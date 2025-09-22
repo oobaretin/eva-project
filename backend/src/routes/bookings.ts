@@ -1,5 +1,6 @@
 import express from 'express';
 import { prisma } from '../index';
+import emailService from '../services/emailService';
 
 const router = express.Router();
 
@@ -50,20 +51,41 @@ router.post('/', async (req, res) => {
     console.log(`📝 Notes: ${customer.notes || 'None'}`);
     console.log('=====================================');
 
-    // Generate a simple booking ID
-    const bookingId = `BK-${Date.now()}`;
+          // Generate a simple booking ID
+          const bookingId = `BK-${Date.now()}`;
 
-    return res.json({
-      success: true,
-      message: 'Booking submitted successfully! We will contact you to confirm your appointment.',
-      data: {
-        bookingId: bookingId,
-        appointmentDate: new Date(date).toISOString(),
-        appointmentTime: time,
-        serviceName: service.name,
-        totalPrice: service.price
-      }
-    });
+          // Send email notifications
+          try {
+            await emailService.sendBookingNotification({
+              customer,
+              service,
+              date,
+              time
+            });
+            
+            // Also send confirmation to customer
+            await emailService.sendCustomerConfirmation({
+              customer,
+              service,
+              date,
+              time
+            });
+          } catch (emailError) {
+            console.error('Email sending failed:', emailError);
+            // Don't fail the booking if email fails
+          }
+
+          return res.json({
+            success: true,
+            message: 'Booking submitted successfully! We will contact you to confirm your appointment.',
+            data: {
+              bookingId: bookingId,
+              appointmentDate: new Date(date).toISOString(),
+              appointmentTime: time,
+              serviceName: service.name,
+              totalPrice: service.price
+            }
+          });
 
   } catch (error) {
     console.error('Error creating booking:', error);

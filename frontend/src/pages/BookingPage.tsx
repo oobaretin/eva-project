@@ -256,7 +256,7 @@ const BookingPage: React.FC = () => {
     return maxDate.toISOString().split('T')[0];
   };
 
-  return (
+   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm">
