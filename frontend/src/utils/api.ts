@@ -3,7 +3,7 @@ import { ApiResponse } from '../types';
 
 // Create axios instance
 const api: AxiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:3001/api',
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -162,6 +162,33 @@ export const apiClient = {
     getAnalytics: (period?: string) =>
       api.get<ApiResponse>('/admin/analytics', { params: { period } }),
   },
+
+  // Bookings endpoints
+  bookings: {
+    create: (data: {
+      service: {
+        name: string;
+        price: string;
+        duration: string;
+      };
+      date: string;
+      time: string;
+      customer: {
+        firstName: string;
+        lastName: string;
+        email: string;
+        phone: string;
+        hairLength?: string;
+        hairTexture?: string;
+        previousBraids?: boolean;
+        allergies?: string;
+        notes?: string;
+      };
+    }) => api.post<ApiResponse>('/bookings', data),
+    
+    getAll: () => api.get<ApiResponse>('/bookings'),
+  },
 };
 
 export default api;
+

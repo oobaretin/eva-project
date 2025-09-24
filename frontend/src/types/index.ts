@@ -201,3 +201,6 @@ export interface ReviewCardProps {
 export interface GalleryCardProps {
   item: GalleryItem;
 }
+
+
+

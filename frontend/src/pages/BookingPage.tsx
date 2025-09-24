@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { CalendarIcon, ClockIcon, StarIcon } from '@heroicons/react/24/outline';
+import toast from 'react-hot-toast';
+import { apiClient } from '../utils/api';
 
 interface Service {
   id: string;
@@ -9,10 +12,104 @@ interface Service {
   price: string;
   category: string;
   features: string[];
-  image: string;
 }
 
+// Services array moved outside component for better performance and availability
+const services: Service[] = [
+  {
+    id: 'box-braids',
+    name: 'Box Braids',
+    description: 'Classic box braids with a modern twist. Perfect for protective styling and low maintenance.',
+    duration: '4-6 hours',
+    price: '$180-250',
+    category: 'Protective Style',
+    features: ['Protective styling', 'Low maintenance', 'Versatile styling', '4-6 weeks duration']
+  },
+  {
+    id: 'knotless-box-braids',
+    name: 'Knotless Box Braids',
+    description: 'Gentle on your scalp with no tension at the roots. Comfortable and beautiful.',
+    duration: '5-7 hours',
+    price: '$200-280',
+    category: 'Protective Style',
+    features: ['No tension at roots', 'Comfortable wear', 'Gentle installation', '5-6 weeks duration']
+  },
+  {
+    id: 'senegalese-twists',
+    name: 'Senegalese Twists',
+    description: 'Elegant and sophisticated twists that are perfect for any occasion.',
+    duration: '4-5 hours',
+    price: '$160-220',
+    category: 'Protective Style',
+    features: ['Elegant appearance', 'Versatile styling', 'Easy maintenance', '4-5 weeks duration'],
+  },
+  {
+    id: 'passion-twists',
+    name: 'Passion Twists',
+    description: 'Trendy and bohemian style that gives you a carefree, natural look.',
+    duration: '3-4 hours',
+    price: '$140-200',
+    category: 'Trendy Style',
+    features: ['Bohemian look', 'Quick installation', 'Natural appearance', '3-4 weeks duration'],
+  },
+  {
+    id: 'goddess-locs',
+    name: 'Goddess Locs',
+    description: 'Beautiful, wavy locs that give you a goddess-like appearance.',
+    duration: '6-8 hours',
+    price: '$220-300',
+    category: 'Luxury Style',
+    features: ['Luxury appearance', 'Wavy texture', 'Long-lasting', '6-8 weeks duration'],
+  },
+  {
+    id: 'cornrows',
+    name: 'Cornrows',
+    description: 'Classic cornrows with modern patterns. Perfect for any hair length.',
+    duration: '2-3 hours',
+    price: '$80-120',
+    category: 'Classic Style',
+    features: ['Classic style', 'Quick installation', 'Versatile patterns', '2-3 weeks duration'],
+  },
+  {
+    id: 'lemonade-braids',
+    name: 'Lemonade Braids',
+    description: 'Inspired by Beyoncé\'s iconic look. Side-swept braids that are absolutely stunning.',
+    duration: '4-5 hours',
+    price: '$180-240',
+    category: 'Trendy Style',
+    features: ['Iconic style', 'Side-swept design', 'Celebrity inspired', '4-5 weeks duration'],
+  },
+  {
+    id: 'fulani-braids',
+    name: 'Fulani Braids',
+    description: 'Traditional African braids with decorative elements and cultural significance.',
+    duration: '5-6 hours',
+    price: '$200-260',
+    category: 'Cultural Style',
+    features: ['Cultural significance', 'Decorative elements', 'Traditional technique', '5-6 weeks duration'],
+  },
+  {
+    id: 'micro-braids',
+    name: 'Micro Braids',
+    description: 'Tiny, delicate braids that give you a natural, textured look.',
+    duration: '8-10 hours',
+    price: '$300-400',
+    category: 'Luxury Style',
+    features: ['Delicate appearance', 'Natural texture', 'Long installation', '8-10 weeks duration'],
+  },
+  {
+    id: 'jumbo-box-braids',
+    name: 'Jumbo Box Braids',
+    description: 'Large, bold braids that make a statement and are easy to maintain.',
+    duration: '3-4 hours',
+    price: '$120-180',
+    category: 'Bold Style',
+    features: ['Bold appearance', 'Quick installation', 'Easy maintenance', '3-4 weeks duration'],
+  }
+];
+
 const BookingPage: React.FC = () => {
+  const location = useLocation();
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedDate, setSelectedDate] = useState('');
@@ -29,128 +126,67 @@ const BookingPage: React.FC = () => {
     allergies: ''
   });
 
-  const services: Service[] = [
-    {
-      id: 'box-braids',
-      name: 'Box Braids',
-      description: 'Classic box braids with a modern twist. Perfect for protective styling and low maintenance.',
-      duration: '4-6 hours',
-      price: '$180-250',
-      category: 'Protective Style',
-      features: ['Protective styling', 'Low maintenance', 'Versatile styling', '4-6 weeks duration'],
-      image: '/images/services/box-braids.jpg'
-    },
-    {
-      id: 'knotless-box-braids',
-      name: 'Knotless Box Braids',
-      description: 'Gentle on your scalp with no tension at the roots. Comfortable and beautiful.',
-      duration: '5-7 hours',
-      price: '$200-280',
-      category: 'Protective Style',
-      features: ['No tension at roots', 'Comfortable wear', 'Gentle installation', '5-6 weeks duration'],
-      image: '/images/services/knotless-box-braids.jpg'
-    },
-    {
-      id: 'senegalese-twists',
-      name: 'Senegalese Twists',
-      description: 'Elegant and sophisticated twists that are perfect for any occasion.',
-      duration: '4-5 hours',
-      price: '$160-220',
-      category: 'Protective Style',
-      features: ['Elegant appearance', 'Versatile styling', 'Easy maintenance', '4-5 weeks duration'],
-      image: '/images/services/senegalese-twists.jpg'
-    },
-    {
-      id: 'passion-twists',
-      name: 'Passion Twists',
-      description: 'Trendy and bohemian style that gives you a carefree, natural look.',
-      duration: '3-4 hours',
-      price: '$140-200',
-      category: 'Trendy Style',
-      features: ['Bohemian look', 'Quick installation', 'Natural appearance', '3-4 weeks duration'],
-      image: '/images/services/passion-twists.jpg'
-    },
-    {
-      id: 'goddess-locs',
-      name: 'Goddess Locs',
-      description: 'Beautiful, wavy locs that give you a goddess-like appearance.',
-      duration: '6-8 hours',
-      price: '$220-300',
-      category: 'Luxury Style',
-      features: ['Luxury appearance', 'Wavy texture', 'Long-lasting', '6-8 weeks duration'],
-      image: '/images/services/goddess-locs.jpg'
-    },
-    {
-      id: 'cornrows',
-      name: 'Cornrows',
-      description: 'Classic cornrows with modern patterns. Perfect for any hair length.',
-      duration: '2-3 hours',
-      price: '$80-120',
-      category: 'Classic Style',
-      features: ['Classic style', 'Quick installation', 'Versatile patterns', '2-3 weeks duration'],
-      image: '/images/services/cornrows.jpg'
-    },
-    {
-      id: 'lemonade-braids',
-      name: 'Lemonade Braids',
-      description: 'Inspired by Beyoncé\'s iconic look. Side-swept braids that are absolutely stunning.',
-      duration: '4-5 hours',
-      price: '$180-240',
-      category: 'Trendy Style',
-      features: ['Iconic style', 'Side-swept design', 'Celebrity inspired', '4-5 weeks duration'],
-      image: '/images/services/lemonade-braids.jpg'
-    },
-    {
-      id: 'fulani-braids',
-      name: 'Fulani Braids',
-      description: 'Traditional African braids with decorative elements and cultural significance.',
-      duration: '5-6 hours',
-      price: '$200-260',
-      category: 'Cultural Style',
-      features: ['Cultural significance', 'Decorative elements', 'Traditional technique', '5-6 weeks duration'],
-      image: '/images/services/fulani-braids.jpg'
-    },
-    {
-      id: 'micro-braids',
-      name: 'Micro Braids',
-      description: 'Tiny, delicate braids that give you a natural, textured look.',
-      duration: '8-10 hours',
-      price: '$300-400',
-      category: 'Luxury Style',
-      features: ['Delicate appearance', 'Natural texture', 'Long installation', '8-10 weeks duration'],
-      image: '/images/services/micro-braids.jpg'
-    },
-    {
-      id: 'jumbo-box-braids',
-      name: 'Jumbo Box Braids',
-      description: 'Large, bold braids that make a statement and are easy to maintain.',
-      duration: '3-4 hours',
-      price: '$120-180',
-      category: 'Bold Style',
-      features: ['Bold appearance', 'Quick installation', 'Easy maintenance', '3-4 weeks duration'],
-      image: '/images/services/jumbo-box-braids.jpg'
-    },
-    {
-      id: 'butterfly-locs',
-      name: 'Butterfly Locs',
-      description: 'Soft, wavy locs with a butterfly-like texture that\'s absolutely beautiful.',
-      duration: '6-7 hours',
-      price: '$240-320',
-      category: 'Luxury Style',
-      features: ['Soft texture', 'Wavy appearance', 'Luxury feel', '6-7 weeks duration'],
-      image: '/images/services/butterfly-locs.jpg'
-    },
-    {
-      id: 'ghana-braids',
-      name: 'Ghana Braids',
-      description: 'Traditional Ghanaian braids with a modern twist. Perfect for any occasion.',
-      duration: '4-5 hours',
-      price: '$160-220',
-      category: 'Cultural Style',
-      features: ['Traditional technique', 'Modern twist', 'Versatile styling', '4-5 weeks duration'],
-      image: '/images/services/ghana-braids.jpg'
+  // Handle selected style from gallery
+  useEffect(() => {
+    const selectedStyle = location.state?.selectedStyle;
+    if (selectedStyle) {
+      console.log('Selected style from gallery:', selectedStyle);
+      
+      // Find matching service based on category and title
+      const matchingService = services.find(service => {
+        const serviceName = service.name.toLowerCase();
+        const serviceCategory = service.category.toLowerCase();
+        const galleryCategory = selectedStyle.category.toLowerCase();
+        const galleryTitle = selectedStyle.title.toLowerCase();
+        
+        // Match by category
+        if (serviceCategory.includes(galleryCategory) || galleryCategory.includes(serviceCategory)) {
+          return true;
+        }
+        
+        // Match by name keywords
+        if (galleryCategory.includes('box braids') && serviceName.includes('box braids')) {
+          return true;
+        }
+        if (galleryCategory.includes('twists') && serviceName.includes('twists')) {
+          return true;
+        }
+        if (galleryCategory.includes('cornrows') && serviceName.includes('cornrows')) {
+          return true;
+        }
+        if (galleryCategory.includes('goddess') && serviceName.includes('goddess')) {
+          return true;
+        }
+        
+        // Match by title keywords
+        if (galleryTitle.includes('box braids') && serviceName.includes('box braids')) {
+          return true;
+        }
+        if (galleryTitle.includes('twists') && serviceName.includes('twists')) {
+          return true;
+        }
+        if (galleryTitle.includes('cornrows') && serviceName.includes('cornrows')) {
+          return true;
+        }
+        if (galleryTitle.includes('goddess') && serviceName.includes('goddess')) {
+          return true;
+        }
+        
+        return false;
+      });
+      
+      console.log('Matching service found:', matchingService);
+      
+      if (matchingService) {
+        setSelectedService(matchingService);
+        setCurrentStep(2); // Skip to step 2 (date/time selection)
+      } else {
+        console.log('No matching service found for:', selectedStyle);
+        // Show a toast message to inform the user
+        toast.success('Style selected! Please choose a service below to continue booking.');
+      }
     }
-  ];
+  }, [location.state]);
 
   const timeSlots = [
     { time: '9:00 AM', available: true },
@@ -165,7 +201,7 @@ const BookingPage: React.FC = () => {
     { time: '6:00 PM', available: true }
   ];
 
-  const handleBookNow = (service: Service) => {
+  const handleServiceSelect = (service: Service) => {
     setSelectedService(service);
     setCurrentStep(2);
   };
@@ -191,33 +227,41 @@ const BookingPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!selectedService || !selectedDate || !selectedTime) {
+      toast.error('Please complete all required fields');
+      return;
+    }
+
     try {
-      // Create booking data
+      // Prepare booking data for API
       const bookingData = {
         service: {
-          name: selectedService?.name,
-          price: selectedService?.price,
-          duration: selectedService?.duration
+          name: selectedService.name,
+          price: selectedService.price,
+          duration: selectedService.duration
         },
         date: selectedDate,
         time: selectedTime,
-        customer: formData
+        customer: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          hairLength: formData.hairLength,
+          hairTexture: formData.hairTexture,
+          previousBraids: formData.previousBraids,
+          allergies: formData.allergies,
+          notes: formData.notes
+        }
       };
 
-      // Submit to backend
-      const response = await fetch('http://localhost:5000/api/bookings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(bookingData)
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        // Show success message
-        alert(`Booking submitted successfully!\n\nWe will contact you at ${formData.phone} to confirm your appointment.\n\nService: ${selectedService?.name}\nDate: ${new Date(selectedDate).toLocaleDateString()}\nTime: ${selectedTime}\n\nBooking ID: ${result.data.bookingId}`);
+      console.log('Submitting booking:', bookingData);
+      
+      // Call the backend API
+      const response = await apiClient.bookings.create(bookingData);
+      
+      if (response.data.success) {
+        toast.success(`🎉 ${response.data.message}\nBooking ID: ${response.data.data.bookingId}\n\nCheck your email for confirmation!`);
         
         // Reset form
         setCurrentStep(1);
@@ -236,11 +280,11 @@ const BookingPage: React.FC = () => {
           allergies: ''
         });
       } else {
-        alert(`Error: ${result.message}`);
+        toast.error(`Error: ${response.data.message}`);
       }
     } catch (error) {
       console.error('Error submitting booking:', error);
-      alert('Failed to submit booking. Please try again or contact us directly at (832) 207-9386');
+      toast.error('Failed to submit booking. Please try again or contact us directly at (832) 207-9386');
     }
   };
 
@@ -256,7 +300,7 @@ const BookingPage: React.FC = () => {
     return maxDate.toISOString().split('T')[0];
   };
 
-   return (
+  return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm">
@@ -273,54 +317,85 @@ const BookingPage: React.FC = () => {
         </div>
       </div>
 
+      {/* Selected Style Banner */}
+      {location.state?.selectedStyle && (
+        <div className="bg-primary-50 border-l-4 border-primary-500 p-4">
+          <div className="container-max">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+                  <span className="text-2xl">✨</span>
+                </div>
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-semibold text-primary-900">
+                  Style Selected from Gallery
+                </h3>
+                <p className="text-primary-700">
+                  You've selected "{location.state.selectedStyle.title}" - we'll help you book this style!
+                </p>
+                {selectedService && (
+                  <p className="text-sm text-primary-600 mt-1">
+                    ✓ Matched to: {selectedService.name} ({selectedService.price})
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Services Grid */}
       <div className="container-max section-padding">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service) => (
-            <div key={service.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-              <div className="h-48 bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
-                <div className="text-6xl">💇‍♀️</div>
-              </div>
+            <div key={service.id} className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 ${
+              selectedService?.id === service.id ? 'ring-2 ring-primary-500 shadow-lg' : ''
+            }`}>
               
               <div className="p-6">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-xl font-semibold text-secondary-900">{service.name}</h3>
-                  <span className="text-sm bg-primary-100 text-primary-800 px-2 py-1 rounded-full">
-                    {service.category}
-                  </span>
-                </div>
-                
-                <p className="text-secondary-600 mb-4 text-sm leading-relaxed">
-                  {service.description}
-                </p>
-                
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center text-sm text-secondary-500">
-                    <ClockIcon className="w-4 h-4 mr-2" />
-                    Duration: {service.duration}
-                  </div>
-                  <div className="flex items-center text-sm text-secondary-500">
-                    <StarIcon className="w-4 h-4 mr-2" />
-                    Price: {service.price}
-                  </div>
-                </div>
-                
-                <div className="mb-4">
-                  <div className="flex flex-wrap gap-1">
-                    {service.features.map((feature, index) => (
-                      <span key={index} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                        {feature}
+                  <div className="flex items-center gap-2">
+                    {selectedService?.id === service.id && (
+                      <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-medium">
+                        ✓ Selected
                       </span>
-                    ))}
+                    )}
+                    <span className="text-sm bg-primary-100 text-primary-800 px-2 py-1 rounded-full">
+                      {service.category}
+                    </span>
                   </div>
                 </div>
+                
+                <p className="text-secondary-600 mb-4">{service.description}</p>
+                
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center text-sm text-secondary-500">
+                    <ClockIcon className="w-4 h-4 mr-1" />
+                    {service.duration}
+                  </div>
+                  <div className="text-lg font-bold text-primary-600">{service.price}</div>
+                </div>
+                
+                <ul className="text-sm text-secondary-600 mb-4">
+                  {service.features.slice(0, 2).map((feature, index) => (
+                    <li key={index} className="flex items-center mb-1">
+                      <StarIcon className="w-3 h-3 text-primary-500 mr-2" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
                 
                 <button
-                  onClick={() => handleBookNow(service)}
-                  className="w-full bg-primary-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-primary-700 transition-colors duration-200 flex items-center justify-center"
+                  onClick={() => handleServiceSelect(service)}
+                  className={`w-full text-center font-medium py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 ${
+                    selectedService?.id === service.id 
+                      ? 'bg-green-600 hover:bg-green-700 text-white' 
+                      : 'btn-primary hover:bg-primary-700'
+                  }`}
                 >
-                  <CalendarIcon className="w-5 h-5 mr-2" />
-                  BOOK NOW
+                  {selectedService?.id === service.id ? '✓ Selected' : 'Select This Service'}
                 </button>
               </div>
             </div>
@@ -328,120 +403,84 @@ const BookingPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Booking Modal */}
-      {selectedService && currentStep > 1 && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-semibold text-secondary-900">
-                  Book {selectedService.name}
-                </h2>
-                <button
-                  onClick={() => setCurrentStep(1)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  ✕
-                </button>
-              </div>
-              
-              <div className="mb-6">
-                <p className="text-secondary-600 mb-2">{selectedService.description}</p>
-                <div className="flex justify-between text-sm text-secondary-500">
-                  <span>Duration: {selectedService.duration}</span>
-                  <span>Price: {selectedService.price}</span>
-                </div>
-              </div>
-
-              {/* Progress Indicator */}
-              <div className="mb-6">
-                <div className="flex items-center justify-center space-x-4">
-                  {[1, 2, 3, 4].map((step) => (
-                    <div key={step} className="flex items-center">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                        currentStep >= step 
-                          ? 'bg-primary-600 text-white' 
-                          : 'bg-gray-200 text-gray-600'
-                      }`}>
-                        {step}
-                      </div>
-                      {step < 4 && (
-                        <div className={`w-12 h-1 mx-2 ${
-                          currentStep > step ? 'bg-primary-600' : 'bg-gray-200'
-                        }`} />
-                      )}
+      {/* Booking Steps */}
+      {selectedService && (
+        <div className="bg-white border-t">
+          <div className="container-max section-padding">
+            <div className="max-w-2xl mx-auto">
+              {/* Step Indicator */}
+              <div className="flex items-center justify-center mb-8">
+                {[1, 2, 3, 4].map((step) => (
+                  <div key={step} className="flex items-center">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                      currentStep >= step 
+                        ? 'bg-primary-600 text-white' 
+                        : 'bg-gray-200 text-gray-600'
+                    }`}>
+                      {step}
                     </div>
-                  ))}
-                </div>
-                <div className="flex justify-center mt-2 space-x-12">
-                  <span className={`text-xs ${currentStep >= 1 ? 'text-primary-600 font-semibold' : 'text-gray-500'}`}>
-                    Service
-                  </span>
-                  <span className={`text-xs ${currentStep >= 2 ? 'text-primary-600 font-semibold' : 'text-gray-500'}`}>
-                    Date
-                  </span>
-                  <span className={`text-xs ${currentStep >= 3 ? 'text-primary-600 font-semibold' : 'text-gray-500'}`}>
-                    Time
-                  </span>
-                  <span className={`text-xs ${currentStep >= 4 ? 'text-primary-600 font-semibold' : 'text-gray-500'}`}>
-                    Details
-                  </span>
-                </div>
+                    {step < 4 && (
+                      <div className={`w-16 h-1 mx-2 ${
+                        currentStep > step ? 'bg-primary-600' : 'bg-gray-200'
+                      }`} />
+                    )}
+                  </div>
+                ))}
               </div>
 
               {/* Step 2: Date Selection */}
               {currentStep === 2 && (
-                <div className="space-y-4">
-                  <div className="flex items-center mb-4">
-                    <button
-                      onClick={() => setCurrentStep(1)}
-                      className="mr-4 p-2 text-gray-500 hover:text-primary-600 transition-colors"
-                    >
-                      ← Back
-                    </button>
-                    <h3 className="text-lg font-semibold text-secondary-900">Select Date</h3>
-                  </div>
+                <div className="text-center">
+                  <h2 className="text-2xl font-serif font-bold text-secondary-900 mb-4">
+                    Select Your Date
+                  </h2>
+                  <p className="text-secondary-600 mb-6">
+                    Choose a date for your {selectedService.name} appointment
+                  </p>
                   
-                  <div>
-                    <label htmlFor="date" className="block text-sm font-medium text-secondary-700 mb-2">
-                      Choose your preferred date
-                    </label>
-                    <input
-                      type="date"
-                      id="date"
-                      value={selectedDate}
-                      onChange={(e) => handleDateSelect(e.target.value)}
-                      min={getMinDate()}
-                      max={getMaxDate()}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    />
+                  <div className="grid grid-cols-7 gap-2 mb-6">
+                    {Array.from({ length: 14 }, (_, i) => {
+                      const date = new Date();
+                      date.setDate(date.getDate() + i + 1);
+                      const dateString = date.toISOString().split('T')[0];
+                      const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+                      const dayNumber = date.getDate();
+                      
+                      return (
+                        <button
+                          key={dateString}
+                          onClick={() => handleDateSelect(dateString)}
+                          className="p-3 border border-gray-200 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-colors duration-200"
+                        >
+                          <div className="text-xs text-gray-500">{dayName}</div>
+                          <div className="text-sm font-medium">{dayNumber}</div>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
 
               {/* Step 3: Time Selection */}
               {currentStep === 3 && (
-                <div className="space-y-4">
-                  <div className="flex items-center mb-4">
-                    <button
-                      onClick={() => setCurrentStep(2)}
-                      className="mr-4 p-2 text-gray-500 hover:text-primary-600 transition-colors"
-                    >
-                      ← Back
-                    </button>
-                    <h3 className="text-lg font-semibold text-secondary-900">Select Time</h3>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-2">
-                    {timeSlots.map((slot, index) => (
+                <div className="text-center">
+                  <h2 className="text-2xl font-serif font-bold text-secondary-900 mb-4">
+                    Select Your Time
+                  </h2>
+                  <p className="text-secondary-600 mb-6">
+                    Choose a time slot for {selectedDate}
+                  </p>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+                    {timeSlots.map((slot) => (
                       <button
-                        key={index}
-                        onClick={() => slot.available && handleTimeSelect(slot.time)}
+                        key={slot.time}
+                        onClick={() => handleTimeSelect(slot.time)}
                         disabled={!slot.available}
-                        className={`p-2 rounded-lg font-medium text-sm transition-colors ${
+                        className={`p-3 border rounded-lg transition-colors duration-200 ${
                           slot.available
-                            ? 'bg-primary-100 text-primary-800 hover:bg-primary-200'
-                            : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                            ? 'border-gray-200 hover:border-primary-500 hover:bg-primary-50'
+                            : 'border-gray-100 bg-gray-50 text-gray-400 cursor-not-allowed'
                         }`}
                       >
                         {slot.time}
@@ -451,183 +490,190 @@ const BookingPage: React.FC = () => {
                 </div>
               )}
 
-              {/* Step 4: Personal Details */}
+              {/* Step 4: Personal Information */}
               {currentStep === 4 && (
-                <div className="space-y-4">
-                  <div className="flex items-center mb-4">
-                    <button
-                      onClick={() => setCurrentStep(3)}
-                      className="mr-4 p-2 text-gray-500 hover:text-primary-600 transition-colors"
-                    >
-                      ← Back
-                    </button>
-                    <h3 className="text-lg font-semibold text-secondary-900">Personal Details</h3>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="text-center mb-6">
+                    <h2 className="text-2xl font-serif font-bold text-secondary-900 mb-2">
+                      Your Information
+                    </h2>
+                    <p className="text-secondary-600">
+                      Please provide your details to complete the booking
+                    </p>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label htmlFor="firstName" className="block text-sm font-medium text-secondary-700 mb-1">
-                          First Name *
-                        </label>
-                        <input
-                          type="text"
-                          id="firstName"
-                          name="firstName"
-                          required
-                          value={formData.firstName}
-                          onChange={handleInputChange}
-                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="lastName" className="block text-sm font-medium text-secondary-700 mb-1">
-                          Last Name *
-                        </label>
-                        <input
-                          type="text"
-                          id="lastName"
-                          name="lastName"
-                          required
-                          value={formData.lastName}
-                          onChange={handleInputChange}
-                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-secondary-700 mb-1">
-                          Email *
-                        </label>
-                        <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          required
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="phone" className="block text-sm font-medium text-secondary-700 mb-1">
-                          Phone *
-                        </label>
-                        <input
-                          type="tel"
-                          id="phone"
-                          name="phone"
-                          required
-                          value={formData.phone}
-                          onChange={handleInputChange}
-                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label htmlFor="hairLength" className="block text-sm font-medium text-secondary-700 mb-1">
-                          Hair Length
-                        </label>
-                        <select
-                          id="hairLength"
-                          name="hairLength"
-                          value={formData.hairLength}
-                          onChange={handleInputChange}
-                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
-                        >
-                          <option value="">Select length</option>
-                          <option value="short">Short (Shoulder length)</option>
-                          <option value="medium">Medium (Mid-back length)</option>
-                          <option value="long">Long (Waist length)</option>
-                          <option value="very-long">Very Long (Waist length)</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label htmlFor="hairTexture" className="block text-sm font-medium text-secondary-700 mb-1">
-                          Hair Texture
-                        </label>
-                        <select
-                          id="hairTexture"
-                          name="hairTexture"
-                          value={formData.hairTexture}
-                          onChange={handleInputChange}
-                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
-                        >
-                          <option value="">Select texture</option>
-                          <option value="straight">Straight</option>
-                          <option value="wavy">Wavy</option>
-                          <option value="curly">Curly</option>
-                          <option value="coily">Coily</option>
-                          <option value="other">Other</option>
-                        </select>
-                      </div>
-                    </div>
-
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="notes" className="block text-sm font-medium text-secondary-700 mb-1">
-                        Additional Notes
-                      </label>
-                      <textarea
-                        id="notes"
-                        name="notes"
-                        rows={3}
-                        value={formData.notes}
-                        onChange={handleInputChange}
-                        placeholder="Any specific requests or information we should know?"
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="allergies" className="block text-sm font-medium text-secondary-700 mb-1">
-                        Allergies or Sensitivities
+                      <label className="block text-sm font-medium text-secondary-700 mb-2">
+                        First Name *
                       </label>
                       <input
                         type="text"
-                        id="allergies"
-                        name="allergies"
-                        value={formData.allergies}
+                        name="firstName"
+                        value={formData.firstName}
                         onChange={handleInputChange}
-                        placeholder="Please list any allergies or sensitivities"
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                       />
                     </div>
-
-                    <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id="previousBraids"
-                        name="previousBraids"
-                        checked={formData.previousBraids}
-                        onChange={handleInputChange}
-                        className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                      />
-                      <label htmlFor="previousBraids" className="ml-2 block text-sm text-secondary-700">
-                        I have had braids before
+                    <div>
+                      <label className="block text-sm font-medium text-secondary-700 mb-2">
+                        Last Name *
                       </label>
+                      <input
+                        type="text"
+                        name="lastName"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      />
                     </div>
+                  </div>
 
-                    <div className="flex space-x-3 pt-4">
-                      <button
-                        type="button"
-                        onClick={() => setCurrentStep(3)}
-                        className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors duration-200 text-sm"
-                      >
-                        Back
-                      </button>
-                      <button
-                        type="submit"
-                        className="flex-1 bg-primary-600 text-white py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors duration-200 text-sm"
-                      >
-                        Confirm Booking
-                      </button>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-secondary-700 mb-2">
+                        Email *
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      />
                     </div>
-                  </form>
-                </div>
+                    <div>
+                      <label className="block text-sm font-medium text-secondary-700 mb-2">
+                        Phone Number *
+                      </label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-secondary-700 mb-2">
+                        Hair Length
+                      </label>
+                      <select
+                        name="hairLength"
+                        value={formData.hairLength}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      >
+                        <option value="">Select hair length</option>
+                        <option value="short">Short (Ear length)</option>
+                        <option value="medium">Medium (Shoulder length)</option>
+                        <option value="long">Long (Below shoulders)</option>
+                        <option value="very-long">Very Long (Mid back+)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-secondary-700 mb-2">
+                        Hair Texture
+                      </label>
+                      <select
+                        name="hairTexture"
+                        value={formData.hairTexture}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      >
+                        <option value="">Select hair texture</option>
+                        <option value="4A">4A - Coily</option>
+                        <option value="4B">4B - Coily</option>
+                        <option value="4C">4C - Coily</option>
+                        <option value="3A">3A - Curly</option>
+                        <option value="3B">3B - Curly</option>
+                        <option value="3C">3C - Curly</option>
+                        <option value="2A">2A - Wavy</option>
+                        <option value="2B">2B - Wavy</option>
+                        <option value="2C">2C - Wavy</option>
+                        <option value="1A">1A - Straight</option>
+                        <option value="1B">1B - Straight</option>
+                        <option value="1C">1C - Straight</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-secondary-700 mb-2">
+                      Special Requests or Notes
+                    </label>
+                    <textarea
+                      name="notes"
+                      value={formData.notes}
+                      onChange={handleInputChange}
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      placeholder="Any specific requests or information we should know?"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-secondary-700 mb-2">
+                      Allergies or Sensitivities
+                    </label>
+                    <input
+                      type="text"
+                      name="allergies"
+                      value={formData.allergies}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      placeholder="Please list any allergies or sensitivities"
+                    />
+                  </div>
+
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      name="previousBraids"
+                      checked={formData.previousBraids}
+                      onChange={handleInputChange}
+                      className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                    />
+                    <label className="ml-2 block text-sm text-secondary-700">
+                      I have had braids before
+                    </label>
+                  </div>
+
+                  {/* Booking Summary */}
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h3 className="font-semibold text-secondary-900 mb-2">Booking Summary</h3>
+                    <div className="text-sm text-secondary-600 space-y-1">
+                      <div><strong>Service:</strong> {selectedService.name}</div>
+                      <div><strong>Date:</strong> {new Date(selectedDate).toLocaleDateString()}</div>
+                      <div><strong>Time:</strong> {selectedTime}</div>
+                      <div><strong>Duration:</strong> {selectedService.duration}</div>
+                      <div><strong>Price:</strong> {selectedService.price}</div>
+                    </div>
+                  </div>
+
+                  <div className="flex space-x-4">
+                    <button
+                      type="button"
+                      onClick={() => setCurrentStep(3)}
+                      className="flex-1 bg-gray-200 text-gray-800 py-3 px-6 rounded-lg hover:bg-gray-300 transition-colors duration-200"
+                    >
+                      Back
+                    </button>
+                    <button
+                      type="submit"
+                      className="flex-1 bg-primary-600 text-white py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors duration-200"
+                    >
+                      Confirm Booking
+                    </button>
+                  </div>
+                </form>
               )}
             </div>
           </div>

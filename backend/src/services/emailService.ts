@@ -26,7 +26,7 @@ class EmailService {
 
   constructor() {
     // Using Gmail SMTP (you can change this to your preferred email provider)
-    this.transporter = nodemailer.createTransporter({
+    this.transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER || 'braidsbyeva@gmail.com',
@@ -180,3 +180,4 @@ class EmailService {
 }
 
 export default new EmailService();
+

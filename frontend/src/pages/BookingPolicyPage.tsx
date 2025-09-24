@@ -196,3 +196,7 @@ const BookingPolicyPage: React.FC = () => {
 };
 
 export default BookingPolicyPage;
+
+
+
+

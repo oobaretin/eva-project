@@ -7,7 +7,7 @@ export const authenticateToken = async (
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
@@ -59,7 +59,7 @@ export const requireAdmin = (
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
-) => {
+): void => {
   if (!req.user?.isAdmin) {
     res.status(403).json({ error: 'Admin access required' });
     return;
@@ -71,7 +71,7 @@ export const optionalAuth = async (
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];

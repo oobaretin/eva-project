@@ -1,264 +1,495 @@
-import React, { useState } from 'react';
-
-interface GalleryImage {
-  id: number;
-  src: string;
-  alt: string;
-  category: string;
-  title: string;
-  description: string;
-}
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { GalleryItem } from '../types';
+import LoadingSpinner from '../components/UI/LoadingSpinner';
+import toast from 'react-hot-toast';
 
 const GalleryPage: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
+  const [filteredItems, setFilteredItems] = useState<GalleryItem[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [isLoading, setIsLoading] = useState(false); // Start with false for testing
+  const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
+  const navigate = useNavigate();
 
-  // Sample gallery data - in a real app, this would come from your backend
-  const galleryImages: GalleryImage[] = [
-    {
-      id: 1,
-      src: '/api/placeholder/400/500',
-      alt: 'Box Braids Style',
-      category: 'box-braids',
-      title: 'Classic Box Braids',
-      description: 'Beautiful shoulder-length box braids with natural hair color'
-    },
-    {
-      id: 2,
-      src: '/api/placeholder/400/500',
-      alt: 'Knotless Box Braids',
-      category: 'box-braids',
-      title: 'Knotless Box Braids',
-      description: 'Gentle knotless technique for maximum comfort and natural look'
-    },
-    {
-      id: 3,
-      src: '/api/placeholder/400/500',
-      alt: 'Senegalese Twists',
-      category: 'twists',
-      title: 'Senegalese Twists',
-      description: 'Elegant Senegalese twists with added length and volume'
-    },
-    {
-      id: 4,
-      src: '/api/placeholder/400/500',
-      alt: 'Passion Twists',
-      category: 'twists',
-      title: 'Passion Twists',
-      description: 'Soft and bouncy passion twists perfect for any occasion'
-    },
-    {
-      id: 5,
-      src: '/api/placeholder/400/500',
-      alt: 'Goddess Locs',
-      category: 'locs',
-      title: 'Goddess Locs',
-      description: 'Luxurious goddess locs with beautiful texture and movement'
-    },
-    {
-      id: 6,
-      src: '/api/placeholder/400/500',
-      alt: 'Butterfly Locs',
-      category: 'locs',
-      title: 'Butterfly Locs',
-      description: 'Trendy butterfly locs with unique texture and style'
-    },
-    {
-      id: 7,
-      src: '/api/placeholder/400/500',
-      alt: 'Cornrows Pattern',
-      category: 'cornrows',
-      title: 'Creative Cornrows',
-      description: 'Intricate cornrow pattern showcasing artistic braiding skills'
-    },
-    {
-      id: 8,
-      src: '/api/placeholder/400/500',
-      alt: 'Lemonade Braids',
-      category: 'cornrows',
-      title: 'Lemonade Braids',
-      description: 'Side-swept lemonade braids inspired by Beyoncé\'s iconic style'
-    },
-    {
-      id: 9,
-      src: '/api/placeholder/400/500',
-      alt: 'Fulani Braids',
-      category: 'traditional',
-      title: 'Fulani Braids',
-      description: 'Traditional Fulani braids with decorative elements and accessories'
-    },
-    {
-      id: 10,
-      src: '/api/placeholder/400/500',
-      alt: 'Ghana Braids',
-      category: 'traditional',
-      title: 'Ghana Braids',
-      description: 'Classic Ghana braids with beautiful geometric patterns'
-    },
-    {
-      id: 11,
-      src: '/api/placeholder/400/500',
-      alt: 'Micro Braids',
-      category: 'micro',
-      title: 'Micro Braids',
-      description: 'Delicate micro braids for a natural, lightweight look'
-    },
-    {
-      id: 12,
-      src: '/api/placeholder/400/500',
-      alt: 'Jumbo Box Braids',
-      category: 'jumbo',
-      title: 'Jumbo Box Braids',
-      description: 'Bold jumbo box braids making a statement with size and style'
+  const categories = ['All', 'Box Braids', 'Cornrows', 'Twists', 'Protective Styles', 'Kids Styles', 'Special Occasions'];
+
+  useEffect(() => {
+    fetchGalleryItems();
+  }, []);
+
+  useEffect(() => {
+    if (selectedCategory === 'All') {
+      setFilteredItems(galleryItems);
+    } else {
+      setFilteredItems(galleryItems.filter(item => item.category === selectedCategory));
     }
-  ];
+  }, [selectedCategory, galleryItems]);
 
-  const categories = [
-    { id: 'all', name: 'All Styles' },
-    { id: 'box-braids', name: 'Box Braids' },
-    { id: 'twists', name: 'Twists' },
-    { id: 'locs', name: 'Locs' },
-    { id: 'cornrows', name: 'Cornrows' },
-    { id: 'traditional', name: 'Traditional' },
-    { id: 'micro', name: 'Micro Braids' },
-    { id: 'jumbo', name: 'Jumbo Braids' }
-  ];
+  const fetchGalleryItems = () => {
+    console.log('Fetching gallery items...');
+    
+      // Comprehensive gallery of beautiful braiding styles with accurate descriptions
+      const mockGalleryItems: GalleryItem[] = [
+        // Box Braids
+        {
+          id: '1',
+          title: 'Knotless Box Braids',
+          description: 'Gentle on your scalp with no tension at the roots. Natural-looking and comfortable for everyday wear.',
+          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 10_42PM.png',
+          category: 'Box Braids',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '2',
+          title: 'Small Box Braids',
+          description: 'Delicate, small-sized box braids for a refined look. Perfect for professional settings.',
+          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 7_28PM.png',
+          category: 'Box Braids',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '3',
+          title: 'Medium Box Braids',
+          description: 'Classic medium-sized box braids with beautiful color options. Versatile and stylish.',
+          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 12_25PM.png',
+          category: 'Box Braids',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '4',
+          title: 'Large Box Braids',
+          description: 'Bold, chunky box braids for a statement look. Quick installation and easy maintenance.',
+          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 12_21PM.png',
+          category: 'Box Braids',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        
+        // Cornrows
+        {
+          id: '5',
+          title: 'Feed-in Cornrows',
+          description: 'Clean, precise cornrows with a modern feed-in technique. Sleek and low maintenance.',
+          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 7_52PM.png',
+          category: 'Cornrows',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '6',
+          title: 'Stitch Braids',
+          description: 'Precisely defined parallel lines creating a sleek, polished look. Perfect for any occasion.',
+          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 7_23PM.png',
+          category: 'Cornrows',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '7',
+          title: 'Ghana Braids',
+          description: 'Traditional Ghana braids with intricate patterns. Cultural and beautifully detailed.',
+          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 7_21PM.png',
+          category: 'Cornrows',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        
+        // Twists
+        {
+          id: '8',
+          title: 'Passion Twists',
+          description: 'Soft, bouncy passion twists that are gentle on your hair. Great for all hair types.',
+          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 8_10PM.png',
+          category: 'Twists',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '9',
+          title: 'Senegalese Twists',
+          description: 'Elegant rope-like twists with a neat, polished appearance. Timeless and sophisticated.',
+          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 8_11PM.png',
+          category: 'Twists',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '10',
+          title: 'Twist Out Style',
+          description: 'Beautiful twist out for natural hair. Defined curls and volume that lasts for days.',
+          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 8_32PM.png',
+          category: 'Twists',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        
+        // Protective Styles
+        {
+          id: '11',
+          title: 'Crochet Braids',
+          description: 'Versatile protective style with various textures. Quick installation and endless styling options.',
+          imageUrl: '/images/gallery/crochet-braids.jpg',
+          category: 'Protective Styles',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '12',
+          title: 'Butterfly Locs',
+          description: 'Stunning butterfly locs styled with natural texture and flow. Long, voluminous locs that cascade beautifully over the shoulders for an elegant, carefree look that protects your natural hair.',
+          imageUrl: '/images/gallery/butterfly-locs-portrait.jpg',
+          category: 'Protective Styles',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '13',
+          title: 'Faux Locs',
+          description: 'Beautiful faux locs that mimic natural dreadlocks. Protective and stylish.',
+          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 8_56PM.png',
+          category: 'Protective Styles',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        
+        // Kids Styles
+        {
+          id: '14',
+          title: 'Kids Box Braids',
+          description: 'Fun and protective styles designed specifically for children. Safe, comfortable, and colorful.',
+          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 9_01PM.png',
+          category: 'Kids Styles',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '15',
+          title: 'Kids Cornrows',
+          description: 'Adorable cornrow styles for kids with fun patterns and accessories. Low maintenance.',
+          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 9_08PM.png',
+          category: 'Kids Styles',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        
+        // Special Occasions
+        {
+          id: '16',
+          title: 'Goddess Braids',
+          description: 'Elegant goddess braids perfect for special occasions. Timeless and sophisticated.',
+          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 9_50PM.png',
+          category: 'Special Occasions',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '17',
+          title: 'Fulani Braids',
+          description: 'Traditional Fulani braids with decorative elements and accessories. Cultural and beautiful.',
+          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 10_06PM.png',
+          category: 'Special Occasions',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '18',
+          title: 'Halo Braid',
+          description: 'Romantic halo braid that encircles the head. Perfect for weddings and special events.',
+          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 10_28PM.png',
+          category: 'Special Occasions',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        }
+      ];
+    
+    console.log('Setting gallery items:', mockGalleryItems);
+    setGalleryItems(mockGalleryItems);
+    setIsLoading(false);
+  };
 
-  const filteredImages = selectedCategory === 'all' 
-    ? galleryImages 
-    : galleryImages.filter(image => image.category === selectedCategory);
+  const handleImageClick = (item: GalleryItem) => {
+    setSelectedImage(item);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedImage(null);
+  };
+
+  const handleBookThisStyle = (item: GalleryItem) => {
+    console.log('Booking style:', item);
+    
+    // Navigate directly to booking page with the selected style
+    const selectedStyle = {
+      category: item.category,
+      title: item.title,
+      description: item.description,
+      imageUrl: item.imageUrl
+    };
+    
+    console.log('Navigating to booking with style:', selectedStyle);
+    
+    navigate('/booking', { 
+      state: { 
+        selectedStyle
+      } 
+    });
+  };
+
+  console.log('GalleryPage render - isLoading:', isLoading, 'galleryItems:', galleryItems.length, 'filteredItems:', filteredItems.length);
+  console.log('Butterfly locs item:', galleryItems.find(item => item.id === '12'));
+  console.log('All gallery items:', galleryItems.map(item => ({ id: item.id, title: item.title, imageUrl: item.imageUrl })));
+
+  if (isLoading) {
+    console.log('Showing loading spinner');
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <LoadingSpinner size="lg" text="Loading gallery..." />
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container-max section-padding">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-serif font-bold text-secondary-900 mb-4">
-              Our Gallery
+    <div className="min-h-screen bg-white">
+      {/* Header Section */}
+      <section className="bg-gradient-primary text-white py-16">
+        <div className="container-max text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-4xl md:text-6xl font-serif font-bold mb-4">
+              Our Work Gallery
             </h1>
-            <p className="text-xl text-secondary-600 max-w-3xl mx-auto">
-              Explore our portfolio of beautiful braiding styles. Each piece is a work of art, 
-              carefully crafted to enhance your natural beauty.
+            <p className="text-xl text-primary-100 max-w-3xl mx-auto">
+              Explore our portfolio of beautiful braiding styles. Each piece is crafted with care and attention to detail.
             </p>
+          </motion.div>
           </div>
+      </section>
 
-          {/* Category Filter */}
-          <div className="mb-8">
-            <div className="flex flex-wrap justify-center gap-2">
-              {categories.map(category => (
+      {/* Filter Section */}
+      <section className="py-8 bg-secondary-50">
+        <div className="container-max">
+          <div className="flex flex-wrap justify-center gap-4">
+            {categories.map((category) => (
                 <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
-                    selectedCategory === category.id
-                      ? 'bg-primary-600 text-white'
-                      : 'bg-white text-secondary-600 hover:bg-primary-50 hover:text-primary-600 border border-gray-200'
-                  }`}
-                >
-                  {category.name}
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-6 py-3 rounded-full font-medium transition-all duration-200 ${
+                  selectedCategory === category
+                    ? 'bg-primary-600 text-white shadow-lg'
+                    : 'bg-white text-secondary-700 hover:bg-primary-50 hover:text-primary-600 border border-secondary-200'
+                }`}
+              >
+                {category}
                 </button>
               ))}
             </div>
           </div>
+      </section>
 
           {/* Gallery Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
-            {filteredImages.map((image) => (
-              <div
-                key={image.id}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200 cursor-pointer"
-                onClick={() => setSelectedImage(image)}
-              >
-                <div className="aspect-[4/5] bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-primary-300 rounded-full mx-auto mb-3 flex items-center justify-center">
-                      <svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <p className="text-primary-700 text-sm font-medium">Photo Coming Soon</p>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-secondary-900 mb-1">{image.title}</h3>
-                  <p className="text-sm text-secondary-600">{image.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Call to Action */}
-          <div className="bg-white rounded-lg shadow-md p-8 text-center">
-            <h2 className="text-2xl font-semibold text-secondary-900 mb-4">
-              Love What You See?
-            </h2>
-            <p className="text-secondary-600 mb-6">
-              Ready to get your own beautiful braids? Book an appointment with us today!
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="/booking"
-                className="bg-primary-600 text-white py-3 px-8 rounded-lg font-semibold hover:bg-primary-700 transition-colors duration-200"
-              >
-                Book Appointment
-              </a>
-              <a
-                href="/services"
-                className="bg-gray-600 text-white py-3 px-8 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-200"
-              >
-                View Services
-              </a>
+      <section className="section-padding">
+        <div className="container-max">
+          {filteredItems.length === 0 ? (
+            <div className="text-center py-16">
+              <p className="text-xl text-secondary-600">No items found in this category.</p>
+              <p className="text-sm text-secondary-500 mt-2">Gallery items: {galleryItems.length}, Filtered: {filteredItems.length}</p>
             </div>
-          </div>
-
-          {/* Image Modal */}
-          {selectedImage && (
-            <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-lg max-w-4xl max-h-[90vh] overflow-hidden">
-                <div className="relative">
-                  <button
-                    onClick={() => setSelectedImage(null)}
-                    className="absolute top-4 right-4 z-10 bg-black bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-75 transition-colors"
-                  >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                  <div className="aspect-[4/5] bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="w-24 h-24 bg-primary-300 rounded-full mx-auto mb-4 flex items-center justify-center">
-                        <svg className="w-12 h-12 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredItems.map((item, index) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  className="card group hover:shadow-xl transition-all duration-300"
+                >
+                  <div className="relative overflow-hidden">
+                    <img 
+                      src={item.imageUrl} 
+                      alt={item.title}
+                      className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                      onClick={() => handleImageClick(item)}
+                      onLoad={() => console.log('✅ Image loaded:', item.title, item.imageUrl)}
+                      onError={(e) => {
+                        console.log('❌ Image failed to load:', item.imageUrl);
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        const fallback = target.nextElementSibling as HTMLElement;
+                        if (fallback) fallback.style.display = 'flex';
+                      }}
+                    />
+                    <div className="h-80 bg-gradient-to-br from-primary-200 to-primary-300 flex items-center justify-center cursor-pointer" style={{display: 'none'}} onClick={() => handleImageClick(item)}>
+                      <span className="text-6xl">💇‍♀️</span>
+                    </div>
+                    {/* Click to view full size overlay */}
+                    <div 
+                      className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center cursor-pointer"
+                      onClick={() => handleImageClick(item)}
+                    >
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white bg-opacity-90 rounded-full p-3">
+                        <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
                         </svg>
                       </div>
-                      <p className="text-primary-700 font-medium">Photo Coming Soon</p>
                     </div>
                   </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-2xl font-semibold text-secondary-900 mb-2">{selectedImage.title}</h3>
-                  <p className="text-secondary-600 mb-4">{selectedImage.description}</p>
-                  <div className="flex gap-4">
-                    <a
-                      href="/booking"
-                      className="bg-primary-600 text-white py-2 px-6 rounded-lg font-semibold hover:bg-primary-700 transition-colors duration-200"
+                  
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-primary-600 bg-primary-100 px-3 py-1 rounded-full">
+                        {item.category}
+                      </span>
+          </div>
+
+                    <h3 className="text-xl font-semibold text-secondary-900 mb-2">
+                      {item.title}
+                    </h3>
+                    
+                    <p className="text-secondary-600 mb-4 line-clamp-2">
+                      {item.description}
+                    </p>
+                    
+                  <button
+                      onClick={() => handleBookThisStyle(item)}
+                      className="w-full btn-primary text-center"
                     >
                       Book This Style
-                    </a>
-                    <button
-                      onClick={() => setSelectedImage(null)}
-                      className="bg-gray-600 text-white py-2 px-6 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-200"
-                    >
-                      Close
                     </button>
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              ))}
             </div>
           )}
         </div>
-      </div>
+      </section>
+
+      {/* Love What You See? Section */}
+      <section className="section-padding bg-gradient-secondary">
+        <div className="container-max text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-secondary-900 mb-4">
+              Love What You See?
+            </h2>
+            <p className="text-xl text-secondary-600 mb-8 max-w-2xl mx-auto">
+              Explore our full range of services and find the perfect style for you. Each service is tailored to your unique hair type and preferences.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/services"
+                className="btn-secondary inline-flex items-center"
+              >
+                View Services
+              </Link>
+              <Link
+                to="/booking"
+                className="btn-primary inline-flex items-center"
+              >
+                Book Your Appointment
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Full-Screen Image Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4"
+          onClick={handleCloseModal}
+        >
+          <div 
+            className="relative max-w-6xl max-h-[90vh] w-full flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button
+              onClick={handleCloseModal}
+              className="absolute top-2 right-2 z-20 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            {/* Image container */}
+            <div className="flex-1 flex items-center justify-center min-h-0 mb-4">
+              <img
+                src={selectedImage.imageUrl}
+                alt={selectedImage.title}
+                className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+                style={{ maxHeight: '70vh' }}
+                onError={(e) => {
+                  console.log('❌ Modal image failed to load:', selectedImage.imageUrl);
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                }}
+              />
+            </div>
+            
+            {/* Image details */}
+            <div className="bg-white rounded-lg p-6 shadow-xl">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-primary-600 bg-primary-100 px-3 py-1 rounded-full">
+                  {selectedImage.category}
+                </span>
+              </div>
+              <h3 className="text-2xl font-semibold text-secondary-900 mb-2">
+                {selectedImage.title}
+              </h3>
+              <p className="text-secondary-600 mb-4">
+                {selectedImage.description}
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => handleBookThisStyle(selectedImage)}
+                  className="btn-primary flex-1"
+                >
+                  Book This Style
+                </button>
+                <button
+                  onClick={handleCloseModal}
+                  className="btn-secondary flex-1"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
