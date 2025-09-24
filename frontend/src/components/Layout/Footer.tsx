@@ -63,10 +63,10 @@ const Footer: React.FC = () => {
               <div className="flex items-center space-x-3">
                 <EnvelopeIcon className="w-5 h-5 text-primary-400" />
                 <a 
-                  href="mailto:braidsbyeva@gmail.com" 
+                  href="mailto:braidsbyevaofficial@gmail.com" 
                   className="text-secondary-300 hover:text-white transition-colors duration-200"
                 >
-                  braidsbyeva@gmail.com
+                  braidsbyevaofficial@gmail.com
                 </a>
               </div>
               <div className="flex items-center space-x-3">

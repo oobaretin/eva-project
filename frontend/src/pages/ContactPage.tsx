@@ -75,10 +75,10 @@ const ContactPage: React.FC = () => {
                     <div>
                       <h3 className="font-semibold text-secondary-900 mb-1">Email</h3>
                       <a 
-                        href="mailto:braidsbyeva@gmail.com" 
+                        href="mailto:braidsbyevaofficial@gmail.com" 
                         className="text-primary-600 hover:text-primary-700 transition-colors"
                       >
-                        braidsbyeva@gmail.com
+                        braidsbyevaofficial@gmail.com
                       </a>
                       <p className="text-sm text-secondary-500 mt-1">Response within 24 hours</p>
                     </div>

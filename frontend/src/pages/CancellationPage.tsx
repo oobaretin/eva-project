@@ -101,7 +101,7 @@ const CancellationPage: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="font-semibold text-secondary-900">Email Us</h3>
-                      <p className="text-secondary-600">braidsbyeva@gmail.com</p>
+                      <p className="text-secondary-600">braidsbyevaofficial@gmail.com</p>
                     </div>
                   </div>
                 </div>

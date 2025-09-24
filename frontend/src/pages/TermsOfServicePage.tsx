@@ -149,7 +149,7 @@ const TermsOfServicePage: React.FC = () => {
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-secondary-600">
                   <strong>BraidsbyEva</strong><br />
-                  Email: braidsbyeva@gmail.com<br />
+                  Email: braidsbyevaofficial@gmail.com<br />
                   Phone: (832) 207-9386<br />
                   Location: Katy, Texas
                 </p>

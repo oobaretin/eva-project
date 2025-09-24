@@ -128,7 +128,7 @@ STRIPE_SECRET_KEY="sk_test_your_stripe_secret_key"
 STRIPE_WEBHOOK_SECRET="whsec_your_webhook_secret"
 
 # Email
-EMAIL_USER="your-email@gmail.com"
+EMAIL_USER="braidsbyevaofficial@gmail.com"
 EMAIL_PASS="your-app-password"
 
 # SMS (Twilio)
@@ -237,7 +237,7 @@ This project is licensed under the ISC License - see the LICENSE file for detail
 ## 📞 Support
 
 For support or questions, please contact:
-- Email: braidsbyeva@gmail.com
+- Email: braidsbyevaofficial@gmail.com
 - Phone: (832) 207-9386
 
 ## 🙏 Acknowledgments

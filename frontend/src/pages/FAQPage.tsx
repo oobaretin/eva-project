@@ -36,7 +36,7 @@ const FAQPage: React.FC = () => {
     },
     {
       question: "Can I book online?",
-      answer: "Yes! You can book appointments through our website booking system, call us at (832) 207-9386, or email braidsbyeva@gmail.com. Online booking is available 24/7 and shows real-time availability.",
+      answer: "Yes! You can book appointments through our website booking system, call us at (832) 207-9386, or email braidsbyevaofficial@gmail.com. Online booking is available 24/7 and shows real-time availability.",
       category: "booking"
     },
     {
@@ -223,7 +223,7 @@ const FAQPage: React.FC = () => {
                   Call (832) 207-9386
                 </a>
                 <a
-                  href="mailto:braidsbyeva@gmail.com"
+                  href="mailto:braidsbyevaofficial@gmail.com"
                   className="bg-gray-600 text-white py-3 px-8 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-200"
                 >
                   Email Us

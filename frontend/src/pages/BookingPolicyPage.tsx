@@ -19,7 +19,7 @@ const BookingPolicyPage: React.FC = () => {
               <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-4">
                 <p className="text-blue-800">
                   <strong>How to Book:</strong> Appointments can be scheduled through our website, by calling (832) 207-9386, 
-                  or by emailing braidsbyeva@gmail.com.
+                  or by emailing braidsbyevaofficial@gmail.com.
                 </p>
               </div>
               
@@ -182,7 +182,7 @@ const BookingPolicyPage: React.FC = () => {
                   </div>
                   <div>
                     <p className="font-semibold text-secondary-900">Email</p>
-                    <p className="text-secondary-600">braidsbyeva@gmail.com</p>
+                    <p className="text-secondary-600">braidsbyevaofficial@gmail.com</p>
                     <p className="text-sm text-secondary-500">Response within 24 hours</p>
                   </div>
                 </div>

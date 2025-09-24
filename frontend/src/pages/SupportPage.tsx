@@ -63,7 +63,7 @@ const SupportPage: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-secondary-900">Email</h3>
-                    <p className="text-secondary-600">braidsbyeva@gmail.com</p>
+                    <p className="text-secondary-600">braidsbyevaofficial@gmail.com</p>
                     <p className="text-sm text-secondary-500">Response within 24 hours</p>
                   </div>
                 </div>
