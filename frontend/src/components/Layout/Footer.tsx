@@ -171,19 +171,33 @@ const Footer: React.FC = () => {
               © {currentYear} BraidsbyEva. All rights reserved.
             </div>
             
-            <div className="flex items-center space-x-6">
-              <Link
-                to="/privacy"
-                className="text-secondary-300 hover:text-white text-sm transition-colors duration-200"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                to="/terms"
-                className="text-secondary-300 hover:text-white text-sm transition-colors duration-200"
-              >
-                Terms of Service
-              </Link>
+            <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
+              <div className="flex items-center space-x-6">
+                <Link
+                  to="/privacy"
+                  className="text-secondary-300 hover:text-white text-sm transition-colors duration-200"
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  to="/terms"
+                  className="text-secondary-300 hover:text-white text-sm transition-colors duration-200"
+                >
+                  Terms of Service
+                </Link>
+              </div>
+              
+              <div className="text-secondary-400 text-xs">
+                Designed by{' '}
+                <a 
+                  href="https://tenqdesigns.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary-400 hover:text-primary-300 transition-colors duration-200 font-medium"
+                >
+                  TenQ Designs LLC
+                </a>
+              </div>
             </div>
           </div>
         </div>
