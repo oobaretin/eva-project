@@ -9,7 +9,7 @@ class EmailService {
         this.transporter = nodemailer_1.default.createTransport({
             service: 'gmail',
             auth: {
-                user: process.env.EMAIL_USER || 'braidsbyeva@gmail.com',
+                user: process.env.EMAIL_USER || 'braidsbyevaofficial@gmail.com',
                 pass: process.env.EMAIL_PASSWORD || '',
             },
         });
@@ -23,8 +23,8 @@ class EmailService {
             day: 'numeric'
         });
         const mailOptions = {
-            from: process.env.EMAIL_USER || 'braidsbyeva@gmail.com',
-            to: 'braidsbyeva@gmail.com',
+            from: process.env.EMAIL_USER || 'braidsbyevaofficial@gmail.com',
+            to: 'braidsbyevaofficial@gmail.com',
             subject: `🎉 New Booking: ${service.name} - ${customer.firstName} ${customer.lastName}`,
             html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -91,7 +91,7 @@ class EmailService {
             day: 'numeric'
         });
         const mailOptions = {
-            from: process.env.EMAIL_USER || 'braidsbyeva@gmail.com',
+            from: process.env.EMAIL_USER || 'braidsbyevaofficial@gmail.com',
             to: customer.email,
             subject: `✅ Booking Confirmation - ${service.name} with BraidsbyEva`,
             html: `
@@ -129,7 +129,7 @@ class EmailService {
               <p style="margin: 0; color: #0c5460;"><strong>📞 Contact Information:</strong></p>
               <p style="margin: 5px 0 0 0; color: #0c5460;">
                 Phone: <a href="tel:+18322079386" style="color: #f2760b;">(832) 207-9386</a><br>
-                Email: <a href="mailto:braidsbyeva@gmail.com" style="color: #f2760b;">braidsbyeva@gmail.com</a>
+                Email: <a href="mailto:braidsbyevaofficial@gmail.com" style="color: #f2760b;">braidsbyevaofficial@gmail.com</a>
               </p>
             </div>
 
