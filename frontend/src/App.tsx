@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast';
 // Components
 import Header from './components/Layout/Header';
 import Footer from './components/Layout/Footer';
-import LoadingSpinner from './components/UI/LoadingSpinner';
+// import LoadingSpinner from './components/UI/LoadingSpinner';
 
 // Pages
 import HomePage from './pages/HomePage';

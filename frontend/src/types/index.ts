@@ -145,6 +145,8 @@ export interface GalleryItem {
   description?: string;
   imageUrl: string;
   category: string;
+  price: string;
+  duration: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;

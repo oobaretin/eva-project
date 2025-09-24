@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { ClockIcon } from '@heroicons/react/24/outline';
 import { GalleryItem } from '../types';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
-import toast from 'react-hot-toast';
+// import toast from 'react-hot-toast';
 
 const GalleryPage: React.FC = () => {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
@@ -37,8 +38,10 @@ const GalleryPage: React.FC = () => {
           id: '1',
           title: 'Knotless Box Braids',
           description: 'Gentle on your scalp with no tension at the roots. Natural-looking and comfortable for everyday wear.',
-          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 10_42PM.png',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2023,%202025%20-%2010_42PM.png',
           category: 'Box Braids',
+          price: '$220',
+          duration: '5-6 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -47,8 +50,10 @@ const GalleryPage: React.FC = () => {
           id: '2',
           title: 'Small Box Braids',
           description: 'Delicate, small-sized box braids for a refined look. Perfect for professional settings.',
-          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 7_28PM.png',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2023,%202025%20-%207_28PM.png',
           category: 'Box Braids',
+          price: '$250',
+          duration: '6-7 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -57,8 +62,10 @@ const GalleryPage: React.FC = () => {
           id: '3',
           title: 'Medium Box Braids',
           description: 'Classic medium-sized box braids with beautiful color options. Versatile and stylish.',
-          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 12_25PM.png',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2023,%202025%20-%2012_25PM.png',
           category: 'Box Braids',
+          price: '$200',
+          duration: '4-5 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -67,8 +74,10 @@ const GalleryPage: React.FC = () => {
           id: '4',
           title: 'Large Box Braids',
           description: 'Bold, chunky box braids for a statement look. Quick installation and easy maintenance.',
-          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 12_21PM.png',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2023,%202025%20-%2012_21PM.png',
           category: 'Box Braids',
+          price: '$180',
+          duration: '3-4 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -79,8 +88,10 @@ const GalleryPage: React.FC = () => {
           id: '5',
           title: 'Feed-in Cornrows',
           description: 'Clean, precise cornrows with a modern feed-in technique. Sleek and low maintenance.',
-          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 7_52PM.png',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2023,%202025%20-%207_52PM.png',
           category: 'Cornrows',
+          price: '$100',
+          duration: '2-3 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -89,8 +100,10 @@ const GalleryPage: React.FC = () => {
           id: '6',
           title: 'Stitch Braids',
           description: 'Precisely defined parallel lines creating a sleek, polished look. Perfect for any occasion.',
-          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 7_23PM.png',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2023,%202025%20-%207_23PM.png',
           category: 'Cornrows',
+          price: '$80',
+          duration: '2-3 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -99,8 +112,10 @@ const GalleryPage: React.FC = () => {
           id: '7',
           title: 'Ghana Braids',
           description: 'Traditional Ghana braids with intricate patterns. Cultural and beautifully detailed.',
-          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 7_21PM.png',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2023,%202025%20-%207_21PM.png',
           category: 'Cornrows',
+          price: '$120',
+          duration: '3-4 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -111,8 +126,10 @@ const GalleryPage: React.FC = () => {
           id: '8',
           title: 'Passion Twists',
           description: 'Soft, bouncy passion twists that are gentle on your hair. Great for all hair types.',
-          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 8_10PM.png',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2023,%202025%20-%208_10PM.png',
           category: 'Twists',
+          price: '$180',
+          duration: '3-4 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -121,8 +138,10 @@ const GalleryPage: React.FC = () => {
           id: '9',
           title: 'Senegalese Twists',
           description: 'Elegant rope-like twists with a neat, polished appearance. Timeless and sophisticated.',
-          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 8_11PM.png',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2023,%202025%20-%208_11PM.png',
           category: 'Twists',
+          price: '$160',
+          duration: '4-5 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -131,8 +150,10 @@ const GalleryPage: React.FC = () => {
           id: '10',
           title: 'Twist Out Style',
           description: 'Beautiful twist out for natural hair. Defined curls and volume that lasts for days.',
-          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 8_32PM.png',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2023,%202025%20-%208_32PM.png',
           category: 'Twists',
+          price: '$120',
+          duration: '2-3 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -145,6 +166,8 @@ const GalleryPage: React.FC = () => {
           description: 'Versatile protective style with various textures. Quick installation and endless styling options.',
           imageUrl: '/images/gallery/crochet-braids.jpg',
           category: 'Protective Styles',
+          price: '$140',
+          duration: '2-3 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -155,6 +178,8 @@ const GalleryPage: React.FC = () => {
           description: 'Stunning butterfly locs styled with natural texture and flow. Long, voluminous locs that cascade beautifully over the shoulders for an elegant, carefree look that protects your natural hair.',
           imageUrl: '/images/gallery/butterfly-locs-portrait.jpg',
           category: 'Protective Styles',
+          price: '$220',
+          duration: '4-5 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -163,8 +188,10 @@ const GalleryPage: React.FC = () => {
           id: '13',
           title: 'Faux Locs',
           description: 'Beautiful faux locs that mimic natural dreadlocks. Protective and stylish.',
-          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 8_56PM.png',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2023,%202025%20-%208_56PM.png',
           category: 'Protective Styles',
+          price: '$200',
+          duration: '4-6 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -175,8 +202,10 @@ const GalleryPage: React.FC = () => {
           id: '14',
           title: 'Kids Box Braids',
           description: 'Fun and protective styles designed specifically for children. Safe, comfortable, and colorful.',
-          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 9_01PM.png',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2023,%202025%20-%209_01PM.png',
           category: 'Kids Styles',
+          price: '$80',
+          duration: '2-3 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -185,8 +214,10 @@ const GalleryPage: React.FC = () => {
           id: '15',
           title: 'Kids Cornrows',
           description: 'Adorable cornrow styles for kids with fun patterns and accessories. Low maintenance.',
-          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 9_08PM.png',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2023,%202025%20-%209_08PM.png',
           category: 'Kids Styles',
+          price: '$60',
+          duration: '1-2 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -197,8 +228,10 @@ const GalleryPage: React.FC = () => {
           id: '16',
           title: 'Goddess Braids',
           description: 'Elegant goddess braids perfect for special occasions. Timeless and sophisticated.',
-          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 9_50PM.png',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2023,%202025%20-%209_50PM.png',
           category: 'Special Occasions',
+          price: '$180',
+          duration: '3-4 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -207,8 +240,10 @@ const GalleryPage: React.FC = () => {
           id: '17',
           title: 'Fulani Braids',
           description: 'Traditional Fulani braids with decorative elements and accessories. Cultural and beautiful.',
-          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 10_06PM.png',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2023,%202025%20-%2010_06PM.png',
           category: 'Special Occasions',
+          price: '$200',
+          duration: '4-5 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -217,12 +252,146 @@ const GalleryPage: React.FC = () => {
           id: '18',
           title: 'Halo Braid',
           description: 'Romantic halo braid that encircles the head. Perfect for weddings and special events.',
-          imageUrl: '/images/gallery/Generated Image September 23, 2025 - 10_28PM.png',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2023,%202025%20-%2010_28PM.png',
           category: 'Special Occasions',
+          price: '$150',
+          duration: '2-3 hours',
           isActive: true,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
-        }
+        },
+        
+        // Additional Box Braids Styles
+        {
+          id: '19',
+          title: 'Jumbo Box Braids',
+          description: 'Extra large box braids for a bold, statement look. Quick installation and maximum impact.',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2024,%202025%20-%2012_27PM.png',
+          category: 'Box Braids',
+          price: '$120',
+          duration: '2-3 hours',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        
+        // Additional Twists
+        {
+          id: '21',
+          title: 'Marley Twists',
+          description: 'Natural-looking twists with a soft, bouncy texture. Great for all hair types and lengths.',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2024,%202025%20-%2012_25PM.png',
+          category: 'Twists',
+          price: '$160',
+          duration: '4-5 hours',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '22',
+          title: 'Spring Twists',
+          description: 'Lightweight, bouncy twists that move naturally. Perfect for active lifestyles.',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2024,%202025%20-%2012_30PM.png',
+          category: 'Twists',
+          price: '$180',
+          duration: '3-4 hours',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        
+        // Additional Cornrows
+        {
+          id: '23',
+          title: 'French Braids',
+          description: 'Classic French braids with intricate patterns. Timeless and elegant styling.',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2024,%202025%20-%2012_26PM.png',
+          category: 'Cornrows',
+          price: '$90',
+          duration: '2-3 hours',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '24',
+          title: 'Dutch Braids',
+          description: 'Reverse French braids that create a raised, 3D effect. Modern and eye-catching.',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2024,%202025%20-%2012_28PM.png',
+          category: 'Cornrows',
+          price: '$100',
+          duration: '2-3 hours',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        
+        // Additional Protective Styles
+        {
+          id: '25',
+          title: 'Box Braids with Curls',
+          description: 'Box braids with beautiful curly ends. Combines protection with stunning style.',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2024,%202025%20-%201_06PM.png',
+          category: 'Protective Styles',
+          price: '$240',
+          duration: '5-6 hours',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '26',
+          title: 'Lemonade Braids',
+          description: 'Side-swept braids inspired by Beyoncé\'s iconic look. Trendy and glamorous.',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2024,%202025%20-%201_22PM.png',
+          category: 'Protective Styles',
+          price: '$160',
+          duration: '3-4 hours',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        
+        // Additional Kids Styles
+        {
+          id: '27',
+          title: 'Kids Twists',
+          description: 'Gentle twists designed specifically for children. Safe, comfortable, and fun.',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2024,%202025%20-%201_09PM.png',
+          category: 'Kids Styles',
+          price: '$70',
+          duration: '2-3 hours',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '28',
+          title: 'Kids Pigtails',
+          description: 'Adorable pigtail styles with colorful accessories. Perfect for school and play.',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2024,%202025%20-%201_13PM.png',
+          category: 'Kids Styles',
+          price: '$50',
+          duration: '1-2 hours',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        
+        // Additional Special Occasions
+        {
+          id: '29',
+          title: 'Crown Braids',
+          description: 'Regal crown braids that frame the face beautifully. Perfect for formal events.',
+          imageUrl: '/images/gallery/Generated%20Image%20September%2024,%202025%20-%201_41PM.png',
+          category: 'Special Occasions',
+          price: '$170',
+          duration: '3-4 hours',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
       ];
     
     console.log('Setting gallery items:', mockGalleryItems);
@@ -376,6 +545,17 @@ const GalleryPage: React.FC = () => {
                       {item.description}
                     </p>
                     
+                    {/* Price and Duration */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="text-2xl font-bold text-primary-600">
+                        {item.price}
+                      </div>
+                      <div className="text-sm text-secondary-500 flex items-center">
+                        <ClockIcon className="w-4 h-4 mr-1" />
+                        {item.duration}
+                      </div>
+                    </div>
+                    
                   <button
                       onClick={() => handleBookThisStyle(item)}
                       className="w-full btn-primary text-center"
@@ -405,13 +585,7 @@ const GalleryPage: React.FC = () => {
             <p className="text-xl text-secondary-600 mb-8 max-w-2xl mx-auto">
               Explore our full range of services and find the perfect style for you. Each service is tailored to your unique hair type and preferences.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/services"
-                className="btn-secondary inline-flex items-center"
-              >
-                View Services
-              </Link>
+            <div className="flex justify-center">
               <Link
                 to="/booking"
                 className="btn-primary inline-flex items-center"

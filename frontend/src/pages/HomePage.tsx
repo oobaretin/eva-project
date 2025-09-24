@@ -93,8 +93,12 @@ const HomePage: React.FC = () => {
             >
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
                 <div className="text-center">
-                  <div className="w-32 h-32 bg-white/20 rounded-full mx-auto mb-6 flex items-center justify-center">
-                    <span className="text-6xl">👩‍🦱</span>
+                  <div className="w-32 h-32 bg-gradient-to-br from-primary-200 to-primary-300 rounded-full mx-auto mb-6 flex items-center justify-center shadow-lg">
+                    <div className="w-28 h-28 bg-white/30 rounded-full flex items-center justify-center">
+                      <div className="w-20 h-20 bg-primary-400 rounded-full flex items-center justify-center">
+                        <span className="text-3xl text-white font-bold">A</span>
+                      </div>
+                    </div>
                   </div>
                   <h3 className="text-2xl font-serif font-bold mb-2">Awa Obaretin</h3>
                   <p className="text-primary-100 mb-4">Professional Braider</p>

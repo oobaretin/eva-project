@@ -8,8 +8,8 @@ const Header: React.FC = () => {
 
   const navigation = [
     { name: 'Home', href: '/' },
-    { name: 'Book Now', href: '/booking' },
     { name: 'Gallery', href: '/gallery' },
+    { name: 'Book Now', href: '/booking' },
     { name: 'Contact', href: '/contact' },
   ];
 
