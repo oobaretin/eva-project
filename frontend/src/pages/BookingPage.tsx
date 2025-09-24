@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ClockIcon, StarIcon } from '@heroicons/react/24/outline';
+// import { ClockIcon, StarIcon } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 import { createBooking, testSupabaseConnection } from '../utils/supabase';
 

@@ -43,7 +43,7 @@ export const testSupabaseConnection = async () => {
     console.log('Supabase URL:', supabaseUrl)
     console.log('Supabase Key (first 20 chars):', supabaseAnonKey.substring(0, 20) + '...')
     
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('bookings')
       .select('count')
       .limit(1)

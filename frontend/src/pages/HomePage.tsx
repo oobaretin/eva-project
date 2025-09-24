@@ -93,11 +93,11 @@ const HomePage: React.FC = () => {
             >
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
                 <div className="text-center">
-                  <div className="w-32 h-32 rounded-full mx-auto mb-6 overflow-hidden shadow-lg border-4 border-white/30">
+                  <div className="w-full max-w-md mx-auto mb-6 shadow-lg rounded-lg overflow-hidden">
                     <img 
                       src="/images/gallery/IMG_4073.png" 
                       alt="Awa Obaretin - Professional Braider" 
-                      className="w-full h-full object-cover"
+                      className="w-full h-auto object-cover"
                     />
                   </div>
                   <h3 className="text-2xl font-serif font-bold mb-2">Awa Obaretin</h3>
