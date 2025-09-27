@@ -43,17 +43,14 @@ const AboutPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Image Placeholder */}
+            {/* Awa's Photo */}
             <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-32 h-32 bg-primary-300 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <svg className="w-16 h-16 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                  </div>
-                  <p className="text-primary-700 font-medium">Professional Photo Coming Soon</p>
-                </div>
+              <div className="rounded-2xl overflow-hidden shadow-lg">
+                <img 
+                  src="/images/gallery/IMG_0827.jpg" 
+                  alt="Awa - Professional Braider" 
+                  className="w-full h-auto object-contain"
+                />
               </div>
             </div>
           </div>
