@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast';
 // Components
 import Header from './components/Layout/Header';
 import Footer from './components/Layout/Footer';
+import ScrollToTop from './components/ScrollToTop';
 // import LoadingSpinner from './components/UI/LoadingSpinner';
 
 // Pages
@@ -28,6 +29,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
+      <ScrollToTop />
       <Header />
       
       <main className="flex-grow">

@@ -102,8 +102,8 @@ const SupportPage: React.FC = () => {
                   <a href="/booking" className="block text-primary-600 hover:text-primary-700 transition-colors">
                     Book an Appointment
                   </a>
-                  <a href="/services" className="block text-primary-600 hover:text-primary-700 transition-colors">
-                    View Our Services
+                  <a href="/gallery" className="block text-primary-600 hover:text-primary-700 transition-colors">
+                    Gallery
                   </a>
                   <a href="/faq" className="block text-primary-600 hover:text-primary-700 transition-colors">
                     Frequently Asked Questions
