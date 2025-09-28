@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { createBooking } from '../utils/supabase';
 
 interface BookingFormData {
   name: string;
@@ -95,42 +96,27 @@ const BookingPage: React.FC = () => {
 
       const styleDetails = getStyleDetails(bookingData.selectedStyle);
 
-      // Send booking to backend for processing and email notifications
-      const backendPayload = {
-        service: {
-          name: bookingData.selectedStyle || 'Braiding Service',
-          price: styleDetails.price,
-          duration: styleDetails.duration
-        },
-        date: bookingData.selectedDate,
-        time: bookingData.selectedTime,
-        customer: {
-          firstName: bookingData.name.split(' ')[0] || bookingData.name,
-          lastName: bookingData.name.split(' ').slice(1).join(' ') || 'Customer',
-          email: bookingData.email,
-          phone: bookingData.phone,
-          hairLength: 'Not specified',
-          hairTexture: 'Not specified',
-          previousBraids: false,
-          allergies: 'None',
-          notes: bookingData.specialRequests || ''
-        }
+      // Create Supabase payload
+      const supabasePayload = {
+        service_name: bookingData.selectedStyle || 'Braiding Service',
+        service_price: styleDetails.price,
+        service_duration: styleDetails.duration,
+        appointment_date: bookingData.selectedDate,
+        appointment_time: bookingData.selectedTime,
+        customer_name: bookingData.name,
+        customer_email: bookingData.email,
+        customer_phone: bookingData.phone,
+        hair_length: 'Not specified',
+        hair_texture: 'Not specified',
+        previous_braids: false,
+        allergies: 'None',
+        notes: bookingData.specialRequests || '',
+        payment_method: 'Cash/Zelle',
+        status: 'pending',
+        created_at: new Date().toISOString()
       };
 
-      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/bookings`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(backendPayload)
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to create booking');
-      }
-      
-      const result = await response.json();
+      const result = await createBooking(supabasePayload);
       console.log('Booking submitted successfully:', result);
       
     } catch (error) {
