@@ -13,13 +13,13 @@
 ### 2. **Set Up Webhook Endpoint**
 1. In Stripe Dashboard, go to **Developers > Webhooks**
 2. Click **Add endpoint**
-3. Enter your backend URL: `https://your-backend-domain.com/api/payments/webhook`
+3. Enter your backend URL: `https://braidsbyeva.com/api/payments/webhook`
 4. Select events: `payment_intent.succeeded`, `payment_intent.payment_failed`
 5. Copy the **Webhook signing secret** (starts with `whsec_`)
 
 ### 3. **Update Environment Variables**
 
-#### **Backend (.env)**
+#### **Backend (Supabase)**
 ```bash
 # Production Stripe
 STRIPE_SECRET_KEY=sk_live_your_live_stripe_secret_key_here
@@ -33,10 +33,10 @@ EMAIL_USER=braidsbyevaofficial@gmail.com
 EMAIL_PASSWORD=your_app_password_here
 
 # Production Frontend URL
-FRONTEND_URL=https://your-domain.com
+FRONTEND_URL=https://braidsbyeva.com
 ```
 
-#### **Frontend (.env)**
+#### **Frontend (Vercel)**
 ```bash
 # Production Stripe
 REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_live_your_live_stripe_publishable_key_here
