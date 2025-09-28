@@ -21,25 +21,33 @@ interface BookingData {
 
 export const sendBookingEmails = async (bookingData: BookingData) => {
   try {
-    // Send to your Vercel API endpoint
-    const response = await fetch('/api/send-emails', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    // For now, just log the booking data since Vercel API isn't set up yet
+    console.log('📧 Email notifications would be sent with data:', {
+      customer: {
+        name: bookingData.customer_name,
+        email: bookingData.customer_email,
+        phone: bookingData.customer_phone
       },
-      body: JSON.stringify({ bookingData })
+      service: {
+        name: bookingData.service_name,
+        price: bookingData.service_price,
+        duration: bookingData.service_duration
+      },
+      appointment: {
+        date: bookingData.appointment_date,
+        time: bookingData.appointment_time
+      },
+      payment: bookingData.payment_method
     });
 
-    if (!response.ok) {
-      throw new Error('Failed to send emails');
-    }
-
-    const result = await response.json();
-    console.log('✅ Emails sent successfully:', result);
-    return result;
+    // Return success for now - emails will be sent manually
+    return {
+      success: true,
+      message: 'Booking saved successfully. Email notifications will be sent manually.'
+    };
 
   } catch (error) {
-    console.error('❌ Error sending emails:', error);
+    console.error('❌ Error in email service:', error);
     // Don't throw error - booking was successful, just email failed
     return {
       success: false,
