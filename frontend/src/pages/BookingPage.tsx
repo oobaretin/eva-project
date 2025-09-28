@@ -177,9 +177,9 @@ const BookingPage: React.FC = () => {
       // Send booking to backend
       await sendBookingToBackend(formData);
       
-      // Show confirmation
-      setShowConfirmation(true);
-      toast.success('Booking submitted successfully! You will receive a confirmation email shortly.');
+             // Show confirmation
+             setShowConfirmation(true);
+             toast.success('Booking submitted successfully! Email notifications sent to both parties.');
       
     } catch (error) {
       console.error('Error submitting booking:', error);

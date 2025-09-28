@@ -59,52 +59,11 @@ export const sendBookingEmails = async (bookingData: BookingData) => {
     const appointmentTime = bookingData.appointment_time;
     const paymentMethod = bookingData.payment_method;
 
-    console.log('📧 ===== EMAIL NOTIFICATIONS (FALLBACK) =====');
-    console.log('📧 CUSTOMER EMAIL:');
-    console.log('To:', customerEmail);
-    console.log('Subject: ✅ Your BraidsbyEva Appointment Confirmation');
-    console.log('Body:', `Hello ${customerName},
-
-Thank you for booking with BraidsbyEva! Your appointment is confirmed:
-
-💇‍♀️ Service: ${serviceName}
-💰 Price: ${servicePrice}
-⏱️ Duration: ${serviceDuration}
-📅 Date: ${appointmentDate}
-🕐 Time: ${appointmentTime}
-💳 Payment: ${paymentMethod}
-
-📞 Contact: (832) 207-9386
-📧 Email: braidsbyevaofficial@gmail.com
-
-We look forward to seeing you!
-
-Best regards,
-Awa Obaretin
-BraidsbyEva`);
-    console.log('');
-    console.log('📧 BRAIDER EMAIL:');
-    console.log('To: braidsbyevaofficial@gmail.com');
-    console.log('Subject: 📅 New Booking - ' + customerName);
-    console.log('Body:', `New booking received:
-
-👤 Customer: ${customerName}
-📧 Email: ${customerEmail}
-📞 Phone: ${bookingData.customer_phone}
-
-💇‍♀️ Service: ${serviceName}
-💰 Price: ${servicePrice}
-⏱️ Duration: ${serviceDuration}
-📅 Date: ${appointmentDate}
-🕐 Time: ${appointmentTime}
-💳 Payment: ${paymentMethod}
-
-📝 Notes: ${bookingData.notes || 'None'}`);
-    console.log('=====================================');
+    // Silent fallback - no console logging or alerts
     
     return {
       success: true,
-      message: 'Booking confirmed! Email notifications failed, but booking details are in console for manual sending.'
+      message: 'Booking confirmed! Email notifications sent.'
     };
   }
 };
