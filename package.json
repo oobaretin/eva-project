@@ -1,0 +1,16 @@
+{
+  "name": "braidsbyeva",
+  "version": "1.0.0",
+  "description": "BraidsbyEva - Professional Hair Braiding Services",
+  "scripts": {
+    "build": "cd frontend && npm run build",
+    "dev": "cd frontend && npm start",
+    "start": "cd frontend && npm start"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.7"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
