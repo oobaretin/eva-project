@@ -11,7 +11,6 @@ import serviceRoutes from './routes/services';
 import appointmentRoutes from './routes/appointments';
 import userRoutes from './routes/users';
 import adminRoutes from './routes/admin';
-import paymentRoutes from './routes/payments';
 import bookingRoutes from './routes/bookings';
 
 // Load environment variables
@@ -52,7 +51,6 @@ app.use('/api/services', serviceRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/payments', paymentRoutes);
 app.use('/api/bookings', bookingRoutes);
 
 // Error handling middleware

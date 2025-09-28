@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-// import { ClockIcon, StarIcon } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
-// Removed Supabase import - now using backend API
-import PaymentMethodSelector from '../components/PaymentMethodSelector';
-import StripeProvider from '../components/StripeProvider';
 
 interface BookingFormData {
   name: string;
@@ -29,12 +25,7 @@ const BookingPage: React.FC = () => {
     specialRequests: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [bookingDetails, setBookingDetails] = useState<BookingFormData | null>(null);
-  const [currentStep, setCurrentStep] = useState<'form' | 'payment' | 'confirmation'>('form');
-  const [appointmentId, setAppointmentId] = useState<string>('');
-  const [servicePrice, setServicePrice] = useState<number>(0);
-  const [fullPrice, setFullPrice] = useState<number>(0);
-  const [isDepositRequired, setIsDepositRequired] = useState<boolean>(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   // Available time slots
   const timeSlots = [
@@ -64,7 +55,7 @@ const BookingPage: React.FC = () => {
     }));
   };
 
-  const sendBookingToBackend = async (bookingData: BookingFormData, paymentMethod?: string, paymentIntentId?: string) => {
+  const sendBookingToBackend = async (bookingData: BookingFormData) => {
     try {
       // Get pricing and duration from the selected style
       const getStyleDetails = (styleName: string) => {
@@ -103,41 +94,12 @@ const BookingPage: React.FC = () => {
       };
 
       const styleDetails = getStyleDetails(bookingData.selectedStyle);
-      
-      // Prepare data for Supabase
-      const bookingPayload = {
-        service_name: bookingData.selectedStyle || 'Braiding Service',
-        service_price: styleDetails.price,
-        service_duration: styleDetails.duration,
-        appointment_date: bookingData.selectedDate,
-        appointment_time: bookingData.selectedTime,
-        customer_first_name: bookingData.name.split(' ')[0] || bookingData.name,
-        customer_last_name: bookingData.name.split(' ').slice(1).join(' ') || '',
-        customer_email: bookingData.email,
-        customer_phone: bookingData.phone,
-        customer_hair_length: 'Not specified',
-        customer_hair_texture: 'Not specified',
-        customer_previous_braids: false,
-        customer_allergies: 'None',
-        customer_notes: bookingData.specialRequests || '',
-        status: paymentMethod ? 'confirmed' : 'pending',
-        payment_method: paymentMethod || 'pending',
-        payment_intent_id: paymentIntentId || null,
-        appointment_id: appointmentId
-      };
-
-      // Calculate payment information using the actual service price
-      const priceInfo = calculateServicePrice(bookingData.selectedStyle);
-      const totalAmount = priceInfo.fullPrice;
-      const isDepositRequired = priceInfo.isDepositRequired;
-      const paidAmount = priceInfo.depositAmount;
-      const remainingBalance = totalAmount - paidAmount;
 
       // Send booking to backend for processing and email notifications
       const backendPayload = {
         service: {
           name: bookingData.selectedStyle || 'Braiding Service',
-          price: `$${totalAmount}`,
+          price: styleDetails.price,
           duration: styleDetails.duration
         },
         date: bookingData.selectedDate,
@@ -152,13 +114,6 @@ const BookingPage: React.FC = () => {
           previousBraids: false,
           allergies: 'None',
           notes: bookingData.specialRequests || ''
-        },
-        paymentInfo: {
-          totalAmount: totalAmount,
-          paidAmount: paidAmount,
-          remainingBalance: remainingBalance,
-          isDeposit: isDepositRequired,
-          paymentMethod: paymentMethod || 'Card Payment'
         }
       };
 
@@ -184,45 +139,6 @@ const BookingPage: React.FC = () => {
     }
   };
 
-  const calculateServicePrice = (styleName: string): { fullPrice: number; depositAmount: number; isDepositRequired: boolean } => {
-    const stylePricing: { [key: string]: number } = {
-      'Knotless Box Braids': 275, // 10% increase from $250
-      'Small Box Braids': 330, // 10% increase from $300
-      'Medium Box Braids': 210, // 5% increase from $200
-      'Large Box Braids': 158, // 5% increase from $150
-      'Jumbo Box Braids': 120, // No change
-      'Feed-in Cornrows': 100, // No change
-      'Stitch Braids': 80, // No change
-      'Ghana Braids': 120, // No change
-      'French Braids': 90, // No change
-      'Dutch Braids': 100, // No change
-      'Passion Twists': 189, // 5% increase from $180
-      'Senegalese Twists': 168, // 5% increase from $160
-      'Twist Out Style': 120, // No change
-      'Marley Twists': 168, // 5% increase from $160
-      'Spring Twists': 189, // 5% increase from $180
-      'Crochet Braids': 140, // No change
-      'Butterfly Locs': 242, // 10% increase from $220
-      'Faux Locs': 210, // 5% increase from $200
-      'Box Braids with Curls': 264, // 10% increase from $240
-      'Lemonade Braids': 168, // 5% increase from $160
-      'Kids Box Braids': 80, // No change
-      'Kids Cornrows': 60, // No change
-      'Kids Twists': 70, // No change
-      'Kids Pigtails': 50, // No change
-      'Goddess Braids': 189, // 5% increase from $180
-      'Fulani Braids': 210, // 5% increase from $200
-      'Halo Braid': 150, // No change
-      'Crown Braids': 179, // 5% increase from $170
-    };
-    
-    const fullPrice = stylePricing[styleName] || 150;
-    const isDepositRequired = fullPrice > 200; // Services over $200 require deposit (not including $200)
-    const depositAmount = isDepositRequired ? Math.round(fullPrice * 0.5) : fullPrice; // 50% deposit for large services
-    
-    return { fullPrice, depositAmount, isDepositRequired };
-  };
-
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -231,43 +147,22 @@ const BookingPage: React.FC = () => {
       return;
     }
 
-    // Calculate service price
-    const priceInfo = calculateServicePrice(formData.selectedStyle);
-    setServicePrice(priceInfo.depositAmount);
-    setFullPrice(priceInfo.fullPrice);
-    setIsDepositRequired(priceInfo.isDepositRequired);
-    
-    // Generate appointment ID
-    const appointmentId = `apt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    setAppointmentId(appointmentId);
-    
-    // Move to payment step
-    setCurrentStep('payment');
-  };
-
-  const handlePaymentSuccess = async (paymentMethod: string, paymentIntentId?: string) => {
     setIsSubmitting(true);
     
     try {
-      // Store booking details
-      setBookingDetails({ ...formData });
+      // Send booking to backend
+      await sendBookingToBackend(formData);
       
-      // Send booking to backend with payment info
-      await sendBookingToBackend(formData, paymentMethod, paymentIntentId);
-      
-      // Move to confirmation step
-      setCurrentStep('confirmation');
+      // Show confirmation
+      setShowConfirmation(true);
+      toast.success('Booking submitted successfully! You will receive a confirmation email shortly.');
       
     } catch (error) {
-      console.error('Error processing payment:', error);
-      toast.error('Payment processed but booking failed. Please contact us at (832) 207-9386');
+      console.error('Error submitting booking:', error);
+      toast.error('Failed to submit booking. Please try again or contact us at (832) 207-9386');
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const handlePaymentError = (error: string) => {
-    toast.error(error);
   };
 
   const getMinDate = () => {
@@ -321,36 +216,8 @@ const BookingPage: React.FC = () => {
         </div>
       )}
 
-      {/* Step Indicator */}
-      <div className="container-max section-padding">
-        <div className="max-w-2xl mx-auto mb-8">
-          <div className="flex items-center justify-center space-x-4">
-            <div className={`flex items-center ${currentStep === 'form' ? 'text-primary-600' : currentStep === 'payment' || currentStep === 'confirmation' ? 'text-green-600' : 'text-gray-400'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'form' ? 'bg-primary-600 text-white' : currentStep === 'payment' || currentStep === 'confirmation' ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-600'}`}>
-                1
-              </div>
-              <span className="ml-2 font-medium">Booking Details</span>
-            </div>
-            <div className={`w-8 h-1 ${currentStep === 'payment' || currentStep === 'confirmation' ? 'bg-green-600' : 'bg-gray-300'}`}></div>
-            <div className={`flex items-center ${currentStep === 'payment' ? 'text-primary-600' : currentStep === 'confirmation' ? 'text-green-600' : 'text-gray-400'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'payment' ? 'bg-primary-600 text-white' : currentStep === 'confirmation' ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-600'}`}>
-                2
-              </div>
-              <span className="ml-2 font-medium">Payment</span>
-            </div>
-            <div className={`w-8 h-1 ${currentStep === 'confirmation' ? 'bg-green-600' : 'bg-gray-300'}`}></div>
-            <div className={`flex items-center ${currentStep === 'confirmation' ? 'text-green-600' : 'text-gray-400'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'confirmation' ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-600'}`}>
-                3
-              </div>
-              <span className="ml-2 font-medium">Confirmation</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Booking Form */}
-      {currentStep === 'form' && (
+      {!showConfirmation && (
         <div className="container-max section-padding">
           <div className="max-w-2xl mx-auto">
             <form onSubmit={handleFormSubmit} className="bg-white rounded-lg shadow-lg p-8">
@@ -476,6 +343,40 @@ const BookingPage: React.FC = () => {
               />
             </div>
 
+            {/* Payment Information */}
+            <div className="mb-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-blue-900 mb-4">Payment Information</h3>
+              <div className="space-y-3">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                      <span className="text-green-600 text-sm">✓</span>
+                    </div>
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-blue-900">Cash Payment</p>
+                    <p className="text-sm text-blue-700">Pay with cash on the day of your appointment</p>
+                  </div>
+                </div>
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                      <span className="text-green-600 text-sm">✓</span>
+                    </div>
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-blue-900">Zelle Payment</p>
+                    <p className="text-sm text-blue-700">Send payment to: braidsbyevaofficial@gmail.com</p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                <p className="text-sm text-yellow-800">
+                  <strong>Note:</strong> Payment is due on the day of your appointment. We accept cash and Zelle payments.
+                </p>
+              </div>
+            </div>
+
             {/* Submit Button */}
             <button
               type="submit"
@@ -485,10 +386,10 @@ const BookingPage: React.FC = () => {
               {isSubmitting ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                  Processing...
+                  Submitting Booking...
                 </>
               ) : (
-                'Continue to Payment'
+                'Book Appointment'
               )}
             </button>
 
@@ -501,86 +402,8 @@ const BookingPage: React.FC = () => {
       </div>
       )}
 
-      {/* Payment Step */}
-      {currentStep === 'payment' && (
-        <div className="container-max section-padding">
-          <div className="max-w-2xl mx-auto">
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-serif font-bold text-secondary-900 mb-2">
-                  Complete Your Booking
-                </h2>
-                <p className="text-secondary-600">
-                  Choose your payment method to secure your appointment
-                </p>
-              </div>
-
-              {/* Service Summary */}
-              <div className="bg-gray-50 rounded-lg p-6 mb-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Service Summary</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Service:</span>
-                    <span className="font-medium">{formData.selectedStyle}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Date:</span>
-                    <span className="font-medium">{formData.selectedDate}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Time:</span>
-                    <span className="font-medium">{formData.selectedTime}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Service Price:</span>
-                    <span className="font-medium">${fullPrice}</span>
-                  </div>
-                  {isDepositRequired && (
-                    <>
-                      <div className="flex justify-between text-sm text-gray-500">
-                        <span>Deposit Required (50%):</span>
-                        <span>${servicePrice}</span>
-                      </div>
-                      <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
-                        <p className="text-sm text-blue-800">
-                          <strong>Deposit Policy:</strong> Services over $200 require a 50% deposit to secure your appointment. 
-                          The remaining balance (${fullPrice - servicePrice}) will be due at your appointment.
-                        </p>
-                      </div>
-                    </>
-                  )}
-                  <div className="flex justify-between text-lg font-semibold border-t pt-2">
-                    <span>{isDepositRequired ? 'Deposit Due:' : 'Total:'}</span>
-                    <span className="text-primary-600">${servicePrice}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Payment Method Selector */}
-              <StripeProvider>
-                <PaymentMethodSelector
-                  amount={servicePrice}
-                  appointmentId={appointmentId}
-                  onPaymentSuccess={handlePaymentSuccess}
-                  onPaymentError={handlePaymentError}
-                  isLoading={isSubmitting}
-                />
-              </StripeProvider>
-
-              {/* Back Button */}
-              <button
-                onClick={() => setCurrentStep('form')}
-                className="w-full mt-6 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
-              >
-                Back to Booking Details
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Confirmation Step */}
-      {currentStep === 'confirmation' && (
+      {/* Confirmation Modal */}
+      {showConfirmation && (
         <div className="container-max section-padding">
           <div className="max-w-2xl mx-auto">
             <div className="bg-white rounded-lg shadow-lg p-8 text-center">
@@ -592,11 +415,11 @@ const BookingPage: React.FC = () => {
               </div>
 
               <h2 className="text-2xl font-serif font-bold text-secondary-900 mb-4">
-                Booking Confirmed!
+                Booking Submitted!
               </h2>
               
               <p className="text-lg text-secondary-600 mb-6">
-                Thank you for booking with BraidsbyEva! We're excited to create your beautiful style.
+                Thank you for booking with BraidsbyEva! We'll contact you shortly to confirm your appointment details.
               </p>
 
               {/* Booking Details */}
@@ -605,33 +428,38 @@ const BookingPage: React.FC = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Name:</span>
-                    <span className="font-medium">{bookingDetails?.name}</span>
+                    <span className="font-medium">{formData.name}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Email:</span>
-                    <span className="font-medium">{bookingDetails?.email}</span>
+                    <span className="font-medium">{formData.email}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Phone:</span>
-                    <span className="font-medium">{bookingDetails?.phone}</span>
+                    <span className="font-medium">{formData.phone}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Service:</span>
-                    <span className="font-medium">{bookingDetails?.selectedStyle}</span>
+                    <span className="font-medium">{formData.selectedStyle || 'To be discussed'}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Date:</span>
-                    <span className="font-medium">{bookingDetails?.selectedDate}</span>
+                    <span className="font-medium">{formData.selectedDate}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Time:</span>
-                    <span className="font-medium">{bookingDetails?.selectedTime}</span>
-                  </div>
-                  <div className="flex justify-between text-lg font-semibold border-t pt-2">
-                    <span>Total Paid:</span>
-                    <span className="text-green-600">${servicePrice}</span>
+                    <span className="font-medium">{formData.selectedTime}</span>
                   </div>
                 </div>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <h4 className="font-semibold text-blue-900 mb-2">Payment Information</h4>
+                <p className="text-sm text-blue-800">
+                  Payment is due on the day of your appointment. We accept <strong>cash</strong> and <strong>Zelle</strong> payments.
+                  <br />
+                  <strong>Zelle:</strong> braidsbyevaofficial@gmail.com
+                </p>
               </div>
 
               <p className="text-sm text-secondary-600 mb-6">
@@ -640,7 +468,7 @@ const BookingPage: React.FC = () => {
 
               <button
                 onClick={() => {
-                  setCurrentStep('form');
+                  setShowConfirmation(false);
                   setFormData({
                     name: '',
                     email: '',
