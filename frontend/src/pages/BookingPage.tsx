@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { createBooking } from '../utils/supabase';
+import { sendBookingEmails } from '../services/emailService';
 
 interface BookingFormData {
   name: string;
@@ -118,6 +119,16 @@ const BookingPage: React.FC = () => {
 
       const result = await createBooking(supabasePayload);
       console.log('Booking submitted successfully:', result);
+      
+      // Send email notifications
+      try {
+        await sendBookingEmails(supabasePayload);
+        console.log('Email notifications sent successfully');
+      } catch (emailError) {
+        console.error('Email sending failed:', emailError);
+        // Don't throw error - booking was successful, just email failed
+        toast.error('Booking saved but email notification failed. Please contact us at (832) 207-9386');
+      }
       
     } catch (error) {
       console.error('Error submitting booking:', error);
