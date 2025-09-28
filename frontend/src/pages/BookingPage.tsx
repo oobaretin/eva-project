@@ -366,7 +366,7 @@ const BookingPage: React.FC = () => {
                   </div>
                   <div className="ml-3">
                     <p className="text-sm font-medium text-blue-900">Zelle Payment</p>
-                    <p className="text-sm text-blue-700">Send payment to: braidsbyevaofficial@gmail.com</p>
+                    <p className="text-sm text-blue-700">Send payment to: (832) 207-9386</p>
                   </div>
                 </div>
               </div>
@@ -458,7 +458,7 @@ const BookingPage: React.FC = () => {
                 <p className="text-sm text-blue-800">
                   Payment is due on the day of your appointment. We accept <strong>cash</strong> and <strong>Zelle</strong> payments.
                   <br />
-                  <strong>Zelle:</strong> braidsbyevaofficial@gmail.com
+                  <strong>Zelle:</strong> (832) 207-9386
                 </p>
               </div>
 
