@@ -21,8 +21,35 @@ interface BookingData {
 
 export const sendBookingEmails = async (bookingData: BookingData) => {
   try {
-    console.log('📧 Preparing email notifications...');
+    console.log('📧 Sending email notifications...');
 
+    // Use the Vercel API endpoint for email sending
+    const apiUrl = process.env.REACT_APP_API_URL || 'https://braidsbyeva.vercel.app/api';
+    
+    const response = await fetch(`${apiUrl}/send-emails`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ bookingData }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log('✅ Email notifications sent:', result);
+    
+    return {
+      success: true,
+      message: 'Email notifications sent successfully!'
+    };
+
+  } catch (error) {
+    console.error('❌ Error sending email notifications:', error);
+    
+    // Fallback: Show email content for manual sending
     const customerEmail = bookingData.customer_email;
     const customerName = bookingData.customer_name;
     const serviceName = bookingData.service_name;
@@ -32,9 +59,11 @@ export const sendBookingEmails = async (bookingData: BookingData) => {
     const appointmentTime = bookingData.appointment_time;
     const paymentMethod = bookingData.payment_method;
 
-    // Customer email content
-    const customerSubject = `✅ Your BraidsbyEva Appointment Confirmation`;
-    const customerBody = `Hello ${customerName},
+    console.log('📧 ===== EMAIL NOTIFICATIONS (FALLBACK) =====');
+    console.log('📧 CUSTOMER EMAIL:');
+    console.log('To:', customerEmail);
+    console.log('Subject: ✅ Your BraidsbyEva Appointment Confirmation');
+    console.log('Body:', `Hello ${customerName},
 
 Thank you for booking with BraidsbyEva! Your appointment is confirmed:
 
@@ -52,14 +81,15 @@ We look forward to seeing you!
 
 Best regards,
 Awa Obaretin
-BraidsbyEva`;
-
-    // Braider email content
-    const braiderSubject = `📅 New Booking - ${customerName}`;
-    const braiderBody = `New booking received:
+BraidsbyEva`);
+    console.log('');
+    console.log('📧 BRAIDER EMAIL:');
+    console.log('To: braidsbyevaofficial@gmail.com');
+    console.log('Subject: 📅 New Booking - ' + customerName);
+    console.log('Body:', `New booking received:
 
 👤 Customer: ${customerName}
-📧 Email: ${bookingData.customer_email}
+📧 Email: ${customerEmail}
 📞 Phone: ${bookingData.customer_phone}
 
 💇‍♀️ Service: ${serviceName}
@@ -69,66 +99,12 @@ BraidsbyEva`;
 🕐 Time: ${appointmentTime}
 💳 Payment: ${paymentMethod}
 
-📝 Notes: ${bookingData.notes || 'None'}`;
-
-    // Store email data in localStorage for easy access
-    const emailData = {
-      customer: {
-        to: customerEmail,
-        subject: customerSubject,
-        body: customerBody
-      },
-      braider: {
-        to: 'braidsbyevaofficial@gmail.com',
-        subject: braiderSubject,
-        body: braiderBody
-      }
-    };
-
-    localStorage.setItem('bookingEmails', JSON.stringify(emailData));
-
-    // Show email content in alert for immediate visibility
-    const emailAlert = `
-📧 EMAIL NOTIFICATIONS READY!
-
-CUSTOMER EMAIL:
-To: ${customerEmail}
-Subject: ${customerSubject}
-
-BRAIDER EMAIL:
-To: braidsbyevaofficial@gmail.com
-Subject: ${braiderSubject}
-
-Check browser console for full email content.
-Email data saved to localStorage for easy access.
-    `;
-
-    alert(emailAlert);
-
-    // Log to console for easy copying
-    console.log('📧 ===== EMAIL NOTIFICATIONS =====');
-    console.log('📧 CUSTOMER EMAIL:');
-    console.log('To:', customerEmail);
-    console.log('Subject:', customerSubject);
-    console.log('Body:', customerBody);
-    console.log('');
-    console.log('📧 BRAIDER EMAIL:');
-    console.log('To: braidsbyevaofficial@gmail.com');
-    console.log('Subject:', braiderSubject);
-    console.log('Body:', braiderBody);
+📝 Notes: ${bookingData.notes || 'None'}`);
     console.log('=====================================');
     
     return {
       success: true,
-      message: 'Email notifications prepared! Check the alert and browser console for email content to send.'
-    };
-
-  } catch (error) {
-    console.error('❌ Error preparing email notifications:', error);
-    
-    return {
-      success: true,
-      message: 'Booking confirmed! Please contact us at (832) 207-9386 for confirmation.'
+      message: 'Booking confirmed! Email notifications failed, but booking details are in console for manual sending.'
     };
   }
 };
