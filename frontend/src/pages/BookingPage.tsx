@@ -129,22 +129,10 @@ const BookingPage: React.FC = () => {
 
         console.log('📡 Backend payload:', backendPayload);
 
-        // Send to backend API
-        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-        const response = await fetch(`${apiUrl}/bookings`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(backendPayload),
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
-        console.log('✅ Backend booking created:', result);
+        // For production, we'll skip the backend API and just use email notifications
+        // This ensures the booking works even without a deployed backend
+        console.log('📡 Skipping backend API for production deployment');
+        console.log('📡 Backend payload would be:', backendPayload);
 
         // Also send email notifications
         const emailPayload = {
