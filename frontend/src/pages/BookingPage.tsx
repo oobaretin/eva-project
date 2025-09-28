@@ -56,81 +56,124 @@ const BookingPage: React.FC = () => {
     }));
   };
 
-  const sendBookingToBackend = async (bookingData: BookingFormData) => {
-    try {
-      console.log('🚀 Starting simple email booking process...');
-      console.log('📝 Form data:', bookingData);
+    const sendBookingToBackend = async (bookingData: BookingFormData) => {
+      try {
+        console.log('🚀 Starting booking process...');
+        console.log('📝 Form data:', bookingData);
 
-      // Get pricing and duration from the selected style
-      const getStyleDetails = (styleName: string) => {
-        const stylePricing: { [key: string]: { price: string; duration: string } } = {
-          'Knotless Box Braids': { price: '$275', duration: '5-6 hours' },
-          'Small Box Braids': { price: '$330', duration: '6-7 hours' },
-          'Medium Box Braids': { price: '$210', duration: '4-5 hours' },
-          'Large Box Braids': { price: '$158', duration: '3-4 hours' },
-          'Jumbo Box Braids': { price: '$120', duration: '2-3 hours' },
-          'Feed-in Cornrows': { price: '$100', duration: '2-3 hours' },
-          'Stitch Braids': { price: '$80', duration: '2-3 hours' },
-          'Ghana Braids': { price: '$120', duration: '3-4 hours' },
-          'French Braids': { price: '$90', duration: '2-3 hours' },
-          'Dutch Braids': { price: '$100', duration: '2-3 hours' },
-          'Passion Twists': { price: '$189', duration: '3-4 hours' },
-          'Senegalese Twists': { price: '$168', duration: '4-5 hours' },
-          'Twist Out Style': { price: '$120', duration: '2-3 hours' },
-          'Marley Twists': { price: '$168', duration: '4-5 hours' },
-          'Spring Twists': { price: '$189', duration: '3-4 hours' },
-          'Crochet Braids': { price: '$140', duration: '2-3 hours' },
-          'Butterfly Locs': { price: '$242', duration: '4-5 hours' },
-          'Faux Locs': { price: '$210', duration: '4-6 hours' },
-          'Box Braids with Curls': { price: '$264', duration: '5-6 hours' },
-          'Lemonade Braids': { price: '$168', duration: '3-4 hours' },
-          'Kids Box Braids': { price: '$80', duration: '2-3 hours' },
-          'Kids Cornrows': { price: '$60', duration: '1-2 hours' },
-          'Kids Twists': { price: '$70', duration: '2-3 hours' },
-          'Kids Pigtails': { price: '$50', duration: '1-2 hours' },
-          'Goddess Braids': { price: '$189', duration: '3-4 hours' },
-          'Fulani Braids': { price: '$210', duration: '4-5 hours' },
-          'Halo Braid': { price: '$150', duration: '2-3 hours' },
-          'Crown Braids': { price: '$179', duration: '3-4 hours' },
+        // Get pricing and duration from the selected style
+        const getStyleDetails = (styleName: string) => {
+          const stylePricing: { [key: string]: { price: string; duration: string } } = {
+            'Knotless Box Braids': { price: '$275', duration: '5-6 hours' },
+            'Small Box Braids': { price: '$330', duration: '6-7 hours' },
+            'Medium Box Braids': { price: '$210', duration: '4-5 hours' },
+            'Large Box Braids': { price: '$158', duration: '3-4 hours' },
+            'Jumbo Box Braids': { price: '$120', duration: '2-3 hours' },
+            'Feed-in Cornrows': { price: '$100', duration: '2-3 hours' },
+            'Stitch Braids': { price: '$80', duration: '2-3 hours' },
+            'Ghana Braids': { price: '$120', duration: '3-4 hours' },
+            'French Braids': { price: '$90', duration: '2-3 hours' },
+            'Dutch Braids': { price: '$100', duration: '2-3 hours' },
+            'Passion Twists': { price: '$189', duration: '3-4 hours' },
+            'Senegalese Twists': { price: '$168', duration: '4-5 hours' },
+            'Twist Out Style': { price: '$120', duration: '2-3 hours' },
+            'Marley Twists': { price: '$168', duration: '4-5 hours' },
+            'Spring Twists': { price: '$189', duration: '3-4 hours' },
+            'Crochet Braids': { price: '$140', duration: '2-3 hours' },
+            'Butterfly Locs': { price: '$242', duration: '4-5 hours' },
+            'Faux Locs': { price: '$210', duration: '4-6 hours' },
+            'Box Braids with Curls': { price: '$264', duration: '5-6 hours' },
+            'Lemonade Braids': { price: '$168', duration: '3-4 hours' },
+            'Kids Box Braids': { price: '$80', duration: '2-3 hours' },
+            'Kids Cornrows': { price: '$60', duration: '1-2 hours' },
+            'Kids Twists': { price: '$70', duration: '2-3 hours' },
+            'Kids Pigtails': { price: '$50', duration: '1-2 hours' },
+            'Goddess Braids': { price: '$189', duration: '3-4 hours' },
+            'Fulani Braids': { price: '$210', duration: '4-5 hours' },
+            'Halo Braid': { price: '$150', duration: '2-3 hours' },
+            'Crown Braids': { price: '$179', duration: '3-4 hours' },
+          };
+          
+          return stylePricing[styleName] || { price: 'To be discussed', duration: 'To be discussed' };
         };
+
+        const styleDetails = getStyleDetails(bookingData.selectedStyle);
+        console.log('💰 Style details:', styleDetails);
+
+        // Split customer name into first and last name
+        const nameParts = bookingData.name.trim().split(' ');
+        const firstName = nameParts[0] || 'Customer';
+        const lastName = nameParts.slice(1).join(' ') || 'Customer';
+
+        // Create backend payload
+        const backendPayload = {
+          service: {
+            name: bookingData.selectedStyle || 'Braiding Service',
+            price: styleDetails.price.replace('$', ''),
+            duration: styleDetails.duration.replace(' hours', '')
+          },
+          date: bookingData.selectedDate,
+          time: bookingData.selectedTime,
+          customer: {
+            firstName: firstName,
+            lastName: lastName,
+            email: bookingData.email,
+            phone: bookingData.phone,
+            hairLength: 'Not specified',
+            hairTexture: 'Not specified',
+            previousBraids: false,
+            allergies: 'None',
+            notes: bookingData.specialRequests || ''
+          }
+        };
+
+        console.log('📡 Backend payload:', backendPayload);
+
+        // Send to backend API
+        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+        const response = await fetch(`${apiUrl}/bookings`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(backendPayload),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log('✅ Backend booking created:', result);
+
+        // Also send email notifications
+        const emailPayload = {
+          service_name: bookingData.selectedStyle || 'Braiding Service',
+          service_price: styleDetails.price,
+          service_duration: styleDetails.duration,
+          appointment_date: bookingData.selectedDate,
+          appointment_time: bookingData.selectedTime,
+          customer_name: bookingData.name,
+          customer_email: bookingData.email,
+          customer_phone: bookingData.phone,
+          hair_length: 'Not specified',
+          hair_texture: 'Not specified',
+          previous_braids: false,
+          allergies: 'None',
+          notes: bookingData.specialRequests || '',
+          payment_method: 'Cash/Zelle',
+          status: 'pending'
+        };
+
+        console.log('📧 Sending email notifications...');
+        await sendBookingEmails(emailPayload);
+        console.log('✅ Email notifications sent successfully!');
         
-        return stylePricing[styleName] || { price: 'To be discussed', duration: 'To be discussed' };
-      };
-
-      const styleDetails = getStyleDetails(bookingData.selectedStyle);
-      console.log('💰 Style details:', styleDetails);
-
-      // Create email payload (no database needed)
-      const emailPayload = {
-        service_name: bookingData.selectedStyle || 'Braiding Service',
-        service_price: styleDetails.price,
-        service_duration: styleDetails.duration,
-        appointment_date: bookingData.selectedDate,
-        appointment_time: bookingData.selectedTime,
-        customer_name: bookingData.name,
-        customer_email: bookingData.email,
-        customer_phone: bookingData.phone,
-        hair_length: 'Not specified',
-        hair_texture: 'Not specified',
-        previous_braids: false,
-        allergies: 'None',
-        notes: bookingData.specialRequests || '',
-        payment_method: 'Cash/Zelle',
-        status: 'pending'
-      };
-
-      console.log('📧 Email payload:', emailPayload);
-      console.log('📧 Sending email notifications...');
-
-      // Send email notifications (this is all we need!)
-      await sendBookingEmails(emailPayload);
-      console.log('✅ Email notifications sent successfully!');
-      
-    } catch (error: any) {
-      console.error('❌ Error sending booking emails:', error);
-      throw error; // Re-throw to handle in the main function
-    }
-  };
+      } catch (error: any) {
+        console.error('❌ Error in booking process:', error);
+        throw error; // Re-throw to handle in main function
+      }
+    };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
