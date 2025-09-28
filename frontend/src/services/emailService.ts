@@ -21,9 +21,8 @@ interface BookingData {
 
 export const sendBookingEmails = async (bookingData: BookingData) => {
   try {
-    console.log('📧 Sending email notifications...');
+    console.log('📧 Preparing email notifications...');
 
-    // Simple solution: Use mailto links to open user's email client
     const customerEmail = bookingData.customer_email;
     const customerName = bookingData.customer_name;
     const serviceName = bookingData.service_name;
@@ -72,42 +71,42 @@ BraidsbyEva`;
 
 📝 Notes: ${bookingData.notes || 'None'}`;
 
-    // Create mailto links
-    const customerMailto = `mailto:${customerEmail}?subject=${encodeURIComponent(customerSubject)}&body=${encodeURIComponent(customerBody)}`;
-    const braiderMailto = `mailto:braidsbyevaofficial@gmail.com?subject=${encodeURIComponent(braiderSubject)}&body=${encodeURIComponent(braiderBody)}`;
+    // Store email data in localStorage for easy access
+    const emailData = {
+      customer: {
+        to: customerEmail,
+        subject: customerSubject,
+        body: customerBody
+      },
+      braider: {
+        to: 'braidsbyevaofficial@gmail.com',
+        subject: braiderSubject,
+        body: braiderBody
+      }
+    };
 
-    // Open email clients - try multiple approaches for better compatibility
-    try {
-      // Method 1: Direct window.open
-      window.open(customerMailto, '_blank');
-      setTimeout(() => {
-        window.open(braiderMailto, '_blank');
-      }, 500);
-    } catch (error) {
-      console.warn('Direct mailto failed, trying alternative method');
-      
-      // Method 2: Create temporary links
-      const customerLink = document.createElement('a');
-      customerLink.href = customerMailto;
-      customerLink.target = '_blank';
-      document.body.appendChild(customerLink);
-      customerLink.click();
-      document.body.removeChild(customerLink);
-      
-      setTimeout(() => {
-        const braiderLink = document.createElement('a');
-        braiderLink.href = braiderMailto;
-        braiderLink.target = '_blank';
-        document.body.appendChild(braiderLink);
-        braiderLink.click();
-        document.body.removeChild(braiderLink);
-      }, 500);
-    }
+    localStorage.setItem('bookingEmails', JSON.stringify(emailData));
 
-    console.log('✅ Email clients opened with pre-filled messages!');
-    
-    // Also log the email content to console as backup
-    console.log('📧 ===== EMAIL BACKUP (if mailto failed) =====');
+    // Show email content in alert for immediate visibility
+    const emailAlert = `
+📧 EMAIL NOTIFICATIONS READY!
+
+CUSTOMER EMAIL:
+To: ${customerEmail}
+Subject: ${customerSubject}
+
+BRAIDER EMAIL:
+To: braidsbyevaofficial@gmail.com
+Subject: ${braiderSubject}
+
+Check browser console for full email content.
+Email data saved to localStorage for easy access.
+    `;
+
+    alert(emailAlert);
+
+    // Log to console for easy copying
+    console.log('📧 ===== EMAIL NOTIFICATIONS =====');
     console.log('📧 CUSTOMER EMAIL:');
     console.log('To:', customerEmail);
     console.log('Subject:', customerSubject);
@@ -121,13 +120,12 @@ BraidsbyEva`;
     
     return {
       success: true,
-      message: 'Email clients opened! If no email client opened, check the browser console for email content to send manually.'
+      message: 'Email notifications prepared! Check the alert and browser console for email content to send.'
     };
 
   } catch (error) {
-    console.error('❌ Error opening email clients:', error);
+    console.error('❌ Error preparing email notifications:', error);
     
-    // Still return success to prevent booking failure
     return {
       success: true,
       message: 'Booking confirmed! Please contact us at (832) 207-9386 for confirmation.'
