@@ -59,6 +59,9 @@ const BookingPage: React.FC = () => {
 
   const sendBookingToBackend = async (bookingData: BookingFormData) => {
     try {
+      console.log('🚀 Starting booking process...');
+      console.log('📝 Form data:', bookingData);
+
       // Get pricing and duration from the selected style
       const getStyleDetails = (styleName: string) => {
         const stylePricing: { [key: string]: { price: string; duration: string } } = {
@@ -96,6 +99,7 @@ const BookingPage: React.FC = () => {
       };
 
       const styleDetails = getStyleDetails(bookingData.selectedStyle);
+      console.log('💰 Style details:', styleDetails);
 
       // Create Supabase payload
       const supabasePayload = {
@@ -117,21 +121,30 @@ const BookingPage: React.FC = () => {
         created_at: new Date().toISOString()
       };
 
+      console.log('📦 Supabase payload:', supabasePayload);
+      console.log('🔗 Attempting to create booking in Supabase...');
+
       const result = await createBooking(supabasePayload);
-      console.log('Booking submitted successfully:', result);
+      console.log('✅ Booking submitted successfully:', result);
       
       // Send email notifications
       try {
+        console.log('📧 Attempting to send email notifications...');
         await sendBookingEmails(supabasePayload);
-        console.log('Email notifications sent successfully');
+        console.log('✅ Email notifications sent successfully');
       } catch (emailError) {
-        console.error('Email sending failed:', emailError);
+        console.error('❌ Email sending failed:', emailError);
         // Don't throw error - booking was successful, just email failed
         toast.error('Booking saved but email notification failed. Please contact us at (832) 207-9386');
       }
       
     } catch (error) {
-      console.error('Error submitting booking:', error);
+      console.error('❌ Error submitting booking:', error);
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack,
+        name: error.name
+      });
       throw error; // Re-throw to handle in the main function
     }
   };

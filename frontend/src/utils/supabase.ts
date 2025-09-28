@@ -7,20 +7,33 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // Booking functions
 export const createBooking = async (bookingData: any) => {
-  console.log('Creating booking with data:', bookingData)
+  console.log('🔗 Creating booking with data:', bookingData)
+  console.log('🔗 Supabase URL:', supabaseUrl)
+  console.log('🔗 Supabase Key (first 20 chars):', supabaseAnonKey.substring(0, 20) + '...')
   
-  const { data, error } = await supabase
-    .from('bookings')
-    .insert([bookingData])
-    .select()
+  try {
+    const { data, error } = await supabase
+      .from('bookings')
+      .insert([bookingData])
+      .select()
 
-  if (error) {
-    console.error('Supabase error:', error)
-    throw new Error(`Database error: ${error.message}`)
+    if (error) {
+      console.error('❌ Supabase error:', error)
+      console.error('❌ Error details:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code
+      })
+      throw new Error(`Database error: ${error.message}`)
+    }
+
+    console.log('✅ Booking created successfully:', data)
+    return data[0]
+  } catch (error) {
+    console.error('❌ Create booking error:', error)
+    throw error
   }
-
-  console.log('Booking created successfully:', data)
-  return data[0]
 }
 
 export const getAllBookings = async () => {
