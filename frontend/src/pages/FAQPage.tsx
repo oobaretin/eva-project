@@ -53,7 +53,7 @@ const FAQPage: React.FC = () => {
     // Pricing & Payment
     {
       question: "How much do your services cost?",
-      answer: "Pricing varies based on the style, length, and complexity. Basic styles start around $80, while more complex styles can range from $150-$300. We provide detailed pricing during your consultation and on our services page. All prices include tax.",
+      answer: "Pricing varies based on the style, length, and complexity. Basic styles start around $80, while more complex styles can range from $158-$330. We provide detailed pricing during your consultation and on our services page. All prices include tax.",
       category: "pricing"
     },
     {

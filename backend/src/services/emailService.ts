@@ -19,6 +19,13 @@ interface BookingData {
   };
   date: string;
   time: string;
+  paymentInfo?: {
+    totalAmount: number;
+    paidAmount: number;
+    remainingBalance: number;
+    isDeposit: boolean;
+    paymentMethod: string;
+  };
 }
 
 class EmailService {
@@ -36,7 +43,8 @@ class EmailService {
   }
 
   async sendBookingNotification(bookingData: BookingData): Promise<void> {
-    const { customer, service, date, time } = bookingData;
+    const { customer, service, date, time, paymentInfo } = bookingData;
+    
     
     const formattedDate = new Date(date).toLocaleDateString('en-US', {
       weekday: 'long',
@@ -48,51 +56,53 @@ class EmailService {
     const mailOptions = {
       from: process.env.EMAIL_USER || 'braidsbyevaofficial@gmail.com',
       to: 'braidsbyevaofficial@gmail.com', // Your email address
-      subject: `🎉 New Booking: ${service.name} - ${customer.firstName} ${customer.lastName}`,
+      subject: `📅 NEW BOOKING: ${service.name} - ${customer.firstName} ${customer.lastName} - ${formattedDate}`,
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <div style="background: linear-gradient(135deg, #f2760b, #ff8c42); color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
-            <h1 style="margin: 0; font-size: 24px;">🎉 New Booking Received!</h1>
-            <p style="margin: 10px 0 0 0; font-size: 16px;">BraidsbyEva Booking System</p>
-          </div>
+        <div style="font-family: Arial, sans-serif; max-width: 100%; width: 100%; margin: 0 auto; background: #ffffff; word-wrap: break-word; overflow-wrap: break-word;">
+          <h1>📅 NEW BOOKING ALERT</h1>
+          <p>BraidsbyEva - Professional Hair Services</p>
+          <p>Booking ID: BK-${Date.now()}</p>
           
-          <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px;">
-            <h2 style="color: #333; margin-top: 0;">📅 Appointment Details</h2>
-            
-            <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-              <h3 style="color: #f2760b; margin-top: 0;">👤 Customer Information</h3>
-              <p><strong>Name:</strong> ${customer.firstName} ${customer.lastName}</p>
-              <p><strong>Email:</strong> <a href="mailto:${customer.email}" style="color: #f2760b;">${customer.email}</a></p>
-              <p><strong>Phone:</strong> <a href="tel:${customer.phone}" style="color: #f2760b;">${customer.phone}</a></p>
-              ${customer.hairLength ? `<p><strong>Hair Length:</strong> ${customer.hairLength}</p>` : ''}
-              ${customer.hairTexture ? `<p><strong>Hair Texture:</strong> ${customer.hairTexture}</p>` : ''}
-              ${customer.previousBraids ? `<p><strong>Previous Braids:</strong> Yes</p>` : ''}
-              ${customer.allergies ? `<p><strong>Allergies:</strong> ${customer.allergies}</p>` : ''}
-              ${customer.notes ? `<p><strong>Notes:</strong> ${customer.notes}</p>` : ''}
-            </div>
+          <h2>📅 Appointment Details</h2>
+          
+          <h3>👤 Customer Information</h3>
+          <p><strong>Full Name:</strong> ${customer.firstName} ${customer.lastName}</p>
+          <p><strong>Email:</strong> ${customer.email}</p>
+          <p><strong>Phone:</strong> ${customer.phone}</p>
+          ${customer.hairLength ? `<p><strong>Hair Length:</strong> ${customer.hairLength}</p>` : ''}
+          ${customer.hairTexture ? `<p><strong>Hair Texture:</strong> ${customer.hairTexture}</p>` : ''}
+          ${customer.previousBraids ? `<p><strong>Previous Braids:</strong> Yes</p>` : ''}
+          ${customer.allergies ? `<p><strong>⚠️ Allergies:</strong> ${customer.allergies}</p>` : ''}
+          ${customer.notes ? `<p><strong>📝 Special Notes:</strong> ${customer.notes}</p>` : ''}
 
-            <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-              <h3 style="color: #f2760b; margin-top: 0;">💇‍♀️ Service Details</h3>
-              <p><strong>Service:</strong> ${service.name}</p>
-              <p><strong>Price:</strong> ${service.price}</p>
-              <p><strong>Duration:</strong> ${service.duration}</p>
-            </div>
+          <h3>💇‍♀️ Service Details</h3>
+          <p><strong>Service:</strong> ${service.name}</p>
+          <p><strong>Total Price:</strong> ${paymentInfo ? `$${paymentInfo.totalAmount}` : service.price}</p>
+          <p><strong>Deposit Paid:</strong> $${paymentInfo ? paymentInfo.paidAmount : 'Not provided'}</p>
+          <p><strong>Balance Due:</strong> $${paymentInfo ? paymentInfo.remainingBalance : 'Not provided'}</p>
+          <p><strong>Duration:</strong> ${service.duration}</p>
 
-            <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-              <h3 style="color: #f2760b; margin-top: 0;">📅 Appointment Schedule</h3>
-              <p><strong>Date:</strong> ${formattedDate}</p>
-              <p><strong>Time:</strong> ${time}</p>
-            </div>
+          <h3>📅 Appointment Schedule</h3>
+          <p><strong>Date:</strong> ${formattedDate}</p>
+          <p><strong>Time:</strong> ${time}</p>
 
-            <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
-              <p style="margin: 0; color: #155724;"><strong>📞 Next Steps:</strong></p>
-              <ul style="margin: 10px 0 0 0; color: #155724;">
-                <li>Contact the customer to confirm the appointment</li>
-                <li>Send them preparation instructions</li>
-                <li>Add the appointment to your calendar</li>
-              </ul>
-            </div>
-          </div>
+          <h3>📞 Immediate Action Required</h3>
+          <ul>
+            <li><strong>1. Contact Customer:</strong> Call or text ${customer.phone} to confirm appointment details</li>
+            <li><strong>2. Send Preparation Instructions:</strong> Email hair care guidelines and what to bring</li>
+            <li><strong>3. Update Calendar:</strong> Add appointment to your scheduling system</li>
+            <li><strong>4. Prepare Workspace:</strong> Set up tools and materials needed for ${service.name}</li>
+            <li><strong>5. Confirm Payment Status:</strong> ${paymentInfo ? (paymentInfo.isDeposit ? 'Collect remaining balance of $' + paymentInfo.remainingBalance + ' on appointment day' : 'Payment completed - no additional payment needed') : 'Collect full payment on appointment day'}</li>
+          </ul>
+          
+          <h3>📋 Professional Reminders</h3>
+          <ul>
+            <li>Arrive 15 minutes early to set up your workspace</li>
+            <li>Have all necessary tools and products ready</li>
+            <li>Review customer's hair history and preferences</li>
+            <li>Maintain professional communication throughout the service</li>
+            <li>Follow up after the appointment for feedback</li>
+          </ul>
         </div>
       `,
     };
@@ -107,7 +117,7 @@ class EmailService {
   }
 
   async sendCustomerConfirmation(bookingData: BookingData): Promise<void> {
-    const { customer, service, date, time } = bookingData;
+    const { customer, service, date, time, paymentInfo } = bookingData;
     
     const formattedDate = new Date(date).toLocaleDateString('en-US', {
       weekday: 'long',
@@ -119,52 +129,61 @@ class EmailService {
     const mailOptions = {
       from: process.env.EMAIL_USER || 'braidsbyevaofficial@gmail.com',
       to: customer.email,
-      subject: `✅ Booking Confirmation - ${service.name} with BraidsbyEva`,
+      subject: `✅ BOOKING CONFIRMED: ${service.name} - ${formattedDate} at ${time}`,
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <div style="background: linear-gradient(135deg, #f2760b, #ff8c42); color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;">
-            <h1 style="margin: 0; font-size: 24px;">✅ Booking Confirmed!</h1>
-            <p style="margin: 10px 0 0 0; font-size: 16px;">Thank you for choosing BraidsbyEva</p>
-          </div>
+        <div style="font-family: Arial, sans-serif; max-width: 100%; width: 100%; margin: 0 auto; background: #ffffff; word-wrap: break-word; overflow-wrap: break-word;">
+          <h1>✅ BOOKING CONFIRMED!</h1>
+          <p>Thank you for choosing BraidsbyEva</p>
+          <p>Professional Hair Services by Awa Obaretin</p>
           
-          <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px;">
-            <p>Hi ${customer.firstName},</p>
-            
-            <p>Thank you for booking with BraidsbyEva! We're excited to work with you.</p>
-            
-            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-              <h3 style="color: #f2760b; margin-top: 0;">📅 Your Appointment</h3>
-              <p><strong>Service:</strong> ${service.name}</p>
-              <p><strong>Date:</strong> ${formattedDate}</p>
-              <p><strong>Time:</strong> ${time}</p>
-              <p><strong>Duration:</strong> ${service.duration}</p>
-              <p><strong>Price:</strong> ${service.price}</p>
-            </div>
+          <p>🎉 Your appointment has been successfully booked!</p>
+          
+          <p>Dear ${customer.firstName},</p>
+          
+          <p>Thank you for choosing BraidsbyEva for your hair styling needs! We're thrilled to have you as our valued client and look forward to providing you with exceptional service.</p>
+          
+          <h3>📅 Your Appointment Details</h3>
+          <p><strong>Service:</strong> ${service.name}</p>
+          <p><strong>Date:</strong> ${formattedDate}</p>
+          <p><strong>Time:</strong> ${time}</p>
+          <p><strong>Duration:</strong> ${service.duration}</p>
+          <p><strong>Total Investment:</strong> ${paymentInfo ? `$${paymentInfo.totalAmount}` : service.price}</p>
+          <p><strong>Deposit Paid:</strong> $${paymentInfo ? paymentInfo.paidAmount : 'Not provided'}</p>
+          <p><strong>Balance Due:</strong> $${paymentInfo ? paymentInfo.remainingBalance : 'Not provided'}</p>
 
-            <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107; margin: 20px 0;">
-              <p style="margin: 0; color: #856404;"><strong>📋 Preparation Instructions:</strong></p>
-              <ul style="margin: 10px 0 0 0; color: #856404;">
-                <li>Come with clean, dry hair</li>
-                <li>Remove any previous braids or extensions</li>
-                <li>Bring a hair tie to secure your hair during the process</li>
-                <li>Arrive 10 minutes early</li>
-              </ul>
-            </div>
+          <h3>📋 Preparation Instructions</h3>
+          <p>Please follow these important steps to ensure the best results:</p>
+          <ul>
+            <li><strong>Hair Preparation:</strong> Come with clean, dry hair (washed 24-48 hours before)</li>
+            <li><strong>Remove Previous Work:</strong> Take out any existing braids, extensions, or protective styles</li>
+            <li><strong>Hair Accessories:</strong> Bring a hair tie and any preferred hair accessories</li>
+            <li><strong>Arrival Time:</strong> Please arrive 10-15 minutes early for consultation</li>
+            <li><strong>Comfort:</strong> Wear comfortable clothing and bring entertainment (books, phone, etc.)</li>
+            <li><strong>Hydration:</strong> Stay hydrated and have a light meal before your appointment</li>
+          </ul>
 
-            <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; border-left: 4px solid #17a2b8;">
-              <p style="margin: 0; color: #0c5460;"><strong>📞 Contact Information:</strong></p>
-              <p style="margin: 5px 0 0 0; color: #0c5460;">
-                Phone: <a href="tel:+18322079386" style="color: #f2760b;">(832) 207-9386</a><br>
-                Email: <a href="mailto:braidsbyevaofficial@gmail.com" style="color: #f2760b;">braidsbyevaofficial@gmail.com</a>
-              </p>
-            </div>
+          <h3>📞 Contact Information</h3>
+          <p><strong>Phone:</strong> (832) 207-9386</p>
+          <p><strong>Email:</strong> braidsbyevaofficial@gmail.com</p>
+          <p><strong>Service Hours:</strong> By appointment only</p>
+          <p><strong>Response Time:</strong> Within 24 hours</p>
 
-            <p>We'll contact you within 24 hours to confirm your appointment and provide any additional details.</p>
-            
-            <p>Looking forward to seeing you soon!</p>
-            
-            <p>Best regards,<br>Awa Obaretin<br>BraidsbyEva</p>
-          </div>
+          <h3>📋 What Happens Next?</h3>
+          <ul>
+            <li><strong>Confirmation Call:</strong> We'll contact you within 24 hours to confirm all details</li>
+            <li><strong>Preparation Guide:</strong> You'll receive detailed hair care instructions</li>
+            <li><strong>Reminder:</strong> We'll send a reminder 24 hours before your appointment</li>
+            <li><strong>Questions:</strong> Feel free to contact us anytime with questions or concerns</li>
+          </ul>
+          
+          <p><strong>We're excited to create beautiful, long-lasting styles for you!</strong></p>
+          
+          <p>Thank you for trusting BraidsbyEva with your hair care needs. We're committed to providing you with exceptional service and stunning results.</p>
+          
+          <p><strong>Best regards,</strong></p>
+          <p><strong>Awa Obaretin</strong></p>
+          <p>Professional Hair Stylist & Founder</p>
+          <p>BraidsbyEva</p>
         </div>
       `,
     };

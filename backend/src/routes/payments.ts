@@ -8,39 +8,27 @@ const router = express.Router();
 
 // Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-12-18.acacia'
+  apiVersion: '2025-08-27.basil'
 });
 
 // Create payment intent for card payments
-router.post('/create-intent', authenticateToken, async (req: AuthenticatedRequest, res, next) => {
+router.post('/create-intent', async (req, res, next) => {
   try {
-    const { amount, currency = 'usd', appointmentId } = req.body as PaymentIntentRequest;
+    const { amount, currency = 'usd', appointmentId } = req.body;
 
     if (!amount || !appointmentId) {
       throw new AppError('Amount and appointment ID are required', 400);
     }
 
-    // Verify appointment exists and belongs to user
-    const appointment = await prisma.appointment.findUnique({
-      where: { id: appointmentId },
-      select: { id: true, userId: true, totalPrice: true }
-    });
-
-    if (!appointment) {
-      throw new AppError('Appointment not found', 404);
-    }
-
-    if (appointment.userId !== req.user!.id) {
-      throw new AppError('Access denied', 403);
-    }
+    // Note: For public booking system, we don't require pre-existing appointments
+    // The appointment will be created after successful payment
 
     // Create payment intent
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100), // Convert to cents
       currency,
       metadata: {
-        appointmentId,
-        userId: req.user!.id
+        appointmentId
       }
     });
 
@@ -58,7 +46,7 @@ router.post('/create-intent', authenticateToken, async (req: AuthenticatedReques
 });
 
 // Confirm payment and update appointment
-router.post('/confirm', authenticateToken, async (req: AuthenticatedRequest, res, next) => {
+router.post('/confirm', async (req, res, next) => {
   try {
     const { paymentIntentId, appointmentId } = req.body;
 
@@ -73,23 +61,16 @@ router.post('/confirm', authenticateToken, async (req: AuthenticatedRequest, res
       throw new AppError('Payment not completed', 400);
     }
 
-    // Update appointment with payment details
-    const updatedAppointment = await prisma.appointment.update({
-      where: { id: appointmentId },
-      data: {
-        paymentStatus: 'PAID',
-        paymentMethod: 'CARD',
-        stripePaymentId: paymentIntentId,
-        paidAt: new Date()
-      }
-    });
-
+    // For public booking system, we just confirm the payment was successful
+    // The appointment will be created in the booking endpoint after payment confirmation
+    
     res.json({
       success: true,
       data: {
-        appointmentId: updatedAppointment.id,
-        paymentStatus: updatedAppointment.paymentStatus,
-        paymentMethod: updatedAppointment.paymentMethod
+        appointmentId: appointmentId,
+        paymentStatus: 'PAID',
+        paymentMethod: 'CARD',
+        stripePaymentId: paymentIntentId
       },
       message: 'Payment confirmed successfully'
     });
@@ -99,60 +80,22 @@ router.post('/confirm', authenticateToken, async (req: AuthenticatedRequest, res
 });
 
 // Get payment status
-router.get('/status/:appointmentId', authenticateToken, async (req: AuthenticatedRequest, res, next) => {
+router.get('/status/:appointmentId', async (req, res, next) => {
   try {
     const { appointmentId } = req.params;
 
-    const appointment = await prisma.appointment.findUnique({
-      where: { id: appointmentId },
-      select: {
-        id: true,
-        userId: true,
-        paymentStatus: true,
-        paymentMethod: true,
-        totalPrice: true,
-        stripePaymentId: true
-      }
-    });
+    // For public booking system, return a generic status
+    // The actual appointment will be created after payment
 
-    if (!appointment) {
-      throw new AppError('Appointment not found', 404);
-    }
-
-    if (appointment.userId !== req.user!.id) {
-      throw new AppError('Access denied', 403);
-    }
-
-    let paymentDetails = null;
-
-    // Get Stripe payment details if available
-    if (appointment.paymentMethod === 'CARD' && appointment.stripePaymentId) {
-      try {
-        const paymentIntent = await stripe.paymentIntents.retrieve(appointment.stripePaymentId);
-        paymentDetails = {
-          status: paymentIntent.status,
-          amount: paymentIntent.amount,
-          currency: paymentIntent.currency,
-          created: paymentIntent.created
-        };
-      } catch (error) {
-        paymentDetails = {
-          status: 'error',
-          message: 'Unable to retrieve payment details'
-        };
-      }
-    }
-
+    // For public booking system, return a simple status
     res.json({
       success: true,
       data: {
-        appointmentId: appointment.id,
-        paymentStatus: appointment.paymentStatus,
-        paymentMethod: appointment.paymentMethod,
-        totalPrice: appointment.totalPrice,
-        paymentDetails
-      },
-      message: 'Payment status retrieved successfully'
+        appointmentId: appointmentId,
+        paymentStatus: 'PENDING',
+        paymentMethod: 'CARD',
+        message: 'Payment status retrieved successfully'
+      }
     });
   } catch (error) {
     next(error);
@@ -188,7 +131,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
       console.log(`Unhandled event type ${event.type}`);
   }
 
-  res.json({ received: true });
+  return res.json({ received: true });
 });
 
 // Get Zelle payment instructions

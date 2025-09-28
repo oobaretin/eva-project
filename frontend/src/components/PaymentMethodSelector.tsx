@@ -21,14 +21,12 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
   isLoading = false
 }) => {
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>('card');
-  const [showZelleInstructions, setShowZelleInstructions] = useState(false);
 
   const handleCardPaymentSuccess = (paymentIntentId: string) => {
     onPaymentSuccess('card', paymentIntentId);
   };
 
   const handleZellePayment = () => {
-    setShowZelleInstructions(true);
     onPaymentSuccess('zelle');
   };
 

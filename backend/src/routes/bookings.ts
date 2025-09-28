@@ -11,7 +11,8 @@ router.post('/', async (req, res) => {
       service,
       date,
       time,
-      customer
+      customer,
+      paymentInfo
     } = req.body;
 
     // Validate required fields
@@ -49,6 +50,19 @@ router.post('/', async (req, res) => {
     console.log(`🔗 Previous Braids: ${customer.previousBraids ? 'Yes' : 'No'}`);
     console.log(`⚠️ Allergies: ${customer.allergies || 'None'}`);
     console.log(`📝 Notes: ${customer.notes || 'None'}`);
+    
+    // Log payment information if available
+    if (paymentInfo) {
+      console.log('💰 PAYMENT INFORMATION:');
+      console.log(`💵 Total Amount: $${paymentInfo.totalAmount}`);
+      console.log(`💳 Amount Paid: $${paymentInfo.paidAmount}`);
+      console.log(`⚖️ Remaining Balance: $${paymentInfo.remainingBalance}`);
+      console.log(`💳 Payment Method: ${paymentInfo.paymentMethod}`);
+      console.log(`📋 Is Deposit: ${paymentInfo.isDeposit ? 'Yes' : 'No'}`);
+    } else {
+      console.log('💰 PAYMENT INFORMATION: Not provided');
+    }
+    
     console.log('=====================================');
 
           // Generate a simple booking ID
@@ -60,7 +74,8 @@ router.post('/', async (req, res) => {
               customer,
               service,
               date,
-              time
+              time,
+              paymentInfo
             });
             
             // Also send confirmation to customer
@@ -68,7 +83,8 @@ router.post('/', async (req, res) => {
               customer,
               service,
               date,
-              time
+              time,
+              paymentInfo
             });
           } catch (emailError) {
             console.error('Email sending failed:', emailError);
