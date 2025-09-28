@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { createBooking } from '../utils/supabase';
 import { sendBookingEmails } from '../services/emailService';
 
 interface BookingFormData {
@@ -59,7 +58,7 @@ const BookingPage: React.FC = () => {
 
   const sendBookingToBackend = async (bookingData: BookingFormData) => {
     try {
-      console.log('🚀 Starting booking process...');
+      console.log('🚀 Starting simple email booking process...');
       console.log('📝 Form data:', bookingData);
 
       // Get pricing and duration from the selected style
@@ -101,8 +100,8 @@ const BookingPage: React.FC = () => {
       const styleDetails = getStyleDetails(bookingData.selectedStyle);
       console.log('💰 Style details:', styleDetails);
 
-      // Create Supabase payload
-      const supabasePayload = {
+      // Create email payload (no database needed)
+      const emailPayload = {
         service_name: bookingData.selectedStyle || 'Braiding Service',
         service_price: styleDetails.price,
         service_duration: styleDetails.duration,
@@ -117,34 +116,18 @@ const BookingPage: React.FC = () => {
         allergies: 'None',
         notes: bookingData.specialRequests || '',
         payment_method: 'Cash/Zelle',
-        status: 'pending',
-        created_at: new Date().toISOString()
+        status: 'pending'
       };
 
-      console.log('📦 Supabase payload:', supabasePayload);
-      console.log('🔗 Attempting to create booking in Supabase...');
+      console.log('📧 Email payload:', emailPayload);
+      console.log('📧 Sending email notifications...');
 
-      const result = await createBooking(supabasePayload);
-      console.log('✅ Booking submitted successfully:', result);
+      // Send email notifications (this is all we need!)
+      await sendBookingEmails(emailPayload);
+      console.log('✅ Email notifications sent successfully!');
       
-      // Send email notifications
-      try {
-        console.log('📧 Attempting to send email notifications...');
-        await sendBookingEmails(supabasePayload);
-        console.log('✅ Email notifications sent successfully');
-      } catch (emailError) {
-        console.error('❌ Email sending failed:', emailError);
-        // Don't throw error - booking was successful, just email failed
-        toast.error('Booking saved but email notification failed. Please contact us at (832) 207-9386');
-      }
-      
-    } catch (error) {
-      console.error('❌ Error submitting booking:', error);
-      console.error('Error details:', {
-        message: error.message,
-        stack: error.stack,
-        name: error.name
-      });
+    } catch (error: any) {
+      console.error('❌ Error sending booking emails:', error);
       throw error; // Re-throw to handle in the main function
     }
   };

@@ -21,37 +21,35 @@ interface BookingData {
 
 export const sendBookingEmails = async (bookingData: BookingData) => {
   try {
-    // For now, just log the booking data since Vercel API isn't set up yet
-    console.log('📧 Email notifications would be sent with data:', {
-      customer: {
-        name: bookingData.customer_name,
-        email: bookingData.customer_email,
-        phone: bookingData.customer_phone
+    console.log('📧 Sending booking emails via Vercel API...');
+    console.log('📧 Booking data:', bookingData);
+
+    // Send to Vercel API endpoint
+    const response = await fetch('/api/send-emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      service: {
-        name: bookingData.service_name,
-        price: bookingData.service_price,
-        duration: bookingData.service_duration
-      },
-      appointment: {
-        date: bookingData.appointment_date,
-        time: bookingData.appointment_time
-      },
-      payment: bookingData.payment_method
+      body: JSON.stringify({ bookingData })
     });
 
-    // Return success for now - emails will be sent manually
-    return {
-      success: true,
-      message: 'Booking saved successfully. Email notifications will be sent manually.'
-    };
+    if (!response.ok) {
+      throw new Error(`Email API failed: ${response.status} ${response.statusText}`);
+    }
+
+    const result = await response.json();
+    console.log('✅ Emails sent successfully:', result);
+    return result;
 
   } catch (error) {
-    console.error('❌ Error in email service:', error);
-    // Don't throw error - booking was successful, just email failed
-    return {
-      success: false,
-      message: 'Booking saved but email notification failed. Please contact us at (832) 207-9386'
-    };
+    console.error('❌ Error sending emails:', error);
+    
+    // If Vercel API fails, show the booking data for manual email sending
+    console.log('📧 Manual email data for backup:');
+    console.log('Customer:', bookingData.customer_name, bookingData.customer_email);
+    console.log('Service:', bookingData.service_name, bookingData.service_price);
+    console.log('Date:', bookingData.appointment_date, bookingData.appointment_time);
+    
+    throw new Error('Email service unavailable. Please contact us at (832) 207-9386');
   }
 };
