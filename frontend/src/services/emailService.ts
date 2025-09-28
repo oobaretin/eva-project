@@ -21,70 +21,73 @@ interface BookingData {
 
 export const sendBookingEmails = async (bookingData: BookingData) => {
   try {
-    console.log('📧 Processing booking email notifications...');
-    console.log('📧 Booking data:', bookingData);
+    console.log('📧 Sending email notifications...');
 
-    // For now, we'll use a simple approach - log the booking data
-    // and provide clear instructions for manual email sending
-    console.log('📧 ===== BOOKING NOTIFICATION =====');
-    console.log('📧 Please send the following emails manually:');
-    console.log('');
-    
-    // Customer Email Template
-    console.log('📧 TO CUSTOMER:');
-    console.log('📧 To:', bookingData.customer_email);
-    console.log('📧 Subject: ✅ Your BraidsbyEva Appointment Confirmation');
-    console.log('📧 Message:');
-    console.log(`Hello ${bookingData.customer_name},`);
-    console.log('');
-    console.log('Thank you for booking with BraidsbyEva! Your appointment is confirmed:');
-    console.log('');
-    console.log(`💇‍♀️ Service: ${bookingData.service_name}`);
-    console.log(`💰 Price: ${bookingData.service_price}`);
-    console.log(`⏱️ Duration: ${bookingData.service_duration}`);
-    console.log(`📅 Date: ${bookingData.appointment_date}`);
-    console.log(`🕐 Time: ${bookingData.appointment_time}`);
-    console.log(`💳 Payment: ${bookingData.payment_method}`);
-    console.log('');
-    console.log('📞 Contact: (832) 207-9386');
-    console.log('📧 Email: braidsbyevaofficial@gmail.com');
-    console.log('');
-    console.log('We look forward to seeing you!');
-    console.log('');
-    console.log('Best regards,');
-    console.log('Awa Obaretin');
-    console.log('BraidsbyEva');
-    console.log('');
-    
-    // Braider Email Template
-    console.log('📧 TO BRAIDER (Awa):');
-    console.log('📧 To: braidsbyevaofficial@gmail.com');
-    console.log('📧 Subject: 📅 New Booking - ' + bookingData.customer_name);
-    console.log('📧 Message:');
-    console.log('New booking received:');
-    console.log('');
-    console.log('👤 Customer: ' + bookingData.customer_name);
-    console.log('📧 Email: ' + bookingData.customer_email);
-    console.log('📞 Phone: ' + bookingData.customer_phone);
-    console.log('');
-    console.log('💇‍♀️ Service: ' + bookingData.service_name);
-    console.log('💰 Price: ' + bookingData.service_price);
-    console.log('⏱️ Duration: ' + bookingData.service_duration);
-    console.log('📅 Date: ' + bookingData.appointment_date);
-    console.log('🕐 Time: ' + bookingData.appointment_time);
-    console.log('💳 Payment: ' + bookingData.payment_method);
-    console.log('');
-    console.log('📝 Notes: ' + (bookingData.notes || 'None'));
-    console.log('');
-    console.log('=====================================');
+    // Simple solution: Use mailto links to open user's email client
+    const customerEmail = bookingData.customer_email;
+    const customerName = bookingData.customer_name;
+    const serviceName = bookingData.service_name;
+    const servicePrice = bookingData.service_price;
+    const serviceDuration = bookingData.service_duration;
+    const appointmentDate = bookingData.appointment_date;
+    const appointmentTime = bookingData.appointment_time;
+    const paymentMethod = bookingData.payment_method;
 
+    // Customer email content
+    const customerSubject = `✅ Your BraidsbyEva Appointment Confirmation`;
+    const customerBody = `Hello ${customerName},
+
+Thank you for booking with BraidsbyEva! Your appointment is confirmed:
+
+💇‍♀️ Service: ${serviceName}
+💰 Price: ${servicePrice}
+⏱️ Duration: ${serviceDuration}
+📅 Date: ${appointmentDate}
+🕐 Time: ${appointmentTime}
+💳 Payment: ${paymentMethod}
+
+📞 Contact: (832) 207-9386
+📧 Email: braidsbyevaofficial@gmail.com
+
+We look forward to seeing you!
+
+Best regards,
+Awa Obaretin
+BraidsbyEva`;
+
+    // Braider email content
+    const braiderSubject = `📅 New Booking - ${customerName}`;
+    const braiderBody = `New booking received:
+
+👤 Customer: ${customerName}
+📧 Email: ${bookingData.customer_email}
+📞 Phone: ${bookingData.customer_phone}
+
+💇‍♀️ Service: ${serviceName}
+💰 Price: ${servicePrice}
+⏱️ Duration: ${serviceDuration}
+📅 Date: ${appointmentDate}
+🕐 Time: ${appointmentTime}
+💳 Payment: ${paymentMethod}
+
+📝 Notes: ${bookingData.notes || 'None'}`;
+
+    // Create mailto links
+    const customerMailto = `mailto:${customerEmail}?subject=${encodeURIComponent(customerSubject)}&body=${encodeURIComponent(customerBody)}`;
+    const braiderMailto = `mailto:braidsbyevaofficial@gmail.com?subject=${encodeURIComponent(braiderSubject)}&body=${encodeURIComponent(braiderBody)}`;
+
+    // Open email clients
+    window.open(customerMailto, '_blank');
+    window.open(braiderMailto, '_blank');
+
+    console.log('✅ Email clients opened with pre-filled messages!');
     return {
       success: true,
-      message: 'Booking confirmed! Please check the console for email templates to send manually.'
+      message: 'Email clients opened! Please send the pre-filled emails.'
     };
 
   } catch (error) {
-    console.error('❌ Error in email service:', error);
+    console.error('❌ Error opening email clients:', error);
     
     // Still return success to prevent booking failure
     return {
