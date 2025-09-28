@@ -24,24 +24,47 @@ export const sendBookingEmails = async (bookingData: BookingData) => {
     console.log('📧 Processing booking email notifications...');
     console.log('📧 Booking data:', bookingData);
 
-    // For now, just log the booking data and return success
-    // This allows the booking to complete without failing
-    console.log('📧 Email notifications will be sent manually:');
-    console.log('👤 Customer:', bookingData.customer_name, bookingData.customer_email);
-    console.log('📞 Phone:', bookingData.customer_phone);
-    console.log('💇‍♀️ Service:', bookingData.service_name);
-    console.log('💰 Price:', bookingData.service_price);
-    console.log('⏱️ Duration:', bookingData.service_duration);
-    console.log('📅 Date:', bookingData.appointment_date);
-    console.log('🕐 Time:', bookingData.appointment_time);
-    console.log('💳 Payment:', bookingData.payment_method);
-    console.log('📝 Notes:', bookingData.notes || 'None');
+    // Try to send emails via Vercel API endpoint
+    try {
+      const response = await fetch('/api/send-emails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ bookingData }),
+      });
 
-    // Return success so booking doesn't fail
-    return {
-      success: true,
-      message: 'Booking confirmed! Email notifications will be sent manually.'
-    };
+      if (response.ok) {
+        const result = await response.json();
+        console.log('✅ Emails sent successfully via Vercel API:', result);
+        return {
+          success: true,
+          message: 'Email notifications sent successfully!'
+        };
+      } else {
+        console.warn('⚠️ Vercel API endpoint not available, logging for manual sending');
+        throw new Error('Vercel API endpoint not available');
+      }
+    } catch (apiError) {
+      console.warn('⚠️ Vercel API endpoint failed, logging for manual sending:', apiError);
+      
+      // Fallback: log email data for manual sending
+      console.log('📧 Email notifications will be sent manually:');
+      console.log('👤 Customer:', bookingData.customer_name, bookingData.customer_email);
+      console.log('📞 Phone:', bookingData.customer_phone);
+      console.log('💇‍♀️ Service:', bookingData.service_name);
+      console.log('💰 Price:', bookingData.service_price);
+      console.log('⏱️ Duration:', bookingData.service_duration);
+      console.log('📅 Date:', bookingData.appointment_date);
+      console.log('🕐 Time:', bookingData.appointment_time);
+      console.log('💳 Payment:', bookingData.payment_method);
+      console.log('📝 Notes:', bookingData.notes || 'None');
+
+      return {
+        success: true,
+        message: 'Booking confirmed! Email notifications will be sent manually.'
+      };
+    }
 
   } catch (error) {
     console.error('❌ Error in email service:', error);
