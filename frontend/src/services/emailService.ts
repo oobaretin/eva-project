@@ -76,14 +76,52 @@ BraidsbyEva`;
     const customerMailto = `mailto:${customerEmail}?subject=${encodeURIComponent(customerSubject)}&body=${encodeURIComponent(customerBody)}`;
     const braiderMailto = `mailto:braidsbyevaofficial@gmail.com?subject=${encodeURIComponent(braiderSubject)}&body=${encodeURIComponent(braiderBody)}`;
 
-    // Open email clients
-    window.open(customerMailto, '_blank');
-    window.open(braiderMailto, '_blank');
+    // Open email clients - try multiple approaches for better compatibility
+    try {
+      // Method 1: Direct window.open
+      window.open(customerMailto, '_blank');
+      setTimeout(() => {
+        window.open(braiderMailto, '_blank');
+      }, 500);
+    } catch (error) {
+      console.warn('Direct mailto failed, trying alternative method');
+      
+      // Method 2: Create temporary links
+      const customerLink = document.createElement('a');
+      customerLink.href = customerMailto;
+      customerLink.target = '_blank';
+      document.body.appendChild(customerLink);
+      customerLink.click();
+      document.body.removeChild(customerLink);
+      
+      setTimeout(() => {
+        const braiderLink = document.createElement('a');
+        braiderLink.href = braiderMailto;
+        braiderLink.target = '_blank';
+        document.body.appendChild(braiderLink);
+        braiderLink.click();
+        document.body.removeChild(braiderLink);
+      }, 500);
+    }
 
     console.log('✅ Email clients opened with pre-filled messages!');
+    
+    // Also log the email content to console as backup
+    console.log('📧 ===== EMAIL BACKUP (if mailto failed) =====');
+    console.log('📧 CUSTOMER EMAIL:');
+    console.log('To:', customerEmail);
+    console.log('Subject:', customerSubject);
+    console.log('Body:', customerBody);
+    console.log('');
+    console.log('📧 BRAIDER EMAIL:');
+    console.log('To: braidsbyevaofficial@gmail.com');
+    console.log('Subject:', braiderSubject);
+    console.log('Body:', braiderBody);
+    console.log('=====================================');
+    
     return {
       success: true,
-      message: 'Email clients opened! Please send the pre-filled emails.'
+      message: 'Email clients opened! If no email client opened, check the browser console for email content to send manually.'
     };
 
   } catch (error) {
