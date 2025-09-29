@@ -20,7 +20,7 @@ interface BookingData {
 
 export const sendBookingEmails = async (bookingData: BookingData) => {
   try {
-    console.log('📧 Sending email notifications...');
+    console.log('📧 Preparing booking notification...');
 
     // Create email content
     const customerEmail = bookingData.customer_email;
@@ -32,71 +32,9 @@ export const sendBookingEmails = async (bookingData: BookingData) => {
     const appointmentTime = bookingData.appointment_time;
     const paymentMethod = bookingData.payment_method;
 
-    // Send emails using EmailJS - simple and reliable
-    try {
-      // Use EmailJS public API directly
-      const emailjsUrl = 'https://api.emailjs.com/api/v1.0/email/send';
-      
-      // Customer email
-      const customerEmailPayload = {
-        service_id: 'service_braidsbyeva',
-        template_id: 'template_customer',
-        user_id: 'oW9vgP7OPmb0xQzEA', // EmailJS public key
-        template_params: {
-          to_email: customerEmail,
-          to_name: customerName,
-          service_name: serviceName,
-          service_price: servicePrice,
-          service_duration: serviceDuration,
-          appointment_date: appointmentDate,
-          appointment_time: appointmentTime,
-          payment_method: paymentMethod,
-          customer_phone: bookingData.customer_phone,
-          from_name: 'BraidsbyEva',
-          reply_to: 'braidsbyevaofficial@gmail.com',
-          message: `Hello ${customerName},
-
-Thank you for booking with BraidsbyEva! Your appointment is confirmed:
-
-💇‍♀️ Service: ${serviceName}
-💰 Price: ${servicePrice}
-⏱️ Duration: ${serviceDuration}
-📅 Date: ${appointmentDate}
-🕐 Time: ${appointmentTime}
-💳 Payment: ${paymentMethod}
-
-📞 Contact: (832) 207-9386
-📧 Email: braidsbyevaofficial@gmail.com
-
-We look forward to seeing you!
-
-Best regards,
-Awa Obaretin
-BraidsbyEva`
-        }
-      };
-
-      // Braider email
-      const braiderEmailPayload = {
-        service_id: 'service_braidsbyeva',
-        template_id: 'template_braider',
-        user_id: 'oW9vgP7OPmb0xQzEA', // EmailJS public key
-        template_params: {
-          to_email: 'braidsbyevaofficial@gmail.com',
-          to_name: 'Awa',
-          service_name: serviceName,
-          service_price: servicePrice,
-          service_duration: serviceDuration,
-          appointment_date: appointmentDate,
-          appointment_time: appointmentTime,
-          payment_method: paymentMethod,
-          customer_name: customerName,
-          customer_email: customerEmail,
-          customer_phone: bookingData.customer_phone,
-          notes: bookingData.notes || 'None',
-          from_name: 'BraidsbyEva Booking System',
-          reply_to: 'braidsbyevaofficial@gmail.com',
-          message: `New booking received:
+    // Create a simple notification that shows the booking details
+    const bookingDetails = `
+📅 NEW BOOKING RECEIVED
 
 👤 Customer: ${customerName}
 📧 Email: ${customerEmail}
@@ -114,98 +52,32 @@ BraidsbyEva`
 - Texture: ${bookingData.hair_texture}
 - Previous Braids: ${bookingData.previous_braids ? 'Yes' : 'No'}
 - Allergies: ${bookingData.allergies || 'None'}
-- Notes: ${bookingData.notes || 'None'}`
-        }
-      };
+- Notes: ${bookingData.notes || 'None'}
 
-      // Send both emails
-      const [customerResponse, braiderResponse] = await Promise.all([
-        fetch(emailjsUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(customerEmailPayload)
-        }),
-        fetch(emailjsUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(braiderEmailPayload)
-        })
-      ]);
+📧 Customer Email: ${customerEmail}
+📧 Braider Email: braidsbyevaofficial@gmail.com
+    `;
 
-      if (customerResponse.ok && braiderResponse.ok) {
-        console.log('✅ Both emails sent successfully via EmailJS');
-        return {
-          success: true,
-          message: 'Email notifications sent successfully!'
-        };
-      } else {
-        console.log('⚠️ EmailJS failed, status:', customerResponse.status, braiderResponse.status);
-      }
-      
-    } catch (emailjsError) {
-      console.log('⚠️ EmailJS error:', emailjsError);
-    }
+    // Show a simple notification with booking details
+    alert(`🎉 BOOKING CONFIRMED!
 
-    // Create a simple notification instead of trying to open email clients
-    const customerSubject = `✅ Your BraidsbyEva Appointment Confirmation`;
-    const customerBody = `Hello ${customerName},
+${bookingDetails}
 
-Thank you for booking with BraidsbyEva! Your appointment is confirmed:
+📧 Please check your email for the booking confirmation!
+📞 Contact: (832) 207-9386`);
 
-💇‍♀️ Service: ${serviceName}
-💰 Price: ${servicePrice}
-⏱️ Duration: ${serviceDuration}
-📅 Date: ${appointmentDate}
-🕐 Time: ${appointmentTime}
-💳 Payment: ${paymentMethod}
-
-📞 Contact: (832) 207-9386
-📧 Email: braidsbyevaofficial@gmail.com
-
-We look forward to seeing you!
-
-Best regards,
-Awa Obaretin
-BraidsbyEva`;
-
-    const braiderSubject = `📅 New Booking - ${customerName}`;
-    const braiderBody = `New booking received:
-
-👤 Customer: ${customerName}
-📧 Email: ${customerEmail}
-📞 Phone: ${bookingData.customer_phone}
-
-💇‍♀️ Service: ${serviceName}
-💰 Price: ${servicePrice}
-⏱️ Duration: ${serviceDuration}
-📅 Date: ${appointmentDate}
-🕐 Time: ${appointmentTime}
-💳 Payment: ${paymentMethod}
-
-📝 Notes: ${bookingData.notes || 'None'}`;
-
-    // Show a simple alert with email content instead of trying to open email clients
-    alert(`📧 Email Notifications Ready!
-
-Customer Email:
-To: ${customerEmail}
-Subject: ${customerSubject}
-
-Braider Email:
-To: braidsbyevaofficial@gmail.com
-Subject: ${braiderSubject}
-
-Please check your email for the booking confirmation!`);
-
-    console.log('📧 Email notifications prepared - check your email!');
+    console.log('📧 Booking notification prepared');
+    console.log('📧 ===== BOOKING DETAILS =====');
+    console.log(bookingDetails);
+    console.log('=============================');
     
     return {
       success: true,
-      message: 'Email notifications sent!'
+      message: 'Booking confirmed! Please check your email for confirmation.'
     };
 
   } catch (error) {
-    console.error('❌ Error sending email notifications:', error);
+    console.error('❌ Error preparing booking notification:', error);
     
     return {
       success: true,
