@@ -44,12 +44,12 @@ export const sendBookingEmails = async (bookingData: BookingData) => {
     console.log('📝 Notes:', bookingData.notes || 'None');
     console.log('=====================================');
 
-    // Send emails using a working email service
+    // Send emails silently in the background - no email clients opened
     try {
-      console.log('📧 Sending booking notifications...');
+      console.log('📧 Sending booking notifications silently...');
       
-      // Use a simple email service that actually works
-      const emailData = {
+      // Send notification to Eva (silent - no popups)
+      const evaData = {
         name: bookingData.customer_name,
         email: bookingData.customer_email,
         phone: bookingData.customer_phone,
@@ -76,22 +76,24 @@ Special Requests: ${bookingData.notes || 'None'}
 Please contact the customer to confirm all details.`
       };
 
-      // Send notification to Eva
-      const evaResponse = await fetch('https://formspree.io/f/xpwgkqyv', {
+      // Send Eva notification silently
+      fetch('https://formspree.io/f/xpwgkqyv', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(emailData)
+        body: JSON.stringify(evaData)
+      }).then(response => {
+        if (response.ok) {
+          console.log('✅ Eva notification sent successfully');
+        } else {
+          console.log('⚠️ Eva notification failed');
+        }
+      }).catch(error => {
+        console.log('⚠️ Eva notification error:', error);
       });
 
-      if (evaResponse.ok) {
-        console.log('✅ Eva notification sent successfully');
-      } else {
-        console.log('⚠️ Eva notification failed');
-      }
-
-      // Send customer confirmation
+      // Send customer confirmation silently
       const customerData = {
         name: bookingData.customer_name,
         email: bookingData.customer_email,
@@ -121,21 +123,24 @@ Awa Obaretin
 BraidsbyEva`
       };
 
-      const customerResponse = await fetch('https://formspree.io/f/xpwgkqyv', {
+      // Send customer confirmation silently
+      fetch('https://formspree.io/f/xpwgkqyv', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(customerData)
+      }).then(response => {
+        if (response.ok) {
+          console.log('✅ Customer confirmation sent successfully');
+        } else {
+          console.log('⚠️ Customer confirmation failed');
+        }
+      }).catch(error => {
+        console.log('⚠️ Customer confirmation error:', error);
       });
 
-      if (customerResponse.ok) {
-        console.log('✅ Customer confirmation sent successfully');
-      } else {
-        console.log('⚠️ Customer confirmation failed');
-      }
-
-      console.log('📧 Email sending process completed');
+      console.log('📧 Email sending process initiated silently');
       
     } catch (error) {
       console.log('⚠️ Email sending failed, but booking is recorded:', error);
