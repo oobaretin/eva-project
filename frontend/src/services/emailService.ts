@@ -21,7 +21,7 @@ interface BookingData {
 
 export const sendBookingEmails = async (bookingData: BookingData) => {
   try {
-    console.log('📧 Sending email notifications...');
+    console.log('📧 Preparing email notifications...');
 
     // Create email content
     const customerEmail = bookingData.customer_email;
@@ -72,67 +72,8 @@ BraidsbyEva`;
 
 📝 Notes: ${bookingData.notes || 'None'}`;
 
-    // Create mailto links
-    const customerMailto = `mailto:${customerEmail}?subject=${encodeURIComponent(customerSubject)}&body=${encodeURIComponent(customerBody)}`;
-    const braiderMailto = `mailto:braidsbyevaofficial@gmail.com?subject=${encodeURIComponent(braiderSubject)}&body=${encodeURIComponent(braiderBody)}`;
-
-    // Try multiple methods to open email clients
-    let emailOpened = false;
-    
-    // Method 1: Direct window.open
-    try {
-      console.log('📧 Opening customer email...');
-      const customerWindow = window.open(customerMailto, '_blank');
-      if (customerWindow) {
-        emailOpened = true;
-        console.log('✅ Customer email window opened');
-      } else {
-        console.warn('Customer email window blocked by browser');
-      }
-      
-      setTimeout(() => {
-        console.log('📧 Opening braider email...');
-        const braiderWindow = window.open(braiderMailto, '_blank');
-        if (braiderWindow) {
-          console.log('✅ Braider email window opened');
-        } else {
-          console.warn('Braider email window blocked by browser');
-        }
-      }, 1000);
-    } catch (error) {
-      console.error('Error opening email windows:', error);
-    }
-    
-    // Method 2: Create temporary links if popups are blocked
-    if (!emailOpened) {
-      console.log('📧 Trying alternative method...');
-      try {
-        const customerLink = document.createElement('a');
-        customerLink.href = customerMailto;
-        customerLink.target = '_blank';
-        customerLink.style.display = 'none';
-        document.body.appendChild(customerLink);
-        customerLink.click();
-        document.body.removeChild(customerLink);
-        
-        setTimeout(() => {
-          const braiderLink = document.createElement('a');
-          braiderLink.href = braiderMailto;
-          braiderLink.target = '_blank';
-          braiderLink.style.display = 'none';
-          document.body.appendChild(braiderLink);
-          braiderLink.click();
-          document.body.removeChild(braiderLink);
-        }, 1000);
-      } catch (error) {
-        console.error('Alternative method failed:', error);
-      }
-    }
-
-    console.log('✅ Email notifications prepared!');
-    
-    // Also log email content to console as backup
-    console.log('📧 ===== EMAIL BACKUP (if windows blocked) =====');
+    // Simple approach - just log the email content
+    console.log('📧 ===== EMAIL NOTIFICATIONS =====');
     console.log('📧 CUSTOMER EMAIL:');
     console.log('To:', customerEmail);
     console.log('Subject:', customerSubject);
@@ -146,11 +87,11 @@ BraidsbyEva`;
     
     return {
       success: true,
-      message: 'Email notifications sent successfully!'
+      message: 'Email notifications prepared! Check console for email content.'
     };
 
   } catch (error) {
-    console.error('❌ Error sending email notifications:', error);
+    console.error('❌ Error preparing email notifications:', error);
     
     return {
       success: true,
