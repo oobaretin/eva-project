@@ -99,6 +99,7 @@ Contact: (832) 207-9386`;
     }
 
     console.log('📧 Booking confirmation processed successfully!');
+    // Force new deployment
     
     return {
       success: true,
