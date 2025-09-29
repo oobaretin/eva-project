@@ -41,25 +41,46 @@ export const sendBookingEmails = async (bookingData: BookingData) => {
     console.log('📝 Notes:', bookingData.notes || 'None');
     console.log('=====================================');
 
-    // Send notification to Eva using a simple webhook
+    // Send emails using the working API endpoint
     try {
-      await fetch('https://formspree.io/f/xpwgkqyv', {
+      const response = await fetch('/api/send-emails', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          name: bookingData.customer_name,
-          email: bookingData.customer_email,
-          phone: bookingData.customer_phone,
-          service: bookingData.service_name,
-          date: appointmentDate,
-          time: bookingData.appointment_time,
-          price: bookingData.service_price,
-          duration: bookingData.service_duration,
-          payment_method: bookingData.payment_method,
-          special_requests: bookingData.notes || 'None',
-          message: `NEW BOOKING RECEIVED
+        body: JSON.stringify({ bookingData }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('✅ Emails sent successfully via API:', result);
+      } else {
+        console.log('⚠️ API email sending failed, using fallback method');
+        throw new Error('API failed');
+      }
+    } catch (apiError) {
+      console.log('⚠️ API not available, using fallback method');
+      
+      // Fallback: Use a simple webhook service
+      try {
+        // Send notification to Eva
+        await fetch('https://formspree.io/f/xpwgkqyv', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: bookingData.customer_name,
+            email: bookingData.customer_email,
+            phone: bookingData.customer_phone,
+            service: bookingData.service_name,
+            date: appointmentDate,
+            time: bookingData.appointment_time,
+            price: bookingData.service_price,
+            duration: bookingData.service_duration,
+            payment_method: bookingData.payment_method,
+            special_requests: bookingData.notes || 'None',
+            message: `NEW BOOKING RECEIVED
 
 Customer: ${bookingData.customer_name}
 Email: ${bookingData.customer_email}
@@ -73,16 +94,12 @@ Payment: ${bookingData.payment_method}
 Special Requests: ${bookingData.notes || 'None'}
 
 Please contact the customer to confirm all details.`
-        })
-      });
-      console.log('✅ Booking notification sent to Eva');
-    } catch (error) {
-      console.log('⚠️ Could not send notification email, but booking is recorded');
-    }
+          })
+        });
+        console.log('✅ Booking notification sent to Eva via Formspree');
 
-    // Send confirmation to customer
-    try {
-      const customerEmailContent = `Dear ${bookingData.customer_name},
+        // Send customer confirmation
+        const customerEmailContent = `Dear ${bookingData.customer_name},
 
 Thank you for booking with BraidsbyEva!
 
@@ -102,25 +119,26 @@ Best regards,
 Awa Obaretin
 BraidsbyEva`;
 
-      await fetch('https://formspree.io/f/xpwgkqyv', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: bookingData.customer_name,
-          email: bookingData.customer_email,
-          phone: bookingData.customer_phone,
-          service: 'Customer Confirmation',
-          date: appointmentDate,
-          time: bookingData.appointment_time,
-          price: bookingData.service_price,
-          message: customerEmailContent
-        })
-      });
-      console.log('✅ Customer confirmation sent');
-    } catch (error) {
-      console.log('⚠️ Could not send customer confirmation, but booking is recorded');
+        await fetch('https://formspree.io/f/xpwgkqyv', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: bookingData.customer_name,
+            email: bookingData.customer_email,
+            phone: bookingData.customer_phone,
+            service: 'Customer Confirmation',
+            date: appointmentDate,
+            time: bookingData.appointment_time,
+            price: bookingData.service_price,
+            message: customerEmailContent
+          })
+        });
+        console.log('✅ Customer confirmation sent via Formspree');
+      } catch (fallbackError) {
+        console.log('⚠️ All email methods failed, but booking is recorded');
+      }
     }
 
     console.log('📧 Booking confirmation processed successfully!');
