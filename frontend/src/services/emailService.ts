@@ -1,4 +1,5 @@
 // Email service for BraidsbyEva
+
 interface BookingData {
   service_name: string;
   service_price: string;
@@ -21,6 +22,7 @@ export const sendBookingEmails = async (bookingData: BookingData) => {
   try {
     console.log('📧 Processing booking confirmation...');
 
+    // Format the appointment date
     const appointmentDate = new Date(bookingData.appointment_date).toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
