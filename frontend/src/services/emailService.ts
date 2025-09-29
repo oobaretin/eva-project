@@ -76,13 +76,39 @@ BraidsbyEva`;
     const customerMailto = `mailto:${customerEmail}?subject=${encodeURIComponent(customerSubject)}&body=${encodeURIComponent(customerBody)}`;
     const braiderMailto = `mailto:braidsbyevaofficial@gmail.com?subject=${encodeURIComponent(braiderSubject)}&body=${encodeURIComponent(braiderBody)}`;
 
-    // Open email clients
-    window.open(customerMailto, '_blank');
-    setTimeout(() => {
-      window.open(braiderMailto, '_blank');
-    }, 1000);
+    // Open email clients with better error handling
+    try {
+      console.log('📧 Opening customer email...');
+      const customerWindow = window.open(customerMailto, '_blank');
+      if (!customerWindow) {
+        console.warn('Customer email window blocked by browser');
+      }
+      
+      setTimeout(() => {
+        console.log('📧 Opening braider email...');
+        const braiderWindow = window.open(braiderMailto, '_blank');
+        if (!braiderWindow) {
+          console.warn('Braider email window blocked by browser');
+        }
+      }, 1000);
+    } catch (error) {
+      console.error('Error opening email windows:', error);
+    }
 
     console.log('✅ Email notifications prepared!');
+    
+    // Also log email content to console as backup
+    console.log('📧 ===== EMAIL BACKUP (if windows blocked) =====');
+    console.log('📧 CUSTOMER EMAIL:');
+    console.log('To:', customerEmail);
+    console.log('Subject:', customerSubject);
+    console.log('Body:', customerBody);
+    console.log('');
+    console.log('📧 BRAIDER EMAIL:');
+    console.log('To: braidsbyevaofficial@gmail.com');
+    console.log('Subject:', braiderSubject);
+    console.log('Body:', braiderBody);
+    console.log('=====================================');
     
     return {
       success: true,
