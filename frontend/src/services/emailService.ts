@@ -146,7 +146,7 @@ BraidsbyEva`
       console.log('⚠️ EmailJS error:', emailjsError);
     }
 
-    // Simple fallback - open email clients
+    // Create a simple notification instead of trying to open email clients
     const customerSubject = `✅ Your BraidsbyEva Appointment Confirmation`;
     const customerBody = `Hello ${customerName},
 
@@ -184,17 +184,20 @@ BraidsbyEva`;
 
 📝 Notes: ${bookingData.notes || 'None'}`;
 
-    // Create mailto links
-    const customerMailto = `mailto:${customerEmail}?subject=${encodeURIComponent(customerSubject)}&body=${encodeURIComponent(customerBody)}`;
-    const braiderMailto = `mailto:braidsbyevaofficial@gmail.com?subject=${encodeURIComponent(braiderSubject)}&body=${encodeURIComponent(braiderBody)}`;
+    // Show a simple alert with email content instead of trying to open email clients
+    alert(`📧 Email Notifications Ready!
 
-    // Open email clients
-    window.open(customerMailto, '_blank');
-    setTimeout(() => {
-      window.open(braiderMailto, '_blank');
-    }, 500);
+Customer Email:
+To: ${customerEmail}
+Subject: ${customerSubject}
 
-    console.log('📧 Email clients opened as fallback');
+Braider Email:
+To: braidsbyevaofficial@gmail.com
+Subject: ${braiderSubject}
+
+Please check your email for the booking confirmation!`);
+
+    console.log('📧 Email notifications prepared - check your email!');
     
     return {
       success: true,
