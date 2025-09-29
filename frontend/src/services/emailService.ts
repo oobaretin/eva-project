@@ -1,3 +1,4 @@
+// Email service for BraidsbyEva
 interface BookingData {
   service_name: string;
   service_price: string;
