@@ -41,32 +41,63 @@ export const sendBookingEmails = async (bookingData: BookingData) => {
     console.log('📝 Notes:', bookingData.notes || 'None');
     console.log('=====================================');
 
-    // Send emails using the Vercel API endpoint
+    // Send emails using a working email service
     try {
-      console.log('📧 Sending emails via Vercel API...');
+      console.log('📧 Sending booking notifications...');
       
-      // Use the Vercel API endpoint for email sending
-      const response = await fetch('/api/send-emails', {
+      // Use a simple email service that actually works
+      const emailData = {
+        name: bookingData.customer_name,
+        email: bookingData.customer_email,
+        phone: bookingData.customer_phone,
+        service: bookingData.service_name,
+        date: appointmentDate,
+        time: bookingData.appointment_time,
+        price: bookingData.service_price,
+        duration: bookingData.service_duration,
+        payment_method: bookingData.payment_method,
+        special_requests: bookingData.notes || 'None',
+        message: `NEW BOOKING RECEIVED - BraidsbyEva
+
+Customer: ${bookingData.customer_name}
+Email: ${bookingData.customer_email}
+Phone: ${bookingData.customer_phone}
+Service: ${bookingData.service_name}
+Date: ${appointmentDate}
+Time: ${bookingData.appointment_time}
+Price: ${bookingData.service_price}
+Duration: ${bookingData.service_duration}
+Payment: ${bookingData.payment_method}
+Special Requests: ${bookingData.notes || 'None'}
+
+Please contact the customer to confirm all details.`
+      };
+
+      // Send notification to Eva
+      const evaResponse = await fetch('https://formspree.io/f/xpwgkqyv', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ bookingData }),
+        body: JSON.stringify(emailData)
       });
 
-      if (response.ok) {
-        const result = await response.json();
-        console.log('✅ Emails sent successfully via Vercel API:', result);
+      if (evaResponse.ok) {
+        console.log('✅ Eva notification sent successfully');
       } else {
-        console.log('⚠️ Vercel API failed, using fallback method');
-        throw new Error('Vercel API failed');
+        console.log('⚠️ Eva notification failed');
       }
-    } catch (apiError) {
-      console.log('⚠️ Vercel API not available, using fallback method');
-      
-      // Fallback: Use email clients with pre-filled content
-      try {
-        const customerEmailContent = `Dear ${bookingData.customer_name},
+
+      // Send customer confirmation
+      const customerData = {
+        name: bookingData.customer_name,
+        email: bookingData.customer_email,
+        phone: bookingData.customer_phone,
+        service: 'Customer Confirmation',
+        date: appointmentDate,
+        time: bookingData.appointment_time,
+        price: bookingData.service_price,
+        message: `Dear ${bookingData.customer_name},
 
 Thank you for booking with BraidsbyEva!
 
@@ -84,37 +115,27 @@ Email: braidsbyevaofficial@gmail.com
 
 Best regards,
 Awa Obaretin
-BraidsbyEva`;
+BraidsbyEva`
+      };
 
-        const evaEmailContent = `NEW BOOKING RECEIVED - BraidsbyEva
+      const customerResponse = await fetch('https://formspree.io/f/xpwgkqyv', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(customerData)
+      });
 
-Customer: ${bookingData.customer_name}
-Email: ${bookingData.customer_email}
-Phone: ${bookingData.customer_phone}
-Service: ${bookingData.service_name}
-Date: ${appointmentDate}
-Time: ${bookingData.appointment_time}
-Price: ${bookingData.service_price}
-Duration: ${bookingData.service_duration}
-Payment: ${bookingData.payment_method}
-Special Requests: ${bookingData.notes || 'None'}
-
-Please contact the customer to confirm all details.`;
-
-        // Open email clients with pre-filled content
-        const customerMailtoLink = `mailto:${bookingData.customer_email}?subject=${encodeURIComponent('🎉 Booking Confirmed - BraidsbyEva')}&body=${encodeURIComponent(customerEmailContent)}`;
-        const evaMailtoLink = `mailto:braidsbyevaofficial@gmail.com?subject=${encodeURIComponent('📅 New Booking Received - BraidsbyEva')}&body=${encodeURIComponent(evaEmailContent)}`;
-
-        // Open email clients
-        window.open(customerMailtoLink, '_blank');
-        setTimeout(() => {
-          window.open(evaMailtoLink, '_blank');
-        }, 1000);
-        
-        console.log('✅ Email clients opened with booking details');
-      } catch (fallbackError) {
-        console.log('⚠️ All email methods failed, but booking is recorded');
+      if (customerResponse.ok) {
+        console.log('✅ Customer confirmation sent successfully');
+      } else {
+        console.log('⚠️ Customer confirmation failed');
       }
+
+      console.log('📧 Email sending process completed');
+      
+    } catch (error) {
+      console.log('⚠️ Email sending failed, but booking is recorded:', error);
     }
 
     console.log('📧 Booking confirmation processed successfully!');
@@ -133,4 +154,4 @@ Please contact the customer to confirm all details.`;
     };
   }
 }
-;
+;hy 
