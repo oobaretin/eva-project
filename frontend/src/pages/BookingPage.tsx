@@ -167,7 +167,7 @@ const BookingPage: React.FC = () => {
     e.preventDefault();
     
     if (!formData.name || !formData.email || !formData.phone || !formData.selectedDate || !formData.selectedTime) {
-      toast.error('Please fill in all required fields');
+      toast.error('⚠️ Please fill in all required fields');
       return;
     }
 
@@ -179,11 +179,11 @@ const BookingPage: React.FC = () => {
       
              // Show confirmation
              setShowConfirmation(true);
-             toast.success('Booking submitted successfully! Email notifications sent to both parties.');
+             toast.success('🎉 Booking confirmed! You will receive an email confirmation shortly.');
       
     } catch (error) {
       console.error('Error submitting booking:', error);
-      toast.error('Failed to submit booking. Please try again or contact us at (832) 207-9386');
+      toast.error('❌ Booking failed. Please try again or call (832) 207-9386');
     } finally {
       setIsSubmitting(false);
     }
