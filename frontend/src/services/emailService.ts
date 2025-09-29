@@ -153,5 +153,4 @@ BraidsbyEva`
       message: 'Booking confirmed! Please contact us at (832) 207-9386 for confirmation.'
     };
   }
-}
-;hy 
+}; 
