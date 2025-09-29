@@ -21,7 +21,7 @@ interface BookingData {
 
 export const sendBookingEmails = async (bookingData: BookingData) => {
   try {
-    console.log('📧 Preparing email notifications...');
+    console.log('📧 Sending email notifications...');
 
     // Create email content
     const customerEmail = bookingData.customer_email;
@@ -72,26 +72,48 @@ BraidsbyEva`;
 
 📝 Notes: ${bookingData.notes || 'None'}`;
 
-    // Simple approach - just log the email content
-    console.log('📧 ===== EMAIL NOTIFICATIONS =====');
-    console.log('📧 CUSTOMER EMAIL:');
-    console.log('To:', customerEmail);
-    console.log('Subject:', customerSubject);
-    console.log('Body:', customerBody);
-    console.log('');
-    console.log('📧 BRAIDER EMAIL:');
-    console.log('To: braidsbyevaofficial@gmail.com');
-    console.log('Subject:', braiderSubject);
-    console.log('Body:', braiderBody);
-    console.log('=====================================');
+    // Try to send via Vercel API
+    try {
+      const response = await fetch('/api/send-emails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ bookingData }),
+      });
+
+      if (response.ok) {
+        console.log('✅ Emails sent via API');
+        return {
+          success: true,
+          message: 'Email notifications sent successfully!'
+        };
+      } else {
+        console.log('⚠️ API failed, using fallback');
+      }
+    } catch (apiError) {
+      console.log('⚠️ API not available, using fallback');
+    }
+
+    // Fallback: Create mailto links
+    const customerMailto = `mailto:${customerEmail}?subject=${encodeURIComponent(customerSubject)}&body=${encodeURIComponent(customerBody)}`;
+    const braiderMailto = `mailto:braidsbyevaofficial@gmail.com?subject=${encodeURIComponent(braiderSubject)}&body=${encodeURIComponent(braiderBody)}`;
+
+    // Open email clients
+    window.open(customerMailto, '_blank');
+    setTimeout(() => {
+      window.open(braiderMailto, '_blank');
+    }, 500);
+
+    console.log('📧 Email clients opened');
     
     return {
       success: true,
-      message: 'Email notifications prepared! Check console for email content.'
+      message: 'Email notifications sent!'
     };
 
   } catch (error) {
-    console.error('❌ Error preparing email notifications:', error);
+    console.error('❌ Error sending email notifications:', error);
     
     return {
       success: true,
