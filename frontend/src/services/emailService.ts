@@ -49,18 +49,6 @@ export const sendBookingEmails = async (bookingData: BookingData) => {
       console.log('📧 Processing booking notifications...');
       
       // Create a simple email notification that works immediately
-      const bookingNotification = {
-        customer: bookingData.customer_name,
-        email: bookingData.customer_email,
-        phone: bookingData.customer_phone,
-        service: bookingData.service_name,
-        date: appointmentDate,
-        time: bookingData.appointment_time,
-        price: bookingData.service_price,
-        duration: bookingData.service_duration,
-        payment: bookingData.payment_method,
-        notes: bookingData.notes || 'None'
-      };
 
       // For now, we'll use a simple approach that works
       // This creates a data URL that can be used to send emails
@@ -95,7 +83,7 @@ Contact: (832) 207-9386`;
         const emailLink = `mailto:braidsbyevaofficial@gmail.com?subject=${encodeURIComponent('New Booking - BraidsbyEva')}&body=${encodeURIComponent(emailContent)}`;
         
         // Only open if user confirms (to avoid Apple Mail issues)
-        if (confirm('Would you like to send email notifications? (This will open your email client)')) {
+        if (window.confirm('Would you like to send email notifications? (This will open your email client)')) {
           window.open(emailLink, '_blank');
         }
         
