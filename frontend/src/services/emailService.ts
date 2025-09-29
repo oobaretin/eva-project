@@ -41,8 +41,11 @@ export const sendBookingEmails = async (bookingData: BookingData) => {
     console.log('📝 Notes:', bookingData.notes || 'None');
     console.log('=====================================');
 
-    // Send emails using the working API endpoint
+    // Send emails using the Vercel API endpoint
     try {
+      console.log('📧 Sending emails via Vercel API...');
+      
+      // Use the Vercel API endpoint for email sending
       const response = await fetch('/api/send-emails', {
         method: 'POST',
         headers: {
@@ -53,52 +56,16 @@ export const sendBookingEmails = async (bookingData: BookingData) => {
 
       if (response.ok) {
         const result = await response.json();
-        console.log('✅ Emails sent successfully via API:', result);
+        console.log('✅ Emails sent successfully via Vercel API:', result);
       } else {
-        console.log('⚠️ API email sending failed, using fallback method');
-        throw new Error('API failed');
+        console.log('⚠️ Vercel API failed, using fallback method');
+        throw new Error('Vercel API failed');
       }
     } catch (apiError) {
-      console.log('⚠️ API not available, using fallback method');
+      console.log('⚠️ Vercel API not available, using fallback method');
       
-      // Fallback: Use a simple webhook service
+      // Fallback: Use email clients with pre-filled content
       try {
-        // Send notification to Eva
-        await fetch('https://formspree.io/f/xpwgkqyv', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: bookingData.customer_name,
-            email: bookingData.customer_email,
-            phone: bookingData.customer_phone,
-            service: bookingData.service_name,
-            date: appointmentDate,
-            time: bookingData.appointment_time,
-            price: bookingData.service_price,
-            duration: bookingData.service_duration,
-            payment_method: bookingData.payment_method,
-            special_requests: bookingData.notes || 'None',
-            message: `NEW BOOKING RECEIVED
-
-Customer: ${bookingData.customer_name}
-Email: ${bookingData.customer_email}
-Phone: ${bookingData.customer_phone}
-Service: ${bookingData.service_name}
-Date: ${appointmentDate}
-Time: ${bookingData.appointment_time}
-Price: ${bookingData.service_price}
-Duration: ${bookingData.service_duration}
-Payment: ${bookingData.payment_method}
-Special Requests: ${bookingData.notes || 'None'}
-
-Please contact the customer to confirm all details.`
-          })
-        });
-        console.log('✅ Booking notification sent to Eva via Formspree');
-
-        // Send customer confirmation
         const customerEmailContent = `Dear ${bookingData.customer_name},
 
 Thank you for booking with BraidsbyEva!
@@ -119,23 +86,32 @@ Best regards,
 Awa Obaretin
 BraidsbyEva`;
 
-        await fetch('https://formspree.io/f/xpwgkqyv', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: bookingData.customer_name,
-            email: bookingData.customer_email,
-            phone: bookingData.customer_phone,
-            service: 'Customer Confirmation',
-            date: appointmentDate,
-            time: bookingData.appointment_time,
-            price: bookingData.service_price,
-            message: customerEmailContent
-          })
-        });
-        console.log('✅ Customer confirmation sent via Formspree');
+        const evaEmailContent = `NEW BOOKING RECEIVED - BraidsbyEva
+
+Customer: ${bookingData.customer_name}
+Email: ${bookingData.customer_email}
+Phone: ${bookingData.customer_phone}
+Service: ${bookingData.service_name}
+Date: ${appointmentDate}
+Time: ${bookingData.appointment_time}
+Price: ${bookingData.service_price}
+Duration: ${bookingData.service_duration}
+Payment: ${bookingData.payment_method}
+Special Requests: ${bookingData.notes || 'None'}
+
+Please contact the customer to confirm all details.`;
+
+        // Open email clients with pre-filled content
+        const customerMailtoLink = `mailto:${bookingData.customer_email}?subject=${encodeURIComponent('🎉 Booking Confirmed - BraidsbyEva')}&body=${encodeURIComponent(customerEmailContent)}`;
+        const evaMailtoLink = `mailto:braidsbyevaofficial@gmail.com?subject=${encodeURIComponent('📅 New Booking Received - BraidsbyEva')}&body=${encodeURIComponent(evaEmailContent)}`;
+
+        // Open email clients
+        window.open(customerMailtoLink, '_blank');
+        setTimeout(() => {
+          window.open(evaMailtoLink, '_blank');
+        }, 1000);
+        
+        console.log('✅ Email clients opened with booking details');
       } catch (fallbackError) {
         console.log('⚠️ All email methods failed, but booking is recorded');
       }
@@ -156,4 +132,5 @@ BraidsbyEva`;
       message: 'Booking confirmed! Please contact us at (832) 207-9386 for confirmation.'
     };
   }
-};
+}
+;

@@ -3,12 +3,12 @@
 
 const nodemailer = require('nodemailer');
 
-// Create transporter using Gmail
+// Create transporter using Gmail with environment variables
 const transporter = nodemailer.createTransporter({
   service: 'gmail',
   auth: {
-    user: 'braidsbyevaofficial@gmail.com',
-    pass: 'dlrj tzws keuv wsdg' // Your Gmail app password
+    user: process.env.EMAIL_USER || 'braidsbyevaofficial@gmail.com',
+    pass: process.env.EMAIL_PASSWORD || 'dlrj tzws keuv wsdg' // Your Gmail app password
   }
 });
 
