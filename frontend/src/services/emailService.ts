@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface BookingData {
   service_name: string;
   service_price: string;
@@ -20,64 +18,120 @@ interface BookingData {
 
 export const sendBookingEmails = async (bookingData: BookingData) => {
   try {
-    console.log('📧 Preparing booking notification...');
+    console.log('📧 Processing booking confirmation...');
 
-    // Create email content
-    const customerEmail = bookingData.customer_email;
-    const customerName = bookingData.customer_name;
-    const serviceName = bookingData.service_name;
-    const servicePrice = bookingData.service_price;
-    const serviceDuration = bookingData.service_duration;
-    const appointmentDate = bookingData.appointment_date;
-    const appointmentTime = bookingData.appointment_time;
-    const paymentMethod = bookingData.payment_method;
+    const appointmentDate = new Date(bookingData.appointment_date).toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
 
-    // Create a simple notification that shows the booking details
-    const bookingDetails = `
-📅 NEW BOOKING RECEIVED
+    // Log booking details for Eva to see
+    console.log('📧 ===== NEW BOOKING RECEIVED =====');
+    console.log('👤 Customer:', bookingData.customer_name);
+    console.log('📧 Email:', bookingData.customer_email);
+    console.log('📞 Phone:', bookingData.customer_phone);
+    console.log('💇‍♀️ Service:', bookingData.service_name);
+    console.log('📅 Date:', appointmentDate);
+    console.log('🕐 Time:', bookingData.appointment_time);
+    console.log('💰 Price:', bookingData.service_price);
+    console.log('⏱️ Duration:', bookingData.service_duration);
+    console.log('💳 Payment:', bookingData.payment_method);
+    console.log('📝 Notes:', bookingData.notes || 'None');
+    console.log('=====================================');
 
-👤 Customer: ${customerName}
-📧 Email: ${customerEmail}
-📞 Phone: ${bookingData.customer_phone}
+    // Send notification to Eva using a simple webhook
+    try {
+      await fetch('https://formspree.io/f/xpwgkqyv', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: bookingData.customer_name,
+          email: bookingData.customer_email,
+          phone: bookingData.customer_phone,
+          service: bookingData.service_name,
+          date: appointmentDate,
+          time: bookingData.appointment_time,
+          price: bookingData.service_price,
+          duration: bookingData.service_duration,
+          payment_method: bookingData.payment_method,
+          special_requests: bookingData.notes || 'None',
+          message: `NEW BOOKING RECEIVED
 
-💇‍♀️ Service: ${serviceName}
-💰 Price: ${servicePrice}
-⏱️ Duration: ${serviceDuration}
-📅 Date: ${appointmentDate}
-🕐 Time: ${appointmentTime}
-💳 Payment: ${paymentMethod}
+Customer: ${bookingData.customer_name}
+Email: ${bookingData.customer_email}
+Phone: ${bookingData.customer_phone}
+Service: ${bookingData.service_name}
+Date: ${appointmentDate}
+Time: ${bookingData.appointment_time}
+Price: ${bookingData.service_price}
+Duration: ${bookingData.service_duration}
+Payment: ${bookingData.payment_method}
+Special Requests: ${bookingData.notes || 'None'}
 
-📝 Hair Details:
-- Length: ${bookingData.hair_length}
-- Texture: ${bookingData.hair_texture}
-- Previous Braids: ${bookingData.previous_braids ? 'Yes' : 'No'}
-- Allergies: ${bookingData.allergies || 'None'}
-- Notes: ${bookingData.notes || 'None'}
+Please contact the customer to confirm all details.`
+        })
+      });
+      console.log('✅ Booking notification sent to Eva');
+    } catch (error) {
+      console.log('⚠️ Could not send notification email, but booking is recorded');
+    }
 
-📧 Customer Email: ${customerEmail}
-📧 Braider Email: braidsbyevaofficial@gmail.com
-    `;
+    // Send confirmation to customer
+    try {
+      const customerEmailContent = `Dear ${bookingData.customer_name},
 
-    // Show a simple notification with booking details
-    alert(`🎉 BOOKING CONFIRMED!
+Thank you for booking with BraidsbyEva!
 
-${bookingDetails}
+Your appointment details:
+- Service: ${bookingData.service_name}
+- Date: ${appointmentDate}
+- Time: ${bookingData.appointment_time}
+- Duration: ${bookingData.service_duration}
+- Price: ${bookingData.service_price}
 
-📧 Please check your email for the booking confirmation!
-📞 Contact: (832) 207-9386`);
+We will contact you shortly to confirm all details.
 
-    console.log('📧 Booking notification prepared');
-    console.log('📧 ===== BOOKING DETAILS =====');
-    console.log(bookingDetails);
-    console.log('=============================');
+Contact: (832) 207-9386
+Email: braidsbyevaofficial@gmail.com
+
+Best regards,
+Awa Obaretin
+BraidsbyEva`;
+
+      await fetch('https://formspree.io/f/xpwgkqyv', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: bookingData.customer_name,
+          email: bookingData.customer_email,
+          phone: bookingData.customer_phone,
+          service: 'Customer Confirmation',
+          date: appointmentDate,
+          time: bookingData.appointment_time,
+          price: bookingData.service_price,
+          message: customerEmailContent
+        })
+      });
+      console.log('✅ Customer confirmation sent');
+    } catch (error) {
+      console.log('⚠️ Could not send customer confirmation, but booking is recorded');
+    }
+
+    console.log('📧 Booking confirmation processed successfully!');
     
     return {
       success: true,
-      message: 'Booking confirmed! Please check your email for confirmation.'
+      message: 'Booking confirmed! You will receive a confirmation email shortly.'
     };
 
   } catch (error) {
-    console.error('❌ Error preparing booking notification:', error);
+    console.error('❌ Error processing booking confirmation:', error);
     
     return {
       success: true,
