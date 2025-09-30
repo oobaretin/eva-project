@@ -30,20 +30,18 @@ export const sendBookingEmails = async (bookingData: BookingEmailData): Promise<
     console.log('📧 Response status:', response.status);
     console.log('📧 Response headers:', Object.fromEntries(response.headers.entries()));
 
-    if (!response.ok) {
-      let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
-      try {
-        const errorData = await response.json();
-        errorMessage = errorData.error || errorMessage;
-        console.error('❌ Email API error response:', errorData);
-      } catch (jsonError) {
-        const textResponse = await response.text();
-        console.error('❌ Email API error (non-JSON):', textResponse);
-        errorMessage = textResponse || errorMessage;
-      }
-      console.error('❌ Email API failed:', errorMessage);
-      return;
-    }
+            if (!response.ok) {
+              let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+              try {
+                const errorData = await response.json();
+                errorMessage = errorData.error || errorMessage;
+                console.error('❌ Email API error response:', errorData);
+              } catch (jsonError) {
+                console.error('❌ Email API error (non-JSON):', errorMessage);
+              }
+              console.error('❌ Email API failed:', errorMessage);
+              return;
+            }
 
     try {
       const result = await response.json();
