@@ -26,7 +26,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Create transporter using Gmail
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
