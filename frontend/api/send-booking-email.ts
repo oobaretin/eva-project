@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import nodemailer from 'nodemailer';
+const nodemailer = require('nodemailer');
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS
