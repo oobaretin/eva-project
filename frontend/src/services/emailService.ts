@@ -15,6 +15,8 @@ interface BookingEmailData {
 export const sendBookingEmails = async (bookingData: BookingEmailData): Promise<void> => {
   try {
     console.log('📧 Sending booking emails via Vercel function...');
+    console.log('📧 API URL:', '/api/send-booking-email');
+    console.log('📧 Payload:', bookingData);
     
     // Call the Vercel serverless function
     const response = await fetch('/api/send-booking-email', {
@@ -25,15 +27,30 @@ export const sendBookingEmails = async (bookingData: BookingEmailData): Promise<
       body: JSON.stringify(bookingData),
     });
 
+    console.log('📧 Response status:', response.status);
+    console.log('📧 Response headers:', Object.fromEntries(response.headers.entries()));
+
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error('❌ Email API error:', errorData.error || 'Failed to send booking emails');
-      // Don't throw error - just log it and continue
+      let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorMessage;
+        console.error('❌ Email API error response:', errorData);
+      } catch (jsonError) {
+        const textResponse = await response.text();
+        console.error('❌ Email API error (non-JSON):', textResponse);
+        errorMessage = textResponse || errorMessage;
+      }
+      console.error('❌ Email API failed:', errorMessage);
       return;
     }
 
-    const result = await response.json();
-    console.log('✅ Booking emails sent successfully:', result);
+    try {
+      const result = await response.json();
+      console.log('✅ Booking emails sent successfully:', result);
+    } catch (jsonError) {
+      console.log('⚠️ Email sent but response not JSON:', await response.text());
+    }
   } catch (error) {
     console.error('❌ Error sending booking emails:', error);
     // Don't throw error - just log it and continue

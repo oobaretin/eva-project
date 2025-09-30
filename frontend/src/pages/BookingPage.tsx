@@ -150,10 +150,10 @@ const BookingPage: React.FC = () => {
         console.log('📧 Email payload:', emailPayload);
         try {
           await sendBookingEmails(emailPayload);
-          console.log('✅ Email notifications sent successfully!');
+          console.log('✅ Email service called successfully!');
         } catch (emailError) {
           console.error('❌ Email sending failed:', emailError);
-          console.log('⚠️ Booking still confirmed, but emails may not have been sent');
+          console.log('⚠️ Booking confirmed, but email service failed');
         }
     };
 
