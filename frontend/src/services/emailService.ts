@@ -1,4 +1,5 @@
 // Email service for sending booking confirmations
+import { sendBookingSMS } from './smsService';
 
 interface BookingEmailData {
   service_name: string;
@@ -45,5 +46,31 @@ export const sendBookingEmails = async (bookingData: BookingEmailData): Promise<
     console.error('❌ Error sending booking emails:', error);
     // Don't throw error - just log it and continue
     // This ensures booking always succeeds even if email fails
+  }
+};
+
+// Combined function to send both emails and SMS
+export const sendBookingNotifications = async (bookingData: BookingEmailData): Promise<void> => {
+  try {
+    console.log('📧📱 Sending booking notifications (email + SMS)...');
+    
+    // Send both email and SMS in parallel
+    await Promise.all([
+      sendBookingEmails(bookingData),
+      sendBookingSMS({
+        customer_name: bookingData.customer_name,
+        customer_phone: bookingData.customer_phone,
+        service_name: bookingData.service_name,
+        appointment_date: bookingData.appointment_date,
+        appointment_time: bookingData.appointment_time,
+        total_price: parseFloat(bookingData.service_price.replace('$', '')),
+        notes: bookingData.notes
+      })
+    ]);
+    
+    console.log('✅ All booking notifications sent successfully');
+  } catch (error) {
+    console.error('❌ Error sending booking notifications:', error);
+    // Don't throw error - just log it and continue
   }
 };

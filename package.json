@@ -8,7 +8,8 @@
     "start": "cd frontend && npm start"
   },
   "dependencies": {
-    "nodemailer": "^6.9.7"
+    "nodemailer": "^6.9.7",
+    "twilio": "^4.19.0"
   },
   "engines": {
     "node": ">=18.0.0"

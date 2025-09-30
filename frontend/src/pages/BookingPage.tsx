@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { sendBookingEmails } from '../services/emailService';
+import { sendBookingNotifications } from '../services/emailService';
 
 interface BookingFormData {
   name: string;
@@ -146,14 +146,14 @@ const BookingPage: React.FC = () => {
           notes: bookingData.specialRequests || ''
         };
 
-        console.log('📧 Sending email notifications...');
-        console.log('📧 Email payload:', emailPayload);
+        console.log('📧📱 Sending email and SMS notifications...');
+        console.log('📧📱 Notification payload:', emailPayload);
         try {
-          await sendBookingEmails(emailPayload);
-          console.log('✅ Email service called successfully!');
-        } catch (emailError) {
-          console.error('❌ Email sending failed:', emailError);
-          console.log('⚠️ Booking confirmed, but email service failed');
+          await sendBookingNotifications(emailPayload);
+          console.log('✅ Email and SMS service called successfully!');
+        } catch (notificationError) {
+          console.error('❌ Notification sending failed:', notificationError);
+          console.log('⚠️ Booking confirmed, but notification service failed');
         }
     };
 
@@ -173,7 +173,7 @@ const BookingPage: React.FC = () => {
       
              // Show confirmation
              setShowConfirmation(true);
-             toast.success('🎉 Booking confirmed! You will receive an email confirmation shortly.');
+             toast.success('🎉 Booking confirmed! You will receive email and SMS confirmations shortly.');
       
     } catch (error) {
       console.error('Error submitting booking:', error);
