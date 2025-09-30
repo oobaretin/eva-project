@@ -53,36 +53,24 @@ module.exports = async (req, res) => {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>Booking Confirmation</title>
-          <style>
-            /* Prevent text truncation and ellipsis */
-            * {
-              text-overflow: unset !important;
-              white-space: normal !important;
-              overflow: visible !important;
-            }
-            /* Ensure all content is visible */
-            .email-content {
-              max-width: none !important;
-              width: 100% !important;
-            }
-          </style>
         </head>
-        <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa;">
-          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
             
             <!-- Header -->
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center;">
-              <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">
                 🎉 Booking Confirmed!
               </h1>
-              <p style="color: #ffffff; margin: 10px 0 0 0; font-size: 18px; opacity: 0.9;">
+              <p style="color: #ffffff; margin: 10px 0 0 0; font-size: 16px;">
                 Thank you for choosing BraidsbyEva!
               </p>
             </div>
 
             <!-- Main Content -->
-            <div style="padding: 40px 30px;">
-              <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0 0 30px 0;">
+            <div style="padding: 30px 20px;">
+              
+              <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
                 Dear <strong>${bookingData.customer_name}</strong>,
               </p>
               
@@ -91,91 +79,78 @@ module.exports = async (req, res) => {
               </p>
 
               <!-- Appointment Details -->
-              <div style="background-color: #f8f9fa; border-left: 4px solid #667eea; padding: 25px; margin: 30px 0; border-radius: 0 8px 8px 0;">
-                <h3 style="color: #333333; margin: 0 0 20px 0; font-size: 20px;">📅 Appointment Details</h3>
-                <div style="display: grid; gap: 12px;">
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Service:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.service_name}</span>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Date:</span>
-                    <span style="color: #333333; font-weight: bold;">${appointmentDate}</span>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Time:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.appointment_time}</span>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Duration:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.service_duration}</span>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Price:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.service_price}</span>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Payment:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.payment_method}</span>
-                  </div>
-                </div>
+              <div style="background-color: #f8f9fa; border: 2px solid #667eea; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                <h3 style="color: #333333; margin: 0 0 15px 0; font-size: 18px;">📅 Your Appointment Details</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Service:</td>
+                    <td style="padding: 8px 0; color: #333333;">${bookingData.service_name}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Date:</td>
+                    <td style="padding: 8px 0; color: #333333;">${appointmentDate}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Time:</td>
+                    <td style="padding: 8px 0; color: #333333;">${bookingData.appointment_time}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Duration:</td>
+                    <td style="padding: 8px 0; color: #333333;">${bookingData.service_duration}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Price:</td>
+                    <td style="padding: 8px 0; color: #333333;">${bookingData.service_price}</td>
+                  </tr>
+                </table>
               </div>
 
               <!-- Preparation Instructions -->
-              <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 20px; margin: 30px 0; border-radius: 8px;">
+              <div style="background-color: #fff3cd; border: 2px solid #ffc107; padding: 20px; margin: 20px 0; border-radius: 8px;">
                 <h3 style="color: #856404; margin: 0 0 15px 0; font-size: 18px;">📋 Important Preparation Instructions</h3>
-                <ul style="color: #856404; margin: 0; padding-left: 20px;">
-                  <li style="margin-bottom: 8px;"><strong>Hair Preparation:</strong> Come with clean, dry hair (washed 24-48 hours before your appointment)</li>
-                  <li style="margin-bottom: 8px;"><strong>Remove Existing Styles:</strong> Please remove any existing braids, twists, or extensions before coming</li>
-                  <li style="margin-bottom: 8px;"><strong>Hair Products:</strong> Avoid heavy oils, gels, or styling products on the day of your appointment</li>
-                  <li style="margin-bottom: 8px;"><strong>Arrival Time:</strong> Please arrive 10-15 minutes early for consultation and preparation</li>
-                  <li style="margin-bottom: 8px;"><strong>Comfort:</strong> Wear comfortable clothing and bring a hair tie if needed</li>
-                  <li style="margin-bottom: 8px;"><strong>Duration:</strong> This service takes ${bookingData.service_duration}, so plan accordingly</li>
-                  <li style="margin-bottom: 8px;"><strong>Questions:</strong> Feel free to bring photos or examples of styles you like</li>
-                </ul>
+                <div style="color: #856404; font-size: 14px; line-height: 1.6;">
+                  <p style="margin: 0 0 10px 0;"><strong>1. Hair Preparation:</strong> Come with clean, dry hair (washed 24-48 hours before your appointment)</p>
+                  <p style="margin: 0 0 10px 0;"><strong>2. Remove Existing Styles:</strong> Please remove any existing braids, twists, or extensions before coming</p>
+                  <p style="margin: 0 0 10px 0;"><strong>3. Hair Products:</strong> Avoid heavy oils, gels, or styling products on the day of your appointment</p>
+                  <p style="margin: 0 0 10px 0;"><strong>4. Arrival Time:</strong> Please arrive 10-15 minutes early for consultation and preparation</p>
+                  <p style="margin: 0 0 10px 0;"><strong>5. Comfort:</strong> Wear comfortable clothing and bring a hair tie if needed</p>
+                  <p style="margin: 0 0 10px 0;"><strong>6. Duration:</strong> This service takes ${bookingData.service_duration}, so plan accordingly</p>
+                  <p style="margin: 0 0 0 0;"><strong>7. Questions:</strong> Feel free to bring photos or examples of styles you like</p>
+                </div>
               </div>
 
               <!-- What to Expect -->
-              <div style="background-color: #e8f5e8; border: 1px solid #c3e6cb; padding: 20px; margin: 30px 0; border-radius: 8px;">
+              <div style="background-color: #d4edda; border: 2px solid #28a745; padding: 20px; margin: 20px 0; border-radius: 8px;">
                 <h3 style="color: #155724; margin: 0 0 15px 0; font-size: 18px;">✨ What to Expect</h3>
-                <ul style="color: #155724; margin: 0; padding-left: 20px;">
-                  <li style="margin-bottom: 8px;">Professional consultation to discuss your desired style</li>
-                  <li style="margin-bottom: 8px;">High-quality hair products and tools</li>
-                  <li style="margin-bottom: 8px;">Expert braiding techniques for long-lasting results</li>
-                  <li style="margin-bottom: 8px;">Aftercare instructions for maintaining your style</li>
-                  <li style="margin-bottom: 8px;">Comfortable seating and relaxing environment</li>
-                </ul>
-              </div>
-
-              <!-- Contact Information -->
-              <div style="background-color: #e3f2fd; border: 1px solid #bbdefb; padding: 20px; margin: 30px 0; border-radius: 8px;">
-                <h3 style="color: #1565c0; margin: 0 0 15px 0; font-size: 18px;">📞 Contact Information</h3>
-                <p style="color: #1565c0; margin: 5px 0;"><strong>Phone:</strong> (832) 207-9386</p>
-                <p style="color: #1565c0; margin: 5px 0;"><strong>Email:</strong> braidsbyevaofficial@gmail.com</p>
-                <p style="color: #1565c0; margin: 5px 0;"><strong>Service Hours:</strong> By appointment only</p>
+                <div style="color: #155724; font-size: 14px; line-height: 1.6;">
+                  <p style="margin: 0 0 8px 0;">• Professional consultation to discuss your desired style</p>
+                  <p style="margin: 0 0 8px 0;">• High-quality hair products and tools</p>
+                  <p style="margin: 0 0 8px 0;">• Expert braiding techniques for long-lasting results</p>
+                  <p style="margin: 0 0 8px 0;">• Aftercare instructions for maintaining your style</p>
+                  <p style="margin: 0 0 0 0;">• Comfortable seating and relaxing environment</p>
+                </div>
               </div>
 
               <!-- Aftercare Instructions -->
-              <div style="background-color: #f0f8ff; border: 1px solid #b3d9ff; padding: 20px; margin: 30px 0; border-radius: 8px;">
-                <h3 style="color: #0066cc; margin: 0 0 15px 0; font-size: 18px;">💆‍♀️ Aftercare Instructions</h3>
-                <ul style="color: #0066cc; margin: 0; padding-left: 20px;">
-                  <li style="margin-bottom: 8px;">Sleep with a satin or silk scarf to protect your braids</li>
-                  <li style="margin-bottom: 8px;">Avoid excessive pulling or manipulation of your braids</li>
-                  <li style="margin-bottom: 8px;">Use a lightweight oil or moisturizer on your scalp as needed</li>
-                  <li style="margin-bottom: 8px;">Keep your braids dry for the first 24-48 hours</li>
-                  <li style="margin-bottom: 8px;">Schedule a follow-up appointment if needed</li>
-                </ul>
+              <div style="background-color: #e3f2fd; border: 2px solid #2196f3; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                <h3 style="color: #0d47a1; margin: 0 0 15px 0; font-size: 18px;">💆‍♀️ Aftercare Instructions</h3>
+                <div style="color: #0d47a1; font-size: 14px; line-height: 1.6;">
+                  <p style="margin: 0 0 8px 0;">• Sleep with a satin or silk scarf to protect your braids</p>
+                  <p style="margin: 0 0 8px 0;">• Avoid excessive pulling or manipulation of your braids</p>
+                  <p style="margin: 0 0 8px 0;">• Use a lightweight oil or moisturizer on your scalp as needed</p>
+                  <p style="margin: 0 0 8px 0;">• Keep your braids dry for the first 24-48 hours</p>
+                  <p style="margin: 0 0 0 0;">• Schedule a follow-up appointment if needed</p>
+                </div>
               </div>
 
-              <!-- Important Reminders -->
-              <div style="background-color: #fff3e0; border: 1px solid #ffcc02; padding: 20px; margin: 30px 0; border-radius: 8px;">
-                <h3 style="color: #e65100; margin: 0 0 15px 0; font-size: 18px;">⚠️ Important Reminders</h3>
-                <ul style="color: #e65100; margin: 0; padding-left: 20px;">
-                  <li style="margin-bottom: 8px;">Please arrive on time - late arrivals may result in shortened service time</li>
-                  <li style="margin-bottom: 8px;">Bring a valid ID and payment method</li>
-                  <li style="margin-bottom: 8px;">If you need to reschedule, please give at least 24 hours notice</li>
-                  <li style="margin-bottom: 8px;">Contact us immediately if you have any questions or concerns</li>
-                </ul>
+              <!-- Contact Information -->
+              <div style="background-color: #f8f9fa; border: 2px solid #6c757d; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                <h3 style="color: #495057; margin: 0 0 15px 0; font-size: 18px;">📞 Contact Information</h3>
+                <div style="color: #495057; font-size: 14px; line-height: 1.6;">
+                  <p style="margin: 0 0 5px 0;"><strong>Phone:</strong> (832) 207-9386</p>
+                  <p style="margin: 0 0 5px 0;"><strong>Email:</strong> braidsbyevaofficial@gmail.com</p>
+                  <p style="margin: 0 0 0 0;"><strong>Service Hours:</strong> By appointment only</p>
+                </div>
               </div>
 
               <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 30px 0 0 0;">
@@ -199,7 +174,7 @@ module.exports = async (req, res) => {
     const evaEmailOptions = {
       from: 'braidsbyevaofficial@gmail.com',
       to: 'braidsbyevaofficial@gmail.com',
-      subject: `📅 New Booking Received - ${bookingData.customer_name}`,
+      subject: `📅 New Booking - ${bookingData.customer_name}`,
       html: `
         <!DOCTYPE html>
         <html>
@@ -208,122 +183,87 @@ module.exports = async (req, res) => {
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>New Booking</title>
         </head>
-        <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa;">
-          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
             
             <!-- Header -->
-            <div style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); padding: 40px 30px; text-align: center;">
-              <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+            <div style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); padding: 40px 20px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: bold;">
                 📅 New Booking Received
               </h1>
-              <p style="color: #ffffff; margin: 10px 0 0 0; font-size: 18px; opacity: 0.9;">
+              <p style="color: #ffffff; margin: 10px 0 0 0; font-size: 16px;">
                 BraidsbyEva Website
               </p>
             </div>
 
             <!-- Main Content -->
-            <div style="padding: 40px 30px;">
+            <div style="padding: 30px 20px;">
               
               <!-- Customer Information -->
-              <div style="background-color: #f8f9fa; border-left: 4px solid #28a745; padding: 25px; margin: 30px 0; border-radius: 0 8px 8px 0;">
-                <h3 style="color: #333333; margin: 0 0 20px 0; font-size: 20px;">👤 Customer Information</h3>
-                <div style="display: grid; gap: 12px;">
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Name:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.customer_name}</span>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Email:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.customer_email}</span>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Phone:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.customer_phone}</span>
-                  </div>
-                </div>
+              <div style="background-color: #f8f9fa; border: 2px solid #28a745; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                <h3 style="color: #333333; margin: 0 0 15px 0; font-size: 18px;">👤 Customer Information</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Name:</td>
+                    <td style="padding: 8px 0; color: #333333;">${bookingData.customer_name}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Email:</td>
+                    <td style="padding: 8px 0; color: #333333;">${bookingData.customer_email}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Phone:</td>
+                    <td style="padding: 8px 0; color: #333333;">${bookingData.customer_phone}</td>
+                  </tr>
+                </table>
               </div>
 
               <!-- Service Details -->
-              <div style="background-color: #f8f9fa; border-left: 4px solid #007bff; padding: 25px; margin: 30px 0; border-radius: 0 8px 8px 0;">
-                <h3 style="color: #333333; margin: 0 0 20px 0; font-size: 20px;">💇‍♀️ Service Details</h3>
-                <div style="display: grid; gap: 12px;">
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Service:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.service_name}</span>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Date:</span>
-                    <span style="color: #333333; font-weight: bold;">${appointmentDate}</span>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Time:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.appointment_time}</span>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Duration:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.service_duration}</span>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Price:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.service_price}</span>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Payment:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.payment_method}</span>
-                  </div>
-                </div>
+              <div style="background-color: #f8f9fa; border: 2px solid #007bff; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                <h3 style="color: #333333; margin: 0 0 15px 0; font-size: 18px;">💇‍♀️ Service Details</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Service:</td>
+                    <td style="padding: 8px 0; color: #333333;">${bookingData.service_name}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Date:</td>
+                    <td style="padding: 8px 0; color: #333333;">${appointmentDate}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Time:</td>
+                    <td style="padding: 8px 0; color: #333333;">${bookingData.appointment_time}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Duration:</td>
+                    <td style="padding: 8px 0; color: #333333;">${bookingData.service_duration}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666; font-weight: bold;">Price:</td>
+                    <td style="padding: 8px 0; color: #333333;">${bookingData.service_price}</td>
+                  </tr>
+                </table>
               </div>
 
               <!-- Customer Notes & Special Requests -->
-              <div style="background-color: #f8f9fa; border-left: 4px solid #6f42c1; padding: 25px; margin: 30px 0; border-radius: 0 8px 8px 0;">
-                <h3 style="color: #333333; margin: 0 0 20px 0; font-size: 20px;">📝 Customer Notes & Special Requests</h3>
-                <div style="background-color: #ffffff; border: 1px solid #dee2e6; padding: 20px; border-radius: 8px;">
-                  <p style="color: #333333; margin: 0; font-size: 16px; line-height: 1.6;">
+              <div style="background-color: #f8f9fa; border: 2px solid #6f42c1; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                <h3 style="color: #333333; margin: 0 0 15px 0; font-size: 18px;">📝 Customer Notes & Special Requests</h3>
+                <div style="background-color: #ffffff; border: 1px solid #dee2e6; padding: 15px; border-radius: 6px;">
+                  <p style="color: #333333; margin: 0; font-size: 14px; line-height: 1.6;">
                     ${bookingData.notes ? bookingData.notes : 'No special requests or notes provided by the customer.'}
                   </p>
                 </div>
               </div>
 
-              <!-- Hair Details (if available) -->
-              ${bookingData.hair_length || bookingData.hair_texture || bookingData.previous_braids || bookingData.allergies ? `
-              <div style="background-color: #f8f9fa; border-left: 4px solid #17a2b8; padding: 25px; margin: 30px 0; border-radius: 0 8px 8px 0;">
-                <h3 style="color: #333333; margin: 0 0 20px 0; font-size: 20px;">💇‍♀️ Hair Information</h3>
-                <div style="display: grid; gap: 12px;">
-                  ${bookingData.hair_length ? `
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Length:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.hair_length}</span>
-                  </div>
-                  ` : ''}
-                  ${bookingData.hair_texture ? `
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Texture:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.hair_texture}</span>
-                  </div>
-                  ` : ''}
-                  ${bookingData.previous_braids ? `
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Previous Braids:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.previous_braids ? 'Yes' : 'No'}</span>
-                  </div>
-                  ` : ''}
-                  ${bookingData.allergies ? `
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Allergies:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.allergies}</span>
-                  </div>
-                  ` : ''}
-                </div>
-              </div>
-              ` : ''}
-
-              <div style="background-color: #d4edda; border: 1px solid #c3e6cb; padding: 20px; margin: 30px 0; border-radius: 8px;">
-                <p style="color: #155724; margin: 0; font-weight: 500;">
-                  📞 Please contact the customer to confirm all details and provide preparation instructions.
+              <!-- Action Required -->
+              <div style="background-color: #d4edda; border: 2px solid #28a745; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                <h3 style="color: #155724; margin: 0 0 15px 0; font-size: 18px;">📞 Action Required</h3>
+                <p style="color: #155724; margin: 0; font-size: 14px; line-height: 1.6;">
+                  Please contact the customer to confirm all details and provide any additional preparation instructions.
                 </p>
               </div>
 
-              <p style="color: #666666; font-size: 14px; margin: 30px 0 0 0; text-align: center;">
+              <p style="color: #666666; font-size: 12px; margin: 30px 0 0 0; text-align: center;">
                 This booking was submitted through your website.
               </p>
             </div>
