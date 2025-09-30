@@ -143,18 +143,18 @@ const BookingPage: React.FC = () => {
           customer_name: bookingData.name,
           customer_email: bookingData.email,
           customer_phone: bookingData.phone,
-          hair_length: 'Not specified',
-          hair_texture: 'Not specified',
-          previous_braids: false,
-          allergies: 'None',
-          notes: bookingData.specialRequests || '',
-          payment_method: 'Cash/Zelle',
-          status: 'pending'
+          notes: bookingData.specialRequests || ''
         };
 
         console.log('📧 Sending email notifications...');
-        await sendBookingEmails(emailPayload);
-        console.log('✅ Email notifications sent successfully!');
+        console.log('📧 Email payload:', emailPayload);
+        try {
+          await sendBookingEmails(emailPayload);
+          console.log('✅ Email notifications sent successfully!');
+        } catch (emailError) {
+          console.error('❌ Email sending failed:', emailError);
+          console.log('⚠️ Booking still confirmed, but emails may not have been sent');
+        }
     };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
