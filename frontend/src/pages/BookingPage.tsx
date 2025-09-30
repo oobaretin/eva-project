@@ -57,8 +57,7 @@ const BookingPage: React.FC = () => {
   };
 
     const sendBookingToBackend = async (bookingData: BookingFormData) => {
-      try {
-        console.log('🚀 Starting booking process...');
+      console.log('🚀 Starting booking process...');
         console.log('📝 Form data:', bookingData);
 
         // Get pricing and duration from the selected style
@@ -156,11 +155,6 @@ const BookingPage: React.FC = () => {
         console.log('📧 Sending email notifications...');
         await sendBookingEmails(emailPayload);
         console.log('✅ Email notifications sent successfully!');
-        
-      } catch (error: any) {
-        console.error('❌ Error in booking process:', error);
-        throw error; // Re-throw to handle in main function
-      }
     };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
