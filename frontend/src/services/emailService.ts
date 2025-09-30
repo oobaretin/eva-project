@@ -31,24 +31,16 @@ export const sendBookingEmails = async (bookingData: BookingEmailData): Promise<
     console.log('📧 Response headers:', Object.fromEntries(response.headers.entries()));
 
             if (!response.ok) {
-              let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
-              try {
-                const errorData = await response.json();
-                errorMessage = errorData.error || errorMessage;
-                console.error('❌ Email API error response:', errorData);
-              } catch (jsonError) {
-                console.error('❌ Email API error (non-JSON):', errorMessage);
-              }
-              console.error('❌ Email API failed:', errorMessage);
+              console.error('❌ Email API failed:', `HTTP ${response.status}: ${response.statusText}`);
               return;
             }
 
-    try {
-      const result = await response.json();
-      console.log('✅ Booking emails sent successfully:', result);
-    } catch (jsonError) {
-      console.log('⚠️ Email sent but response not JSON');
-    }
+            try {
+              const result = await response.json();
+              console.log('✅ Booking emails sent successfully:', result);
+            } catch (jsonError) {
+              console.log('⚠️ Email sent but response not JSON');
+            }
   } catch (error) {
     console.error('❌ Error sending booking emails:', error);
     // Don't throw error - just log it and continue
