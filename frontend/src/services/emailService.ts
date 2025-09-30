@@ -132,6 +132,7 @@ Contact: (832) 207-9386`;
     }
 
     console.log('📧📱 All notifications sent successfully!');
+    // Force fresh deployment - no more confirmation dialogs
     
     return {
       success: true,
