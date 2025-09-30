@@ -110,13 +110,27 @@ module.exports = async (req, res) => {
 
               <!-- Preparation Instructions -->
               <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 20px; margin: 30px 0; border-radius: 8px;">
-                <h3 style="color: #856404; margin: 0 0 15px 0; font-size: 18px;">📋 Preparation Instructions</h3>
+                <h3 style="color: #856404; margin: 0 0 15px 0; font-size: 18px;">📋 Important Preparation Instructions</h3>
                 <ul style="color: #856404; margin: 0; padding-left: 20px;">
-                  <li style="margin-bottom: 8px;">Come with clean, dry hair (washed 24-48 hours before)</li>
-                  <li style="margin-bottom: 8px;">Remove any existing braids or extensions</li>
-                  <li style="margin-bottom: 8px;">Bring a hair tie and any preferred accessories</li>
-                  <li style="margin-bottom: 8px;">Arrive 10-15 minutes early for consultation</li>
-                  <li style="margin-bottom: 8px;">Wear comfortable clothing</li>
+                  <li style="margin-bottom: 8px;"><strong>Hair Preparation:</strong> Come with clean, dry hair (washed 24-48 hours before your appointment)</li>
+                  <li style="margin-bottom: 8px;"><strong>Remove Existing Styles:</strong> Please remove any existing braids, twists, or extensions before coming</li>
+                  <li style="margin-bottom: 8px;"><strong>Hair Products:</strong> Avoid heavy oils, gels, or styling products on the day of your appointment</li>
+                  <li style="margin-bottom: 8px;"><strong>Arrival Time:</strong> Please arrive 10-15 minutes early for consultation and preparation</li>
+                  <li style="margin-bottom: 8px;"><strong>Comfort:</strong> Wear comfortable clothing and bring a hair tie if needed</li>
+                  <li style="margin-bottom: 8px;"><strong>Duration:</strong> This service takes ${bookingData.service_duration}, so plan accordingly</li>
+                  <li style="margin-bottom: 8px;"><strong>Questions:</strong> Feel free to bring photos or examples of styles you like</li>
+                </ul>
+              </div>
+
+              <!-- What to Expect -->
+              <div style="background-color: #e8f5e8; border: 1px solid #c3e6cb; padding: 20px; margin: 30px 0; border-radius: 8px;">
+                <h3 style="color: #155724; margin: 0 0 15px 0; font-size: 18px;">✨ What to Expect</h3>
+                <ul style="color: #155724; margin: 0; padding-left: 20px;">
+                  <li style="margin-bottom: 8px;">Professional consultation to discuss your desired style</li>
+                  <li style="margin-bottom: 8px;">High-quality hair products and tools</li>
+                  <li style="margin-bottom: 8px;">Expert braiding techniques for long-lasting results</li>
+                  <li style="margin-bottom: 8px;">Aftercare instructions for maintaining your style</li>
+                  <li style="margin-bottom: 8px;">Comfortable seating and relaxing environment</li>
                 </ul>
               </div>
 
@@ -224,32 +238,48 @@ module.exports = async (req, res) => {
                 </div>
               </div>
 
-              <!-- Hair Details -->
+              <!-- Customer Notes & Special Requests -->
               <div style="background-color: #f8f9fa; border-left: 4px solid #6f42c1; padding: 25px; margin: 30px 0; border-radius: 0 8px 8px 0;">
-                <h3 style="color: #333333; margin: 0 0 20px 0; font-size: 20px;">📝 Hair Details</h3>
+                <h3 style="color: #333333; margin: 0 0 20px 0; font-size: 20px;">📝 Customer Notes & Special Requests</h3>
+                <div style="background-color: #ffffff; border: 1px solid #dee2e6; padding: 20px; border-radius: 8px;">
+                  <p style="color: #333333; margin: 0; font-size: 16px; line-height: 1.6;">
+                    ${bookingData.notes ? bookingData.notes : 'No special requests or notes provided by the customer.'}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Hair Details (if available) -->
+              ${bookingData.hair_length || bookingData.hair_texture || bookingData.previous_braids || bookingData.allergies ? `
+              <div style="background-color: #f8f9fa; border-left: 4px solid #17a2b8; padding: 25px; margin: 30px 0; border-radius: 0 8px 8px 0;">
+                <h3 style="color: #333333; margin: 0 0 20px 0; font-size: 20px;">💇‍♀️ Hair Information</h3>
                 <div style="display: grid; gap: 12px;">
+                  ${bookingData.hair_length ? `
                   <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="color: #666666; font-weight: 500;">Length:</span>
                     <span style="color: #333333; font-weight: bold;">${bookingData.hair_length}</span>
                   </div>
+                  ` : ''}
+                  ${bookingData.hair_texture ? `
                   <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="color: #666666; font-weight: 500;">Texture:</span>
                     <span style="color: #333333; font-weight: bold;">${bookingData.hair_texture}</span>
                   </div>
+                  ` : ''}
+                  ${bookingData.previous_braids ? `
                   <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="color: #666666; font-weight: 500;">Previous Braids:</span>
                     <span style="color: #333333; font-weight: bold;">${bookingData.previous_braids ? 'Yes' : 'No'}</span>
                   </div>
+                  ` : ''}
+                  ${bookingData.allergies ? `
                   <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="color: #666666; font-weight: 500;">Allergies:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.allergies || 'None'}</span>
+                    <span style="color: #333333; font-weight: bold;">${bookingData.allergies}</span>
                   </div>
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="color: #666666; font-weight: 500;">Special Requests:</span>
-                    <span style="color: #333333; font-weight: bold;">${bookingData.notes || 'None'}</span>
-                  </div>
+                  ` : ''}
                 </div>
               </div>
+              ` : ''}
 
               <div style="background-color: #d4edda; border: 1px solid #c3e6cb; padding: 20px; margin: 30px 0; border-radius: 8px;">
                 <p style="color: #155724; margin: 0; font-weight: 500;">
