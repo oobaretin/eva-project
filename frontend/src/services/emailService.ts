@@ -54,4 +54,3 @@ export const sendBookingEmails = async (bookingData: BookingEmailData): Promise<
     // Don't throw error - just log it and continue
     // This ensures booking always succeeds even if email fails
   }
-};
