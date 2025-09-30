@@ -53,6 +53,19 @@ module.exports = async (req, res) => {
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>Booking Confirmation</title>
+          <style>
+            /* Prevent text truncation and ellipsis */
+            * {
+              text-overflow: unset !important;
+              white-space: normal !important;
+              overflow: visible !important;
+            }
+            /* Ensure all content is visible */
+            .email-content {
+              max-width: none !important;
+              width: 100% !important;
+            }
+          </style>
         </head>
         <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa;">
           <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
@@ -140,6 +153,29 @@ module.exports = async (req, res) => {
                 <p style="color: #1565c0; margin: 5px 0;"><strong>Phone:</strong> (832) 207-9386</p>
                 <p style="color: #1565c0; margin: 5px 0;"><strong>Email:</strong> braidsbyevaofficial@gmail.com</p>
                 <p style="color: #1565c0; margin: 5px 0;"><strong>Service Hours:</strong> By appointment only</p>
+              </div>
+
+              <!-- Aftercare Instructions -->
+              <div style="background-color: #f0f8ff; border: 1px solid #b3d9ff; padding: 20px; margin: 30px 0; border-radius: 8px;">
+                <h3 style="color: #0066cc; margin: 0 0 15px 0; font-size: 18px;">💆‍♀️ Aftercare Instructions</h3>
+                <ul style="color: #0066cc; margin: 0; padding-left: 20px;">
+                  <li style="margin-bottom: 8px;">Sleep with a satin or silk scarf to protect your braids</li>
+                  <li style="margin-bottom: 8px;">Avoid excessive pulling or manipulation of your braids</li>
+                  <li style="margin-bottom: 8px;">Use a lightweight oil or moisturizer on your scalp as needed</li>
+                  <li style="margin-bottom: 8px;">Keep your braids dry for the first 24-48 hours</li>
+                  <li style="margin-bottom: 8px;">Schedule a follow-up appointment if needed</li>
+                </ul>
+              </div>
+
+              <!-- Important Reminders -->
+              <div style="background-color: #fff3e0; border: 1px solid #ffcc02; padding: 20px; margin: 30px 0; border-radius: 8px;">
+                <h3 style="color: #e65100; margin: 0 0 15px 0; font-size: 18px;">⚠️ Important Reminders</h3>
+                <ul style="color: #e65100; margin: 0; padding-left: 20px;">
+                  <li style="margin-bottom: 8px;">Please arrive on time - late arrivals may result in shortened service time</li>
+                  <li style="margin-bottom: 8px;">Bring a valid ID and payment method</li>
+                  <li style="margin-bottom: 8px;">If you need to reschedule, please give at least 24 hours notice</li>
+                  <li style="margin-bottom: 8px;">Contact us immediately if you have any questions or concerns</li>
+                </ul>
               </div>
 
               <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 30px 0 0 0;">
