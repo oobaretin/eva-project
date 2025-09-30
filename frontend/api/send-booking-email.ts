@@ -2,12 +2,26 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import nodemailer from 'nodemailer';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Only allow POST requests
+  // Enable CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
+    console.log('📧 Received booking email request');
+    console.log('Environment check:', {
+      hasEmailUser: !!process.env.EMAIL_USER,
+      hasEmailPass: !!process.env.EMAIL_PASS
+    });
+
     const {
       service_name,
       service_price,
@@ -20,13 +34,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       notes,
     } = req.body;
 
-    // Validate required fields
     if (!customer_name || !customer_email || !appointment_date || !appointment_time) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Create transporter using Gmail
-    const transporter = nodemailer.createTransport({
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error('❌ Missing email credentials');
+      return res.status(500).json({ error: 'Email service not configured' });
+    }
+
+    const transporter = nodemailer.createTransporter({
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
@@ -34,7 +51,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       },
     });
 
-    // Format date for better readability
     const formattedDate = new Date(appointment_date).toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
@@ -50,77 +66,40 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       html: `
         <!DOCTYPE html>
         <html>
-        <head>
-          <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-            .content { background: #ffffff; padding: 30px; border: 1px solid #e5e7eb; }
-            .details { background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0; }
-            .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e5e7eb; }
-            .detail-label { font-weight: 600; color: #6b7280; }
-            .detail-value { color: #111827; }
-            .payment-box { background: #dbeafe; border-left: 4px solid #3b82f6; padding: 15px; margin: 20px 0; border-radius: 4px; }
-            .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
-            .button { display: inline-block; background: #f97316; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <div class="header">
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px;">
+          <div style="max-width: 600px; margin: 0 auto; background: #ffffff;">
+            <div style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
               <h1 style="margin: 0; font-size: 28px;">🎉 Appointment Confirmed!</h1>
-              <p style="margin: 10px 0 0 0; opacity: 0.9;">BraidsbyEva - Professional Braiding Services</p>
+              <p style="margin: 10px 0 0 0;">BraidsbyEva - Professional Braiding Services</p>
             </div>
             
-            <div class="content">
+            <div style="padding: 30px; border: 1px solid #e5e7eb; border-top: none;">
               <p>Hi ${customer_name},</p>
               
               <p>Thank you for booking with BraidsbyEva! We're excited to create a beautiful style for you.</p>
               
-              <div class="details">
+              <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
                 <h3 style="margin-top: 0; color: #f97316;">Appointment Details</h3>
-                <div class="detail-row">
-                  <span class="detail-label">Service:</span>
-                  <span class="detail-value">${service_name || 'Braiding Service'}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Date:</span>
-                  <span class="detail-value">${formattedDate}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Time:</span>
-                  <span class="detail-value">${appointment_time}</span>
-                </div>
-                ${service_price ? `
-                <div class="detail-row">
-                  <span class="detail-label">Price:</span>
-                  <span class="detail-value">${service_price}</span>
-                </div>
-                ` : ''}
-                ${service_duration ? `
-                <div class="detail-row">
-                  <span class="detail-label">Duration:</span>
-                  <span class="detail-value">${service_duration}</span>
-                </div>
-                ` : ''}
-                ${notes ? `
-                <div class="detail-row">
-                  <span class="detail-label">Notes:</span>
-                  <span class="detail-value">${notes}</span>
-                </div>
-                ` : ''}
+                <table style="width: 100%;">
+                  <tr><td style="padding: 8px 0; color: #6b7280;"><strong>Service:</strong></td><td style="text-align: right;">${service_name || 'Braiding Service'}</td></tr>
+                  <tr><td style="padding: 8px 0; color: #6b7280;"><strong>Date:</strong></td><td style="text-align: right;">${formattedDate}</td></tr>
+                  <tr><td style="padding: 8px 0; color: #6b7280;"><strong>Time:</strong></td><td style="text-align: right;">${appointment_time}</td></tr>
+                  ${service_price ? `<tr><td style="padding: 8px 0; color: #6b7280;"><strong>Price:</strong></td><td style="text-align: right;">${service_price}</td></tr>` : ''}
+                  ${service_duration ? `<tr><td style="padding: 8px 0; color: #6b7280;"><strong>Duration:</strong></td><td style="text-align: right;">${service_duration}</td></tr>` : ''}
+                </table>
+                ${notes ? `<p style="margin-top: 15px;"><strong>Your Notes:</strong><br>${notes}</p>` : ''}
               </div>
               
-              <div class="payment-box">
+              <div style="background: #dbeafe; border-left: 4px solid #3b82f6; padding: 15px; margin: 20px 0; border-radius: 4px;">
                 <h4 style="margin-top: 0; color: #1e40af;">💳 Payment Information</h4>
                 <p style="margin: 5px 0;">Payment is due on the day of your appointment.</p>
                 <p style="margin: 5px 0;"><strong>We accept:</strong> Cash and Zelle</p>
                 <p style="margin: 5px 0;"><strong>Zelle:</strong> (832) 207-9386</p>
               </div>
               
-              <p><strong>Location:</strong> Katy, Texas (address will be shared upon confirmation)</p>
+              <p><strong>Location:</strong> Katy, Texas</p>
               
-              <p style="margin-top: 25px;">If you need to reschedule or have any questions, please contact us:</p>
+              <p style="margin-top: 25px;">If you need to reschedule or have questions:</p>
               <p style="margin: 5px 0;">📞 <strong>(832) 207-9386</strong></p>
               <p style="margin: 5px 0;">📧 <strong>braidsbyevaofficial@gmail.com</strong></p>
               
@@ -128,10 +107,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               <p><strong>Eva & Team</strong><br>BraidsbyEva</p>
             </div>
             
-            <div class="footer">
+            <div style="text-align: center; padding: 20px; color: #6b7280; font-size: 14px;">
               <p>BraidsbyEva - Professional Braiding Services</p>
-              <p>Katy, Texas | (832) 207-9386 | braidsbyevaofficial@gmail.com</p>
-              <p style="font-size: 12px; color: #9ca3af;">© 2025 BraidsbyEva. All rights reserved.</p>
+              <p>Katy, Texas | (832) 207-9386</p>
             </div>
           </div>
         </body>
@@ -139,7 +117,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       `,
     };
 
-    // Email to Eva (Braider)
+    // Email to Eva
     const braiderEmail = {
       from: `BraidsbyEva Bookings <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
@@ -147,86 +125,42 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       html: `
         <!DOCTYPE html>
         <html>
-        <head>
-          <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-            .content { background: #ffffff; padding: 30px; border: 1px solid #e5e7eb; }
-            .details { background: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #10b981; }
-            .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #d1fae5; }
-            .detail-label { font-weight: 600; color: #065f46; }
-            .detail-value { color: #111827; font-weight: 500; }
-            .alert { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 20px 0; border-radius: 4px; }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <div class="header">
-              <h1 style="margin: 0; font-size: 28px;">📅 New Appointment Booked!</h1>
-              <p style="margin: 10px 0 0 0; opacity: 0.9;">A new customer has scheduled an appointment</p>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px;">
+          <div style="max-width: 600px; margin: 0 auto; background: #ffffff;">
+            <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+              <h1 style="margin: 0; font-size: 28px;">📅 New Appointment!</h1>
+              <p style="margin: 10px 0 0 0;">A new customer has booked</p>
             </div>
             
-            <div class="content">
-              <div class="details">
+            <div style="padding: 30px; border: 1px solid #e5e7eb; border-top: none;">
+              <div style="background: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #10b981;">
                 <h3 style="margin-top: 0; color: #10b981;">Customer Information</h3>
-                <div class="detail-row">
-                  <span class="detail-label">Name:</span>
-                  <span class="detail-value">${customer_name}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Phone:</span>
-                  <span class="detail-value"><a href="tel:${customer_phone}">${customer_phone}</a></span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Email:</span>
-                  <span class="detail-value"><a href="mailto:${customer_email}">${customer_email}</a></span>
-                </div>
+                <table style="width: 100%;">
+                  <tr><td style="padding: 8px 0; color: #065f46;"><strong>Name:</strong></td><td style="text-align: right;"><strong>${customer_name}</strong></td></tr>
+                  <tr><td style="padding: 8px 0; color: #065f46;"><strong>Phone:</strong></td><td style="text-align: right;"><a href="tel:${customer_phone}">${customer_phone}</a></td></tr>
+                  <tr><td style="padding: 8px 0; color: #065f46;"><strong>Email:</strong></td><td style="text-align: right;"><a href="mailto:${customer_email}">${customer_email}</a></td></tr>
+                </table>
               </div>
               
-              <div class="details">
+              <div style="background: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #10b981;">
                 <h3 style="margin-top: 0; color: #10b981;">Appointment Details</h3>
-                <div class="detail-row">
-                  <span class="detail-label">Service:</span>
-                  <span class="detail-value">${service_name || 'Braiding Service'}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Date:</span>
-                  <span class="detail-value">${formattedDate}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Time:</span>
-                  <span class="detail-value">${appointment_time}</span>
-                </div>
-                ${service_price ? `
-                <div class="detail-row">
-                  <span class="detail-label">Price:</span>
-                  <span class="detail-value">${service_price}</span>
-                </div>
-                ` : ''}
-                ${service_duration ? `
-                <div class="detail-row">
-                  <span class="detail-label">Duration:</span>
-                  <span class="detail-value">${service_duration}</span>
-                </div>
-                ` : ''}
-                ${notes ? `
-                <div class="detail-row" style="border-bottom: none;">
-                  <span class="detail-label">Special Notes:</span>
-                </div>
-                <div style="background: white; padding: 10px; border-radius: 4px; margin-top: 10px;">
-                  <p style="margin: 0; white-space: pre-wrap;">${notes}</p>
-                </div>
-                ` : ''}
+                <table style="width: 100%;">
+                  <tr><td style="padding: 8px 0; color: #065f46;"><strong>Service:</strong></td><td style="text-align: right;"><strong>${service_name || 'Braiding Service'}</strong></td></tr>
+                  <tr><td style="padding: 8px 0; color: #065f46;"><strong>Date:</strong></td><td style="text-align: right;"><strong>${formattedDate}</strong></td></tr>
+                  <tr><td style="padding: 8px 0; color: #065f46;"><strong>Time:</strong></td><td style="text-align: right;"><strong>${appointment_time}</strong></td></tr>
+                  ${service_price ? `<tr><td style="padding: 8px 0; color: #065f46;"><strong>Price:</strong></td><td style="text-align: right;">${service_price}</td></tr>` : ''}
+                  ${service_duration ? `<tr><td style="padding: 8px 0; color: #065f46;"><strong>Duration:</strong></td><td style="text-align: right;">${service_duration}</td></tr>` : ''}
+                </table>
+                ${notes ? `<div style="margin-top: 15px; background: white; padding: 10px; border-radius: 4px;"><strong>Special Notes:</strong><br>${notes}</div>` : ''}
               </div>
               
-              <div class="alert">
-                <p style="margin: 0;"><strong>⚠️ Action Required:</strong> Please contact the customer to confirm this appointment.</p>
+              <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 20px 0; border-radius: 4px;">
+                <p style="margin: 0;"><strong>⚠️ Action Required:</strong> Contact customer to confirm appointment.</p>
               </div>
               
               <p style="text-align: center; margin-top: 30px;">
-                <a href="tel:${customer_phone}" style="display: inline-block; background: #10b981; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 5px;">📞 Call Customer</a>
-                <a href="sms:${customer_phone}" style="display: inline-block; background: #3b82f6; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 5px;">💬 Text Customer</a>
+                <a href="tel:${customer_phone}" style="display: inline-block; background: #10b981; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 5px;">📞 Call</a>
+                <a href="sms:${customer_phone}" style="display: inline-block; background: #3b82f6; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 5px;">💬 Text</a>
               </p>
             </div>
           </div>
@@ -235,21 +169,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       `,
     };
 
-    // Send both emails
+    console.log('📤 Sending emails...');
     await Promise.all([
       transporter.sendMail(customerEmail),
       transporter.sendMail(braiderEmail),
     ]);
 
+    console.log('✅ Emails sent successfully');
     return res.status(200).json({ 
       success: true, 
       message: 'Booking emails sent successfully' 
     });
 
   } catch (error) {
-    console.error('Email sending error:', error);
+    console.error('❌ Email error:', error);
     return res.status(500).json({ 
-      error: 'Failed to send booking emails',
+      error: 'Failed to send emails',
       details: error instanceof Error ? error.message : 'Unknown error'
     });
   }
