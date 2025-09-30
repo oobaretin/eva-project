@@ -47,7 +47,7 @@ export const sendBookingEmails = async (bookingData: BookingEmailData): Promise<
       const result = await response.json();
       console.log('✅ Booking emails sent successfully:', result);
     } catch (jsonError) {
-      console.log('⚠️ Email sent but response not JSON:', await response.text());
+      console.log('⚠️ Email sent but response not JSON');
     }
   } catch (error) {
     console.error('❌ Error sending booking emails:', error);
