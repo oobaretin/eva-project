@@ -19,7 +19,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log('📧 Received booking email request');
     console.log('Environment check:', {
       hasEmailUser: !!process.env.EMAIL_USER,
-      hasEmailPass: !!process.env.EMAIL_PASS
+      hasEmailPass: !!process.env.EMAIL_PASS,
+      emailUserLength: process.env.EMAIL_USER?.length || 0,
+      emailPassLength: process.env.EMAIL_PASS?.length || 0
     });
 
     const {
@@ -43,6 +45,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(500).json({ error: 'Email service not configured' });
     }
 
+    console.log('📧 Creating Nodemailer transporter...');
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -50,6 +53,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         pass: process.env.EMAIL_PASS,
       },
     });
+
+    console.log('📧 Testing transporter connection...');
+    try {
+      await transporter.verify();
+      console.log('✅ Transporter verified successfully');
+    } catch (verifyError) {
+      console.error('❌ Transporter verification failed:', verifyError);
+      return res.status(500).json({ 
+        error: 'Email service authentication failed',
+        details: verifyError instanceof Error ? verifyError.message : 'Unknown error'
+      });
+    }
 
     const formattedDate = new Date(appointment_date).toLocaleDateString('en-US', {
       weekday: 'long',
