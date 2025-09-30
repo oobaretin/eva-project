@@ -27,13 +27,16 @@ export const sendBookingEmails = async (bookingData: BookingEmailData): Promise<
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error || 'Failed to send booking emails');
+      console.error('❌ Email API error:', errorData.error || 'Failed to send booking emails');
+      // Don't throw error - just log it and continue
+      return;
     }
 
     const result = await response.json();
     console.log('✅ Booking emails sent successfully:', result);
   } catch (error) {
     console.error('❌ Error sending booking emails:', error);
-    throw error;
+    // Don't throw error - just log it and continue
+    // This ensures booking always succeeds even if email fails
   }
 };
