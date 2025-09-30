@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -18,9 +18,7 @@ async function handler(req, res) {
     console.log('📧 Received booking email request');
     console.log('Environment check:', {
       hasEmailUser: !!process.env.EMAIL_USER,
-      hasEmailPass: !!process.env.EMAIL_PASS,
-      emailUserLength: process.env.EMAIL_USER?.length || 0,
-      emailPassLength: process.env.EMAIL_PASS?.length || 0
+      hasEmailPass: !!process.env.EMAIL_PASS
     });
 
     const {
@@ -44,7 +42,6 @@ async function handler(req, res) {
       return res.status(500).json({ error: 'Email service not configured' });
     }
 
-    console.log('📧 Creating Nodemailer transporter...');
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -52,18 +49,6 @@ async function handler(req, res) {
         pass: process.env.EMAIL_PASS,
       },
     });
-
-    console.log('📧 Testing transporter connection...');
-    try {
-      await transporter.verify();
-      console.log('✅ Transporter verified successfully');
-    } catch (verifyError) {
-      console.error('❌ Transporter verification failed:', verifyError);
-      return res.status(500).json({ 
-        error: 'Email service authentication failed',
-        details: verifyError instanceof Error ? verifyError.message : 'Unknown error'
-      });
-    }
 
     const formattedDate = new Date(appointment_date).toLocaleDateString('en-US', {
       weekday: 'long',
@@ -199,9 +184,7 @@ async function handler(req, res) {
     console.error('❌ Email error:', error);
     return res.status(500).json({ 
       error: 'Failed to send emails',
-      details: error instanceof Error ? error.message : 'Unknown error'
+      details: error.message
     });
   }
-}
-
-module.exports = handler;
+};
