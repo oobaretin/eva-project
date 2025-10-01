@@ -26,12 +26,12 @@ export default async function handler(req, res) {
       appointment_time
     });
 
-    // Create transporter with hardcoded credentials for testing
+    // Use the original working Gmail setup
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: 'braidsbyevaofficial@gmail.com',
-        pass: 'dlrj tzws keuv wsdg' // Your Gmail app password
+        pass: 'dlrj tzws keuv wsdg' // Your working app password
       }
     });
 
@@ -43,7 +43,7 @@ export default async function handler(req, res) {
       day: 'numeric'
     });
 
-    // Simple customer email
+    // Customer email with improved template
     const customerEmail = {
       from: 'BraidsbyEva <braidsbyevaofficial@gmail.com>',
       to: customer_email,
@@ -158,7 +158,7 @@ export default async function handler(req, res) {
       `,
     };
 
-    // Simple braider email
+    // Braider email with improved template
     const braiderEmail = {
       from: 'BraidsbyEva Bookings <braidsbyevaofficial@gmail.com>',
       to: 'braidsbyevaofficial@gmail.com',
@@ -258,7 +258,7 @@ export default async function handler(req, res) {
 
     console.log('📧 Sending emails...');
     
-    // Send both emails
+    // Send both emails using the original working method
     const results = await Promise.all([
       transporter.sendMail(customerEmail),
       transporter.sendMail(braiderEmail)
