@@ -64,6 +64,173 @@ class EmailService {
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>New Booking Alert</title>
+          <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+            
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
+            
+            body {
+              font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              line-height: 1.6;
+              color: #333;
+              background-color: #f8f9fa;
+            }
+            
+            .email-container {
+              max-width: 800px;
+              margin: 0 auto;
+              background-color: #ffffff;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+              border-radius: 12px;
+              overflow: hidden;
+            }
+            
+            .header {
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              padding: 50px 30px;
+              text-align: center;
+              position: relative;
+              overflow: hidden;
+            }
+            
+            .header::before {
+              content: '';
+              position: absolute;
+              top: -50px;
+              right: -50px;
+              width: 120px;
+              height: 120px;
+              background: rgba(255, 255, 255, 0.1);
+              border-radius: 50%;
+            }
+            
+            .header::after {
+              content: '';
+              position: absolute;
+              bottom: -40px;
+              left: -40px;
+              width: 80px;
+              height: 80px;
+              background: rgba(255, 255, 255, 0.1);
+              border-radius: 50%;
+            }
+            
+            .header h1 {
+              color: #ffffff;
+              margin: 0;
+              font-size: 36px;
+              font-weight: 700;
+              text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+              position: relative;
+              z-index: 1;
+            }
+            
+            .card {
+              background: white;
+              border-radius: 15px;
+              padding: 30px;
+              margin-bottom: 30px;
+              box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+              border: 1px solid #e9ecef;
+            }
+            
+            .gradient-card {
+              background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+              color: white;
+              border: none;
+            }
+            
+            .blue-gradient-card {
+              background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+              color: white;
+              border: none;
+            }
+            
+            .pink-gradient-card {
+              background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+              color: white;
+              border: none;
+            }
+            
+            .action-card {
+              background: #fff3cd;
+              border: 2px solid #ffc107;
+              border-radius: 15px;
+              padding: 30px;
+              margin-bottom: 30px;
+            }
+            
+            .reminder-card {
+              background: #e8f5e8;
+              border: 2px solid #28a745;
+              border-radius: 15px;
+              padding: 30px;
+            }
+            
+            .step-item {
+              display: flex;
+              align-items: center;
+              padding: 15px;
+              background: white;
+              border-radius: 8px;
+              box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+              margin-bottom: 15px;
+            }
+            
+            .step-number {
+              background: #007bff;
+              color: white;
+              padding: 8px 12px;
+              border-radius: 50%;
+              margin-right: 15px;
+              font-weight: bold;
+              min-width: 32px;
+              text-align: center;
+            }
+            
+            .step-number.green { background: #28a745; }
+            .step-number.yellow { background: #ffc107; }
+            .step-number.blue { background: #17a2b8; }
+            .step-number.red { background: #dc3545; }
+            
+            .info-grid {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 20px;
+            }
+            
+            .info-item {
+              background: rgba(255, 255, 255, 0.2);
+              padding: 15px;
+              border-radius: 10px;
+              margin-bottom: 15px;
+            }
+            
+            .footer {
+              background: #f8f9fa;
+              padding: 20px 30px;
+              text-align: center;
+              border-top: 1px solid #e9ecef;
+            }
+            
+            @media (max-width: 600px) {
+              .info-grid {
+                grid-template-columns: 1fr;
+              }
+              
+              .header h1 {
+                font-size: 28px;
+              }
+              
+              .card {
+                padding: 20px;
+              }
+            }
+          </style>
         </head>
         <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa;">
           <div style="max-width: 800px; margin: 0 auto; background-color: #ffffff; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);">
@@ -247,17 +414,218 @@ class EmailService {
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>Booking Confirmation</title>
+          <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+            
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
+            
+            body {
+              font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              line-height: 1.6;
+              color: #333;
+              background-color: #f8f9fa;
+            }
+            
+            .email-container {
+              max-width: 800px;
+              margin: 0 auto;
+              background-color: #ffffff;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+              border-radius: 12px;
+              overflow: hidden;
+            }
+            
+            .header {
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              padding: 50px 30px;
+              text-align: center;
+              position: relative;
+              overflow: hidden;
+            }
+            
+            .header::before {
+              content: '';
+              position: absolute;
+              top: -50px;
+              right: -50px;
+              width: 120px;
+              height: 120px;
+              background: rgba(255, 255, 255, 0.1);
+              border-radius: 50%;
+            }
+            
+            .header::after {
+              content: '';
+              position: absolute;
+              bottom: -40px;
+              left: -40px;
+              width: 80px;
+              height: 80px;
+              background: rgba(255, 255, 255, 0.1);
+              border-radius: 50%;
+            }
+            
+            .header h1 {
+              color: #ffffff;
+              margin: 0;
+              font-size: 42px;
+              font-weight: 700;
+              text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+              position: relative;
+              z-index: 1;
+            }
+            
+            .welcome-banner {
+              background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+              color: white;
+              padding: 25px;
+              border-radius: 15px;
+              text-align: center;
+              margin: 40px 0;
+            }
+            
+            .greeting-card {
+              background: #f8f9fa;
+              padding: 25px;
+              border-radius: 10px;
+              margin-bottom: 30px;
+              border-left: 4px solid #667eea;
+            }
+            
+            .appointment-card {
+              background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+              color: white;
+              border-radius: 15px;
+              padding: 35px;
+              margin-bottom: 30px;
+            }
+            
+            .preparation-card {
+              background: #fff3cd;
+              border: 2px solid #ffc107;
+              border-radius: 15px;
+              padding: 30px;
+              margin-bottom: 30px;
+            }
+            
+            .contact-card {
+              background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+              color: white;
+              border-radius: 15px;
+              padding: 30px;
+              margin-bottom: 30px;
+            }
+            
+            .next-steps-card {
+              background: #e8f5e8;
+              border: 2px solid #28a745;
+              border-radius: 15px;
+              padding: 30px;
+              margin-bottom: 30px;
+            }
+            
+            .excitement-card {
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              color: white;
+              border-radius: 15px;
+              padding: 30px;
+              margin-bottom: 30px;
+              text-align: center;
+            }
+            
+            .signature-card {
+              text-align: center;
+              padding: 30px;
+              background: #f8f9fa;
+              border-radius: 15px;
+            }
+            
+            .info-grid {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 20px;
+            }
+            
+            .info-item {
+              background: rgba(255, 255, 255, 0.2);
+              padding: 15px;
+              border-radius: 10px;
+              margin-bottom: 15px;
+            }
+            
+            .preparation-step {
+              display: flex;
+              align-items: center;
+              padding: 15px;
+              background: white;
+              border-radius: 8px;
+              box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+              margin-bottom: 15px;
+            }
+            
+            .step-number {
+              background: #ffc107;
+              color: white;
+              padding: 8px 12px;
+              border-radius: 50%;
+              margin-right: 15px;
+              font-weight: bold;
+              min-width: 32px;
+              text-align: center;
+            }
+            
+            .next-step-item {
+              display: flex;
+              align-items: center;
+              padding: 15px;
+              background: white;
+              border-radius: 8px;
+              box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+              margin-bottom: 15px;
+            }
+            
+            .step-icon {
+              color: #28a745;
+              margin-right: 15px;
+              font-size: 20px;
+            }
+            
+            .footer {
+              background: #f8f9fa;
+              padding: 20px 30px;
+              text-align: center;
+              border-top: 1px solid #e9ecef;
+            }
+            
+            @media (max-width: 600px) {
+              .info-grid {
+                grid-template-columns: 1fr;
+              }
+              
+              .header h1 {
+                font-size: 32px;
+              }
+              
+              .appointment-card,
+              .preparation-card,
+              .contact-card,
+              .next-steps-card,
+              .excitement-card {
+                padding: 20px;
+              }
+            }
+          </style>
         </head>
-        <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa;">
-          <div style="max-width: 800px; margin: 0 auto; background-color: #ffffff; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);">
+        <body>
+          <div class="email-container">
             
             <!-- Header -->
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 50px 30px; text-align: center; position: relative; overflow: hidden;">
-              <div style="position: absolute; top: -50px; right: -50px; width: 120px; height: 120px; background: rgba(255, 255, 255, 0.1); border-radius: 50%;"></div>
-              <div style="position: absolute; bottom: -40px; left: -40px; width: 80px; height: 80px; background: rgba(255, 255, 255, 0.1); border-radius: 50%;"></div>
-              <h1 style="color: #ffffff; margin: 0; font-size: 42px; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.3); position: relative; z-index: 1;">
-                ✅ BOOKING CONFIRMED!
-              </h1>
+            <div class="header">
+              <h1>✅ BOOKING CONFIRMED!</h1>
               <p style="color: #ffffff; margin: 20px 0 0 0; font-size: 20px; opacity: 0.9; position: relative; z-index: 1;">
                 Thank you for choosing BraidsbyEva
               </p>
@@ -270,14 +638,12 @@ class EmailService {
             <div style="padding: 40px 30px;">
               
               <!-- Welcome Message -->
-              <div style="text-align: center; margin-bottom: 40px;">
-                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 25px; border-radius: 15px; display: inline-block;">
-                  <h2 style="margin: 0; font-size: 24px;">🎉 Your appointment has been successfully booked!</h2>
-                </div>
+              <div class="welcome-banner">
+                <h2 style="margin: 0; font-size: 24px;">🎉 Your appointment has been successfully booked!</h2>
               </div>
 
               <!-- Greeting -->
-              <div style="background: #f8f9fa; padding: 25px; border-radius: 10px; margin-bottom: 30px; border-left: 4px solid #667eea;">
+              <div class="greeting-card">
                 <p style="color: #333333; font-size: 18px; line-height: 1.6; margin: 0;">
                   Dear <strong>${customer.firstName}</strong>,
                 </p>
@@ -287,30 +653,30 @@ class EmailService {
               </div>
 
               <!-- Appointment Details Card -->
-              <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 35px; border-radius: 15px; margin-bottom: 30px; color: white;">
+              <div class="appointment-card">
                 <h2 style="margin: 0 0 25px 0; font-size: 28px; text-align: center;">
                   📅 Your Appointment Details
                 </h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="info-grid">
                   <div>
-                    <div style="background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                    <div class="info-item">
                       <p style="margin: 0; font-size: 16px;"><strong>Service:</strong> ${service.name}</p>
                     </div>
-                    <div style="background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                    <div class="info-item">
                       <p style="margin: 0; font-size: 16px;"><strong>Date:</strong> ${formattedDate}</p>
                     </div>
-                    <div style="background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px;">
+                    <div class="info-item">
                       <p style="margin: 0; font-size: 16px;"><strong>Time:</strong> ${time}</p>
                     </div>
                   </div>
                   <div>
-                    <div style="background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                    <div class="info-item">
                       <p style="margin: 0; font-size: 16px;"><strong>Duration:</strong> ${service.duration}</p>
                     </div>
-                    <div style="background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                    <div class="info-item">
                       <p style="margin: 0; font-size: 16px;"><strong>Total Investment:</strong> ${paymentInfo ? `$${paymentInfo.totalAmount}` : service.price}</p>
                     </div>
-                    <div style="background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px;">
+                    <div class="info-item">
                       <p style="margin: 0; font-size: 16px;"><strong>Balance Due:</strong> $${paymentInfo ? paymentInfo.remainingBalance : 'Not provided'}</p>
                     </div>
                   </div>
@@ -318,57 +684,55 @@ class EmailService {
               </div>
 
               <!-- Preparation Instructions -->
-              <div style="background: #fff3cd; border: 2px solid #ffc107; padding: 30px; border-radius: 15px; margin-bottom: 30px;">
+              <div class="preparation-card">
                 <h2 style="margin: 0 0 20px 0; font-size: 24px; color: #856404; display: flex; align-items: center;">
                   📋 Preparation Instructions
                 </h2>
                 <p style="color: #856404; font-size: 16px; margin-bottom: 20px;">Please follow these important steps to ensure the best results:</p>
-                <div style="display: grid; gap: 15px;">
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="background: #ffc107; color: white; padding: 8px 12px; border-radius: 50%; margin-right: 15px; font-weight: bold;">1</span>
-                    <div>
-                      <strong>Hair Preparation:</strong> Come with clean, dry hair (washed 24-48 hours before)
-                    </div>
+                <div class="preparation-step">
+                  <span class="step-number">1</span>
+                  <div>
+                    <strong>Hair Preparation:</strong> Come with clean, dry hair (washed 24-48 hours before)
                   </div>
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="background: #ffc107; color: white; padding: 8px 12px; border-radius: 50%; margin-right: 15px; font-weight: bold;">2</span>
-                    <div>
-                      <strong>Remove Previous Work:</strong> Take out any existing braids, extensions, or protective styles
-                    </div>
+                </div>
+                <div class="preparation-step">
+                  <span class="step-number">2</span>
+                  <div>
+                    <strong>Remove Previous Work:</strong> Take out any existing braids, extensions, or protective styles
                   </div>
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="background: #ffc107; color: white; padding: 8px 12px; border-radius: 50%; margin-right: 15px; font-weight: bold;">3</span>
-                    <div>
-                      <strong>Hair Accessories:</strong> Bring a hair tie and any preferred hair accessories
-                    </div>
+                </div>
+                <div class="preparation-step">
+                  <span class="step-number">3</span>
+                  <div>
+                    <strong>Hair Accessories:</strong> Bring a hair tie and any preferred hair accessories
                   </div>
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="background: #ffc107; color: white; padding: 8px 12px; border-radius: 50%; margin-right: 15px; font-weight: bold;">4</span>
-                    <div>
-                      <strong>Arrival Time:</strong> Please arrive 10-15 minutes early for consultation
-                    </div>
+                </div>
+                <div class="preparation-step">
+                  <span class="step-number">4</span>
+                  <div>
+                    <strong>Arrival Time:</strong> Please arrive 10-15 minutes early for consultation
                   </div>
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="background: #ffc107; color: white; padding: 8px 12px; border-radius: 50%; margin-right: 15px; font-weight: bold;">5</span>
-                    <div>
-                      <strong>Comfort:</strong> Wear comfortable clothing and bring entertainment (books, phone, etc.)
-                    </div>
+                </div>
+                <div class="preparation-step">
+                  <span class="step-number">5</span>
+                  <div>
+                    <strong>Comfort:</strong> Wear comfortable clothing and bring entertainment (books, phone, etc.)
                   </div>
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="background: #ffc107; color: white; padding: 8px 12px; border-radius: 50%; margin-right: 15px; font-weight: bold;">6</span>
-                    <div>
-                      <strong>Hydration:</strong> Stay hydrated and have a light meal before your appointment
-                    </div>
+                </div>
+                <div class="preparation-step">
+                  <span class="step-number">6</span>
+                  <div>
+                    <strong>Hydration:</strong> Stay hydrated and have a light meal before your appointment
                   </div>
                 </div>
               </div>
 
               <!-- Contact Information -->
-              <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); padding: 30px; border-radius: 15px; margin-bottom: 30px; color: white;">
+              <div class="contact-card">
                 <h2 style="margin: 0 0 20px 0; font-size: 24px; text-align: center;">
                   📞 Contact Information
                 </h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center;">
+                <div class="info-grid" style="text-align: center;">
                   <div>
                     <p style="margin: 8px 0; font-size: 16px;"><strong>Phone:</strong> <a href="tel:8322079386" style="color: white; text-decoration: underline;">(832) 207-9386</a></p>
                     <p style="margin: 8px 0; font-size: 16px;"><strong>Email:</strong> <a href="mailto:braidsbyevaofficial@gmail.com" style="color: white; text-decoration: underline;">braidsbyevaofficial@gmail.com</a></p>
@@ -381,40 +745,38 @@ class EmailService {
               </div>
 
               <!-- What Happens Next -->
-              <div style="background: #e8f5e8; border: 2px solid #28a745; padding: 30px; border-radius: 15px; margin-bottom: 30px;">
+              <div class="next-steps-card">
                 <h2 style="margin: 0 0 20px 0; font-size: 24px; color: #155724; text-align: center;">
                   📋 What Happens Next?
                 </h2>
-                <div style="display: grid; gap: 15px;">
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="color: #28a745; margin-right: 15px; font-size: 20px;">📞</span>
-                    <div>
-                      <strong>Confirmation Call:</strong> We'll contact you within 24 hours to confirm all details
-                    </div>
+                <div class="next-step-item">
+                  <span class="step-icon">📞</span>
+                  <div>
+                    <strong>Confirmation Call:</strong> We'll contact you within 24 hours to confirm all details
                   </div>
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="color: #28a745; margin-right: 15px; font-size: 20px;">📧</span>
-                    <div>
-                      <strong>Preparation Guide:</strong> You'll receive detailed hair care instructions
-                    </div>
+                </div>
+                <div class="next-step-item">
+                  <span class="step-icon">📧</span>
+                  <div>
+                    <strong>Preparation Guide:</strong> You'll receive detailed hair care instructions
                   </div>
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="color: #28a745; margin-right: 15px; font-size: 20px;">⏰</span>
-                    <div>
-                      <strong>Reminder:</strong> We'll send a reminder 24 hours before your appointment
-                    </div>
+                </div>
+                <div class="next-step-item">
+                  <span class="step-icon">⏰</span>
+                  <div>
+                    <strong>Reminder:</strong> We'll send a reminder 24 hours before your appointment
                   </div>
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="color: #28a745; margin-right: 15px; font-size: 20px;">❓</span>
-                    <div>
-                      <strong>Questions:</strong> Feel free to contact us anytime with questions or concerns
-                    </div>
+                </div>
+                <div class="next-step-item">
+                  <span class="step-icon">❓</span>
+                  <div>
+                    <strong>Questions:</strong> Feel free to contact us anytime with questions or concerns
                   </div>
                 </div>
               </div>
 
               <!-- Excitement Message -->
-              <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 15px; margin-bottom: 30px; color: white; text-align: center;">
+              <div class="excitement-card">
                 <h2 style="margin: 0 0 15px 0; font-size: 24px;">We're excited to create beautiful, long-lasting styles for you!</h2>
                 <p style="margin: 0; font-size: 16px; opacity: 0.9;">
                   Thank you for trusting BraidsbyEva with your hair care needs. We're committed to providing you with exceptional service and stunning results.
@@ -422,7 +784,7 @@ class EmailService {
               </div>
 
               <!-- Signature -->
-              <div style="text-align: center; padding: 30px; background: #f8f9fa; border-radius: 15px;">
+              <div class="signature-card">
                 <p style="color: #333333; font-size: 18px; margin: 0 0 10px 0;"><strong>Best regards,</strong></p>
                 <p style="color: #333333; font-size: 20px; margin: 0 0 5px 0;"><strong>Awa Obaretin</strong></p>
                 <p style="color: #666666; font-size: 16px; margin: 0 0 5px 0;">Professional Hair Stylist & Founder</p>
@@ -431,7 +793,7 @@ class EmailService {
             </div>
 
             <!-- Footer -->
-            <div style="background: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #e9ecef;">
+            <div class="footer">
               <p style="color: #6c757d; font-size: 14px; margin: 0;">
                 © 2024 BraidsbyEva. All rights reserved. | Professional Hair Services
               </p>
