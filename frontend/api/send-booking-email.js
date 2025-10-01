@@ -26,12 +26,12 @@ export default async function handler(req, res) {
       appointment_time
     });
 
-    // Use the original working Gmail setup
+    // Gmail setup - you need to generate a new app password
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: 'braidsbyevaofficial@gmail.com',
-        pass: 'dlrj tzws keuv wsdg' // Your working app password
+        pass: 'otgtfmihpbcllruu' // Your working Gmail app password
       }
     });
 
@@ -43,7 +43,7 @@ export default async function handler(req, res) {
       day: 'numeric'
     });
 
-    // Customer email with improved template
+    // Customer email with beautiful template
     const customerEmail = {
       from: 'BraidsbyEva <braidsbyevaofficial@gmail.com>',
       to: customer_email,
@@ -158,7 +158,7 @@ export default async function handler(req, res) {
       `,
     };
 
-    // Braider email with improved template
+    // Braider email with beautiful template
     const braiderEmail = {
       from: 'BraidsbyEva Bookings <braidsbyevaofficial@gmail.com>',
       to: 'braidsbyevaofficial@gmail.com',
@@ -256,9 +256,9 @@ export default async function handler(req, res) {
       `,
     };
 
-    console.log('📧 Sending emails...');
+    console.log('📧 Sending emails via Gmail...');
     
-    // Send both emails using the original working method
+    // Send both emails
     const results = await Promise.all([
       transporter.sendMail(customerEmail),
       transporter.sendMail(braiderEmail)
@@ -284,7 +284,7 @@ export default async function handler(req, res) {
     console.error('❌ Error sending emails:', error);
     res.status(500).json({ 
       success: false, 
-      message: 'Failed to send emails',
+      message: 'Failed to send emails - please check Gmail app password setup',
       error: error.message 
     });
   }
