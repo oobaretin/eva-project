@@ -33,7 +33,7 @@ class EmailService {
 
   constructor() {
     // Using Gmail SMTP (you can change this to your preferred email provider)
-    this.transporter = nodemailer.createTransporter({
+    this.transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER || 'braidsbyevaofficial@gmail.com',
@@ -241,204 +241,60 @@ class EmailService {
       to: customer.email,
       subject: `✅ BOOKING CONFIRMED: ${service.name} - ${formattedDate} at ${time}`,
       html: `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Booking Confirmation</title>
-        </head>
-        <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa;">
-          <div style="max-width: 800px; margin: 0 auto; background-color: #ffffff; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);">
-            
-            <!-- Header -->
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 50px 30px; text-align: center; position: relative; overflow: hidden;">
-              <div style="position: absolute; top: -50px; right: -50px; width: 120px; height: 120px; background: rgba(255, 255, 255, 0.1); border-radius: 50%;"></div>
-              <div style="position: absolute; bottom: -40px; left: -40px; width: 80px; height: 80px; background: rgba(255, 255, 255, 0.1); border-radius: 50%;"></div>
-              <h1 style="color: #ffffff; margin: 0; font-size: 42px; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.3); position: relative; z-index: 1;">
-                ✅ BOOKING CONFIRMED!
-              </h1>
-              <p style="color: #ffffff; margin: 20px 0 0 0; font-size: 20px; opacity: 0.9; position: relative; z-index: 1;">
-                Thank you for choosing BraidsbyEva
-              </p>
-              <p style="color: #ffffff; margin: 10px 0 0 0; font-size: 16px; opacity: 0.8; position: relative; z-index: 1;">
-                Professional Hair Services by Awa Obaretin
-              </p>
-            </div>
+        <div style="font-family: Arial, sans-serif; max-width: 100%; width: 100%; margin: 0 auto; background: #ffffff; word-wrap: break-word; overflow-wrap: break-word;">
+          <h1>✅ BOOKING CONFIRMED!</h1>
+          <p>Thank you for choosing BraidsbyEva</p>
+          <p>Professional Hair Services by Awa Obaretin</p>
+          
+          <p>🎉 Your appointment has been successfully booked!</p>
+          
+          <p>Dear ${customer.firstName},</p>
+          
+          <p>Thank you for choosing BraidsbyEva for your hair styling needs! We're thrilled to have you as our valued client and look forward to providing you with exceptional service.</p>
+          
+          <h3>📅 Your Appointment Details</h3>
+          <p><strong>Service:</strong> ${service.name}</p>
+          <p><strong>Date:</strong> ${formattedDate}</p>
+          <p><strong>Time:</strong> ${time}</p>
+          <p><strong>Duration:</strong> ${service.duration}</p>
+          <p><strong>Total Investment:</strong> ${paymentInfo ? `$${paymentInfo.totalAmount}` : service.price}</p>
+          <p><strong>Deposit Paid:</strong> $${paymentInfo ? paymentInfo.paidAmount : 'Not provided'}</p>
+          <p><strong>Balance Due:</strong> $${paymentInfo ? paymentInfo.remainingBalance : 'Not provided'}</p>
 
-            <!-- Main Content -->
-            <div style="padding: 40px 30px;">
-              
-              <!-- Welcome Message -->
-              <div style="text-align: center; margin-bottom: 40px;">
-                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 25px; border-radius: 15px; display: inline-block;">
-                  <h2 style="margin: 0; font-size: 24px;">🎉 Your appointment has been successfully booked!</h2>
-                </div>
-              </div>
+          <h3>📋 Preparation Instructions</h3>
+          <p>Please follow these important steps to ensure the best results:</p>
+          <ul>
+            <li><strong>Hair Preparation:</strong> Come with clean, dry hair (washed 24-48 hours before)</li>
+            <li><strong>Remove Previous Work:</strong> Take out any existing braids, extensions, or protective styles</li>
+            <li><strong>Hair Accessories:</strong> Bring a hair tie and any preferred hair accessories</li>
+            <li><strong>Arrival Time:</strong> Please arrive 10-15 minutes early for consultation</li>
+            <li><strong>Comfort:</strong> Wear comfortable clothing and bring entertainment (books, phone, etc.)</li>
+            <li><strong>Hydration:</strong> Stay hydrated and have a light meal before your appointment</li>
+          </ul>
 
-              <!-- Greeting -->
-              <div style="background: #f8f9fa; padding: 25px; border-radius: 10px; margin-bottom: 30px; border-left: 4px solid #667eea;">
-                <p style="color: #333333; font-size: 18px; line-height: 1.6; margin: 0;">
-                  Dear <strong>${customer.firstName}</strong>,
-                </p>
-                <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 15px 0 0 0;">
-                  Thank you for choosing BraidsbyEva for your hair styling needs! We're thrilled to have you as our valued client and look forward to providing you with exceptional service.
-                </p>
-              </div>
+          <h3>📞 Contact Information</h3>
+          <p><strong>Phone:</strong> (832) 207-9386</p>
+          <p><strong>Email:</strong> braidsbyevaofficial@gmail.com</p>
+          <p><strong>Service Hours:</strong> By appointment only</p>
+          <p><strong>Response Time:</strong> Within 24 hours</p>
 
-              <!-- Appointment Details Card -->
-              <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 35px; border-radius: 15px; margin-bottom: 30px; color: white;">
-                <h2 style="margin: 0 0 25px 0; font-size: 28px; text-align: center;">
-                  📅 Your Appointment Details
-                </h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                  <div>
-                    <div style="background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                      <p style="margin: 0; font-size: 16px;"><strong>Service:</strong> ${service.name}</p>
-                    </div>
-                    <div style="background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                      <p style="margin: 0; font-size: 16px;"><strong>Date:</strong> ${formattedDate}</p>
-                    </div>
-                    <div style="background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px;">
-                      <p style="margin: 0; font-size: 16px;"><strong>Time:</strong> ${time}</p>
-                    </div>
-                  </div>
-                  <div>
-                    <div style="background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                      <p style="margin: 0; font-size: 16px;"><strong>Duration:</strong> ${service.duration}</p>
-                    </div>
-                    <div style="background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                      <p style="margin: 0; font-size: 16px;"><strong>Total Investment:</strong> ${paymentInfo ? `$${paymentInfo.totalAmount}` : service.price}</p>
-                    </div>
-                    <div style="background: rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px;">
-                      <p style="margin: 0; font-size: 16px;"><strong>Balance Due:</strong> $${paymentInfo ? paymentInfo.remainingBalance : 'Not provided'}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Preparation Instructions -->
-              <div style="background: #fff3cd; border: 2px solid #ffc107; padding: 30px; border-radius: 15px; margin-bottom: 30px;">
-                <h2 style="margin: 0 0 20px 0; font-size: 24px; color: #856404; display: flex; align-items: center;">
-                  📋 Preparation Instructions
-                </h2>
-                <p style="color: #856404; font-size: 16px; margin-bottom: 20px;">Please follow these important steps to ensure the best results:</p>
-                <div style="display: grid; gap: 15px;">
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="background: #ffc107; color: white; padding: 8px 12px; border-radius: 50%; margin-right: 15px; font-weight: bold;">1</span>
-                    <div>
-                      <strong>Hair Preparation:</strong> Come with clean, dry hair (washed 24-48 hours before)
-                    </div>
-                  </div>
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="background: #ffc107; color: white; padding: 8px 12px; border-radius: 50%; margin-right: 15px; font-weight: bold;">2</span>
-                    <div>
-                      <strong>Remove Previous Work:</strong> Take out any existing braids, extensions, or protective styles
-                    </div>
-                  </div>
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="background: #ffc107; color: white; padding: 8px 12px; border-radius: 50%; margin-right: 15px; font-weight: bold;">3</span>
-                    <div>
-                      <strong>Hair Accessories:</strong> Bring a hair tie and any preferred hair accessories
-                    </div>
-                  </div>
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="background: #ffc107; color: white; padding: 8px 12px; border-radius: 50%; margin-right: 15px; font-weight: bold;">4</span>
-                    <div>
-                      <strong>Arrival Time:</strong> Please arrive 10-15 minutes early for consultation
-                    </div>
-                  </div>
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="background: #ffc107; color: white; padding: 8px 12px; border-radius: 50%; margin-right: 15px; font-weight: bold;">5</span>
-                    <div>
-                      <strong>Comfort:</strong> Wear comfortable clothing and bring entertainment (books, phone, etc.)
-                    </div>
-                  </div>
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="background: #ffc107; color: white; padding: 8px 12px; border-radius: 50%; margin-right: 15px; font-weight: bold;">6</span>
-                    <div>
-                      <strong>Hydration:</strong> Stay hydrated and have a light meal before your appointment
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Contact Information -->
-              <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); padding: 30px; border-radius: 15px; margin-bottom: 30px; color: white;">
-                <h2 style="margin: 0 0 20px 0; font-size: 24px; text-align: center;">
-                  📞 Contact Information
-                </h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center;">
-                  <div>
-                    <p style="margin: 8px 0; font-size: 16px;"><strong>Phone:</strong> <a href="tel:8322079386" style="color: white; text-decoration: underline;">(832) 207-9386</a></p>
-                    <p style="margin: 8px 0; font-size: 16px;"><strong>Email:</strong> <a href="mailto:braidsbyevaofficial@gmail.com" style="color: white; text-decoration: underline;">braidsbyevaofficial@gmail.com</a></p>
-                  </div>
-                  <div>
-                    <p style="margin: 8px 0; font-size: 16px;"><strong>Service Hours:</strong> By appointment only</p>
-                    <p style="margin: 8px 0; font-size: 16px;"><strong>Response Time:</strong> Within 24 hours</p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- What Happens Next -->
-              <div style="background: #e8f5e8; border: 2px solid #28a745; padding: 30px; border-radius: 15px; margin-bottom: 30px;">
-                <h2 style="margin: 0 0 20px 0; font-size: 24px; color: #155724; text-align: center;">
-                  📋 What Happens Next?
-                </h2>
-                <div style="display: grid; gap: 15px;">
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="color: #28a745; margin-right: 15px; font-size: 20px;">📞</span>
-                    <div>
-                      <strong>Confirmation Call:</strong> We'll contact you within 24 hours to confirm all details
-                    </div>
-                  </div>
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="color: #28a745; margin-right: 15px; font-size: 20px;">📧</span>
-                    <div>
-                      <strong>Preparation Guide:</strong> You'll receive detailed hair care instructions
-                    </div>
-                  </div>
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="color: #28a745; margin-right: 15px; font-size: 20px;">⏰</span>
-                    <div>
-                      <strong>Reminder:</strong> We'll send a reminder 24 hours before your appointment
-                    </div>
-                  </div>
-                  <div style="display: flex; align-items: center; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <span style="color: #28a745; margin-right: 15px; font-size: 20px;">❓</span>
-                    <div>
-                      <strong>Questions:</strong> Feel free to contact us anytime with questions or concerns
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Excitement Message -->
-              <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 15px; margin-bottom: 30px; color: white; text-align: center;">
-                <h2 style="margin: 0 0 15px 0; font-size: 24px;">We're excited to create beautiful, long-lasting styles for you!</h2>
-                <p style="margin: 0; font-size: 16px; opacity: 0.9;">
-                  Thank you for trusting BraidsbyEva with your hair care needs. We're committed to providing you with exceptional service and stunning results.
-                </p>
-              </div>
-
-              <!-- Signature -->
-              <div style="text-align: center; padding: 30px; background: #f8f9fa; border-radius: 15px;">
-                <p style="color: #333333; font-size: 18px; margin: 0 0 10px 0;"><strong>Best regards,</strong></p>
-                <p style="color: #333333; font-size: 20px; margin: 0 0 5px 0;"><strong>Awa Obaretin</strong></p>
-                <p style="color: #666666; font-size: 16px; margin: 0 0 5px 0;">Professional Hair Stylist & Founder</p>
-                <p style="color: #667eea; font-size: 18px; margin: 0; font-weight: bold;">BraidsbyEva</p>
-              </div>
-            </div>
-
-            <!-- Footer -->
-            <div style="background: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #e9ecef;">
-              <p style="color: #6c757d; font-size: 14px; margin: 0;">
-                © 2024 BraidsbyEva. All rights reserved. | Professional Hair Services
-              </p>
-            </div>
-          </div>
-        </body>
-        </html>
+          <h3>📋 What Happens Next?</h3>
+          <ul>
+            <li><strong>Confirmation Call:</strong> We'll contact you within 24 hours to confirm all details</li>
+            <li><strong>Preparation Guide:</strong> You'll receive detailed hair care instructions</li>
+            <li><strong>Reminder:</strong> We'll send a reminder 24 hours before your appointment</li>
+            <li><strong>Questions:</strong> Feel free to contact us anytime with questions or concerns</li>
+          </ul>
+          
+          <p><strong>We're excited to create beautiful, long-lasting styles for you!</strong></p>
+          
+          <p>Thank you for trusting BraidsbyEva with your hair care needs. We're committed to providing you with exceptional service and stunning results.</p>
+          
+          <p><strong>Best regards,</strong></p>
+          <p><strong>Awa Obaretin</strong></p>
+          <p>Professional Hair Stylist & Founder</p>
+          <p>BraidsbyEva</p>
+        </div>
       `,
     };
 
@@ -453,3 +309,4 @@ class EmailService {
 }
 
 export default new EmailService();
+
