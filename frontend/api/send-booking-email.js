@@ -93,7 +93,6 @@ export default async function handler(req, res) {
                 <p><strong>Duration:</strong> ${service_duration || 'Not specified'}</p>
                 <p><strong>Price:</strong> ${service_price || 'Contact for pricing'}</p>
                 <p><strong>Location:</strong> Katy, Texas</p>
-                ${notes ? `<p><strong>Your Notes:</strong> ${notes}</p>` : ''}
               </div>
               
               <div class="preparation">
