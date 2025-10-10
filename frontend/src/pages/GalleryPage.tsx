@@ -392,6 +392,20 @@ const GalleryPage: React.FC = () => {
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         },
+        
+        // Braids with Weave
+        {
+          id: '30',
+          title: 'Braids with Weave',
+          description: 'Beautiful combination of braids and weave for added length and volume. Perfect for achieving a fuller, more dramatic look.',
+          imageUrl: '/images/gallery/braids-with-weave.jpg',
+          category: 'Box Braids',
+          price: '$200',
+          duration: '4-5 hours',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
       ];
     
     console.log('Setting gallery items:', mockGalleryItems);
