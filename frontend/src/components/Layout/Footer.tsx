@@ -32,7 +32,7 @@ const Footer: React.FC = () => {
           {/* Company Info */}
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center space-x-2 mb-4">
-              <div className="w-20 h-20 -mr-4 mt-2">
+              <div className="w-20 h-20 -mr-6 mt-2">
                 <img 
                   src="/images/logo.png" 
                   alt="BraidsbyEva Logo" 
