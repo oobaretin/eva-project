@@ -31,8 +31,8 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="lg:col-span-1">
-            <Link to="/" className="flex items-baseline space-x-2 mb-4">
-              <div className="w-20 h-20 -mr-4">
+            <Link to="/" className="flex items-center space-x-2 mb-4">
+              <div className="w-20 h-20 -mr-4 mt-2">
                 <img 
                   src="/images/logo.png" 
                   alt="BraidsbyEva Logo" 
