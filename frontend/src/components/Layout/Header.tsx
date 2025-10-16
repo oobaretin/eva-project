@@ -20,7 +20,7 @@ const Header: React.FC = () => {
       <div className="container-max">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-1">
+          <Link to="/" className="flex items-center space-x-0.5">
             <div className="w-24 h-24">
               <img 
                 src="/images/logo.png" 
