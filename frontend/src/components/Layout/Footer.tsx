@@ -32,16 +32,12 @@ const Footer: React.FC = () => {
           {/* Company Info */}
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center -space-x-3 mb-4 items-end">
-              <div className="w-20 h-20 mb-1">
-                <div className="w-full h-full rounded-full overflow-hidden bg-gradient-primary p-1">
-                  <div className="w-full h-full rounded-full overflow-hidden bg-white p-0.5">
-                    <img 
-                      src="/images/logo.png" 
-                      alt="BraidsbyEva Logo" 
-                      className="w-full h-full object-contain rounded-full"
-                    />
-                  </div>
-                </div>
+              <div className="w-20 h-20 mb-2">
+                <img 
+                  src="/images/logo.png" 
+                  alt="BraidsbyEva Logo" 
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div>
                 <h3 className="text-xl font-serif font-bold">BraidsbyEva</h3>

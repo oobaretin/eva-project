@@ -21,16 +21,12 @@ const Header: React.FC = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <Link to="/" className="flex items-center -space-x-4 items-end">
-            <div className="w-36 h-36 mb-1">
-              <div className="w-full h-full rounded-full overflow-hidden bg-gradient-primary p-1">
-                <div className="w-full h-full rounded-full overflow-hidden bg-white p-0.5">
-                  <img 
-                    src="/images/logo.png" 
-                    alt="BraidsbyEva Logo" 
-                    className="w-full h-full object-contain rounded-full"
-                  />
-                </div>
-              </div>
+            <div className="w-36 h-36 mb-2">
+              <img 
+                src="/images/logo.png" 
+                alt="BraidsbyEva Logo" 
+                className="w-full h-full object-contain"
+              />
             </div>
             <div>
               <h1 className="text-2xl font-serif font-bold text-gradient">BraidsbyEva</h1>
