@@ -20,8 +20,8 @@ const Header: React.FC = () => {
       <div className="container-max">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
-          <Link to="/" className="flex items-end">
-            <div className="w-36 h-36 mb-2 mr-0">
+          <Link to="/" className="flex items-center space-x-2">
+            <div className="w-36 h-36 -mr-6">
               <img 
                 src="/images/logo.png" 
                 alt="BraidsbyEva Logo" 
