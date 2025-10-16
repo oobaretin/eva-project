@@ -21,7 +21,7 @@ const Header: React.FC = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-36 h-36 -mr-6 mt-12">
+            <div className="w-40 h-40 -mr-6 mt-12">
               <img 
                 src="/images/logo.png" 
                 alt="BraidsbyEva Logo" 
