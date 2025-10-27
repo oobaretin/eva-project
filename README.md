@@ -245,3 +245,4 @@ For support or questions, please contact:
 - Built with modern web technologies and best practices
 - Designed for professional braiding businesses
 - Optimized for user experience and business efficiency
+# Trigger Vercel rebuild
