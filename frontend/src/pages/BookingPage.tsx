@@ -378,8 +378,12 @@ const BookingPage: React.FC = () => {
                 </div>
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
-                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                      <span className="text-green-600 text-sm">✓</span>
+                    <div className="w-6 h-6 bg-white rounded flex items-center justify-center border border-gray-200">
+                      <img 
+                        src="/zelle-logo1.png" 
+                        alt="Zelle Logo" 
+                        className="w-4 h-4 object-contain"
+                      />
                     </div>
                   </div>
                   <div className="ml-3">
