@@ -1,0 +1,224 @@
+import React, { useState } from 'react';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
+
+interface ServiceVariation {
+  name: string;
+  price: string;
+  duration: string;
+}
+
+interface ServiceCategory {
+  name: string;
+  starting: number;
+  variations: ServiceVariation[];
+}
+
+interface ServiceMenuProps {
+  onServiceSelect: (serviceName: string, price: string, duration: string) => void;
+  selectedService?: string;
+}
+
+const SERVICE_DATA: { [key: string]: ServiceCategory } = {
+  'Box Braids': {
+    name: 'Box Braids',
+    starting: 120,
+    variations: [
+      { name: 'Knotless Box Braids', price: '$275', duration: '5-6 hours' },
+      { name: 'Small Box Braids', price: '$330', duration: '6-7 hours' },
+      { name: 'Medium Box Braids', price: '$210', duration: '4-5 hours' },
+      { name: 'Large Box Braids', price: '$158', duration: '3-4 hours' },
+      { name: 'Jumbo Box Braids', price: '$120', duration: '2-3 hours' },
+      { name: 'Box Braids with Curls', price: '$264', duration: '5-6 hours' },
+    ]
+  },
+  'Cornrows': {
+    name: 'Cornrows',
+    starting: 80,
+    variations: [
+      { name: 'Feed-in Cornrows', price: '$100', duration: '2-3 hours' },
+      { name: 'Stitch Braids', price: '$80', duration: '2-3 hours' },
+    ]
+  },
+  'Traditional Braids': {
+    name: 'Traditional Braids',
+    starting: 90,
+    variations: [
+      { name: 'Ghana Braids', price: '$120', duration: '3-4 hours' },
+      { name: 'French Braids', price: '$90', duration: '2-3 hours' },
+      { name: 'Dutch Braids', price: '$100', duration: '2-3 hours' },
+      { name: 'Lemonade Braids', price: '$168', duration: '3-4 hours' },
+      { name: 'Goddess Braids', price: '$189', duration: '3-4 hours' },
+      { name: 'Fulani Braids', price: '$210', duration: '4-5 hours' },
+      { name: 'Halo Braid', price: '$150', duration: '2-3 hours' },
+      { name: 'Crown Braids', price: '$179', duration: '3-4 hours' },
+    ]
+  },
+  'Twists': {
+    name: 'Twists',
+    starting: 120,
+    variations: [
+      { name: 'Passion Twists', price: '$189', duration: '3-4 hours' },
+      { name: 'Senegalese Twists', price: '$168', duration: '4-5 hours' },
+      { name: 'Twist Out Style', price: '$120', duration: '2-3 hours' },
+      { name: 'Marley Twists', price: '$168', duration: '4-5 hours' },
+      { name: 'Spring Twists', price: '$189', duration: '3-4 hours' },
+    ]
+  },
+  'Locs': {
+    name: 'Locs',
+    starting: 140,
+    variations: [
+      { name: 'Butterfly Locs', price: '$242', duration: '4-5 hours' },
+      { name: 'Faux Locs', price: '$210', duration: '4-6 hours' },
+    ]
+  },
+  'Crochet Styles': {
+    name: 'Crochet Styles',
+    starting: 140,
+    variations: [
+      { name: 'Crochet Braids', price: '$140', duration: '2-3 hours' },
+    ]
+  },
+  'Kids Styles': {
+    name: 'Kids Styles',
+    starting: 50,
+    variations: [
+      { name: 'Kids Box Braids', price: '$80', duration: '2-3 hours' },
+      { name: 'Kids Cornrows', price: '$60', duration: '1-2 hours' },
+      { name: 'Kids Twists', price: '$70', duration: '2-3 hours' },
+      { name: 'Kids Pigtails', price: '$50', duration: '1-2 hours' },
+    ]
+  }
+};
+
+const ServiceMenu: React.FC<ServiceMenuProps> = ({ onServiceSelect, selectedService }) => {
+  const [expandedCategories, setExpandedCategories] = useState<{ [key: string]: boolean }>({});
+
+  const toggleCategory = (categoryName: string) => {
+    setExpandedCategories(prev => ({
+      ...prev,
+      [categoryName]: !prev[categoryName]
+    }));
+  };
+
+  const handleServiceClick = (service: ServiceVariation) => {
+    onServiceSelect(service.name, service.price, service.duration);
+  };
+
+  return (
+    <div className="w-full">
+      <div className="mb-6">
+        <h2 className="text-2xl font-serif font-bold text-secondary-900 mb-2">
+          Select Your Service
+        </h2>
+        <p className="text-secondary-600">
+          Choose from our professional braiding services. Click on a category to see all options.
+        </p>
+      </div>
+
+      <div className="space-y-3">
+        {Object.entries(SERVICE_DATA).map(([categoryKey, category]) => {
+          const isExpanded = expandedCategories[categoryKey] || false;
+          
+          return (
+            <div
+              key={categoryKey}
+              className="bg-white border border-secondary-200 rounded-lg shadow-sm overflow-hidden transition-all duration-200"
+            >
+              {/* Category Header */}
+              <button
+                onClick={() => toggleCategory(categoryKey)}
+                className="w-full px-6 py-4 flex items-center justify-between hover:bg-secondary-50 transition-colors duration-200"
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="flex-shrink-0">
+                    <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                      <span className="text-primary-600 font-semibold text-sm">
+                        {category.variations.length}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="text-left">
+                    <h3 className="text-lg font-semibold text-secondary-900">
+                      {category.name}
+                    </h3>
+                    <p className="text-sm text-secondary-600">
+                      Starting at ${category.starting}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex-shrink-0">
+                  {isExpanded ? (
+                    <ChevronUpIcon className="w-5 h-5 text-secondary-500" />
+                  ) : (
+                    <ChevronDownIcon className="w-5 h-5 text-secondary-500" />
+                  )}
+                </div>
+              </button>
+
+              {/* Service Variations */}
+              {isExpanded && (
+                <div className="border-t border-secondary-100 bg-secondary-50">
+                  <div className="p-4 space-y-2">
+                    {category.variations.map((variation, index) => {
+                      const isSelected = selectedService === variation.name;
+                      
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => handleServiceClick(variation)}
+                          className={`w-full px-4 py-3 rounded-lg border-2 text-left transition-all duration-200 ${
+                            isSelected
+                              ? 'border-primary-500 bg-primary-50 shadow-md'
+                              : 'border-secondary-200 bg-white hover:border-primary-300 hover:bg-primary-50'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center space-x-2">
+                                <h4 className="font-semibold text-secondary-900">
+                                  {variation.name}
+                                </h4>
+                                {isSelected && (
+                                  <span className="text-xs bg-primary-600 text-white px-2 py-1 rounded-full">
+                                    Selected
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-sm text-secondary-600 mt-1">
+                                {variation.duration}
+                              </p>
+                            </div>
+                            <div className="ml-4 text-right">
+                              <p className="text-lg font-bold text-primary-600">
+                                {variation.price}
+                              </p>
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {selectedService && (
+        <div className="mt-6 p-4 bg-primary-50 border border-primary-200 rounded-lg">
+          <p className="text-sm text-primary-800">
+            <strong>Selected:</strong> {selectedService}
+          </p>
+          <p className="text-xs text-primary-700 mt-1">
+            Continue below to complete your booking
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ServiceMenu;
+

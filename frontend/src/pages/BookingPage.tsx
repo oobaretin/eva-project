@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { sendBookingEmails } from '../services/emailService';
+import ServiceMenu from '../components/ServiceMenu';
 
 interface BookingFormData {
   name: string;
@@ -54,6 +55,14 @@ const BookingPage: React.FC = () => {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleServiceSelect = (serviceName: string, price: string, duration: string) => {
+    setFormData(prev => ({
+      ...prev,
+      selectedStyle: serviceName
+    }));
+    toast.success(`Selected: ${serviceName} - ${price}`);
   };
 
     const sendBookingToBackend = async (bookingData: BookingFormData) => {
@@ -234,10 +243,21 @@ const BookingPage: React.FC = () => {
         </div>
       )}
 
-      {/* Booking Form */}
+      {/* Service Menu & Booking Form */}
       {!showConfirmation && (
         <div className="container-max section-padding">
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-4xl mx-auto">
+            {/* Service Menu Section */}
+            <div className="mb-8">
+              <div className="bg-white rounded-lg shadow-lg p-8">
+                <ServiceMenu 
+                  onServiceSelect={handleServiceSelect}
+                  selectedService={formData.selectedStyle}
+                />
+              </div>
+            </div>
+
+            {/* Booking Form Section */}
             <form onSubmit={handleFormSubmit} className="bg-white rounded-lg shadow-lg p-8">
             
             {/* Date Selection */}
@@ -329,10 +349,10 @@ const BookingPage: React.FC = () => {
               />
             </div>
 
-            {/* Selected Style */}
+            {/* Selected Style - Read Only if selected from menu */}
             <div className="mb-6">
               <label htmlFor="selectedStyle" className="block text-sm font-medium text-secondary-700 mb-2">
-                Hairstyle (if selected from gallery)
+                Selected Service
               </label>
               <input
                 type="text"
@@ -340,9 +360,15 @@ const BookingPage: React.FC = () => {
                 name="selectedStyle"
                 value={formData.selectedStyle}
                 onChange={handleInputChange}
-                placeholder="Leave blank if you haven't selected a specific style"
-                className="w-full px-4 py-3 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                placeholder="Select a service from the menu above"
+                className="w-full px-4 py-3 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50"
+                readOnly={!!formData.selectedStyle}
               />
+              {!formData.selectedStyle && (
+                <p className="mt-2 text-sm text-secondary-500">
+                  Please select a service from the menu above
+                </p>
+              )}
             </div>
 
             {/* Special Requests */}
