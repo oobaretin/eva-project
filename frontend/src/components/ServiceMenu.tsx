@@ -38,46 +38,46 @@ const SERVICE_DATA: { [key: string]: ServiceCategory } = {
     name: 'Twists',
     starting: 120,
     variations: [
-      { name: 'Passion Twists', price: '$189', duration: '3-4 hours' },
-      { name: 'Senegalese Twists', price: '$168', duration: '4-5 hours' },
+      { name: 'Passion Twists', price: '$210', duration: '3-4 hours' },
+      { name: 'Senegalese Twists', price: '$210', duration: '4-5 hours' },
       { name: 'Twist Out Style', price: '$120', duration: '2-3 hours' },
-      { name: 'Marley Twists', price: '$168', duration: '4-5 hours' },
-      { name: 'Spring Twists', price: '$189', duration: '3-4 hours' },
-      { name: 'Goddess Braids', price: '$189', duration: '3-4 hours' },
+      { name: 'Marley Twists', price: '$190', duration: '4-5 hours' },
+      { name: 'Spring Twists', price: '$210', duration: '3-4 hours' },
+      { name: 'Goddess Braids', price: '$200', duration: '3-4 hours' },
       { name: 'Fulani Braids', price: '$210', duration: '4-5 hours' },
-      { name: 'Lemonade Braids', price: '$168', duration: '3-4 hours' },
+      { name: 'Lemonade Braids', price: '$180', duration: '3-4 hours' },
     ]
   },
   'Faux Locs': {
     name: 'Faux Locs',
-    starting: 210,
+    starting: 250,
     variations: [
-      { name: 'Butterfly Locs', price: '$242', duration: '4-5 hours' },
-      { name: 'Faux Locs', price: '$210', duration: '4-6 hours' },
-      { name: 'Goddess Locs', price: '$230', duration: '4-5 hours' },
+      { name: 'Butterfly Locs', price: '$280', duration: '4-5 hours' },
+      { name: 'Faux Locs', price: '$250', duration: '4-6 hours' },
+      { name: 'Goddess Locs', price: '$320', duration: '4-5 hours' },
     ]
   },
   'Crochets': {
     name: 'Crochets',
-    starting: 140,
+    starting: 150,
     variations: [
-      { name: 'Crochet Braids', price: '$140', duration: '2-3 hours' },
-      { name: 'Crochet Twists', price: '$150', duration: '2-3 hours' },
-      { name: 'Crochet Box Braids', price: '$160', duration: '3-4 hours' },
-      { name: 'Crochet Faux Locs', price: '$180', duration: '3-4 hours' },
-      { name: 'Crochet Passion Twists', price: '$170', duration: '3-4 hours' },
-      { name: 'Crochet Senegalese Twists', price: '$165', duration: '3-4 hours' },
-      { name: 'Crochet Spring Twists', price: '$175', duration: '3-4 hours' },
-      { name: 'Crochet Marley Twists', price: '$160', duration: '3-4 hours' },
-      { name: 'Crochet Goddess Braids', price: '$180', duration: '3-4 hours' },
+      { name: 'Crochet Braids', price: '$150', duration: '2-3 hours' },
+      { name: 'Crochet Twists', price: '$160', duration: '2-3 hours' },
+      { name: 'Crochet Box Braids', price: '$170', duration: '3-4 hours' },
+      { name: 'Crochet Faux Locs', price: '$200', duration: '3-4 hours' },
+      { name: 'Crochet Passion Twists', price: '$190', duration: '3-4 hours' },
+      { name: 'Crochet Senegalese Twists', price: '$185', duration: '3-4 hours' },
+      { name: 'Crochet Spring Twists', price: '$195', duration: '3-4 hours' },
+      { name: 'Crochet Marley Twists', price: '$180', duration: '3-4 hours' },
+      { name: 'Crochet Goddess Braids', price: '$200', duration: '3-4 hours' },
     ]
   },
   'Dreads': {
     name: 'Dreads',
-    starting: 200,
+    starting: 250,
     variations: [
-      { name: 'Traditional Dreads', price: '$200', duration: '4-5 hours' },
-      { name: 'Interlocked Dreads', price: '$220', duration: '5-6 hours' },
+      { name: 'Traditional Dreads', price: '$250', duration: '4-5 hours' },
+      { name: 'Interlocked Dreads', price: '$280', duration: '5-6 hours' },
     ]
   },
   'Kid Styles': {
@@ -127,10 +127,10 @@ const SERVICE_DATA: { [key: string]: ServiceCategory } = {
   },
   'Weaves/Extensions': {
     name: 'Weaves/Extensions',
-    starting: 200,
+    starting: 220,
     variations: [
-      { name: 'Sew-in Weave', price: '$200', duration: '4-5 hours' },
-      { name: 'Tape-in Extensions', price: '$250', duration: '3-4 hours' },
+      { name: 'Sew-in Weave', price: '$220', duration: '4-5 hours' },
+      { name: 'Tape-in Extensions', price: '$350', duration: '3-4 hours' },
       { name: 'Clip-in Extensions', price: '$180', duration: '2-3 hours' },
     ]
   },
