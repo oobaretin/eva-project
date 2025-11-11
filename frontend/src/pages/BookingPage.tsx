@@ -72,34 +72,79 @@ const BookingPage: React.FC = () => {
         // Get pricing and duration from the selected style
         const getStyleDetails = (styleName: string) => {
           const stylePricing: { [key: string]: { price: string; duration: string } } = {
+            // Braids (9 styles)
             'Knotless Box Braids': { price: '$275', duration: '5-6 hours' },
             'Small Box Braids': { price: '$330', duration: '6-7 hours' },
             'Medium Box Braids': { price: '$210', duration: '4-5 hours' },
             'Large Box Braids': { price: '$158', duration: '3-4 hours' },
             'Jumbo Box Braids': { price: '$120', duration: '2-3 hours' },
-            'Feed-in Cornrows': { price: '$100', duration: '2-3 hours' },
-            'Stitch Braids': { price: '$80', duration: '2-3 hours' },
+            'Box Braids with Curls': { price: '$264', duration: '5-6 hours' },
             'Ghana Braids': { price: '$120', duration: '3-4 hours' },
             'French Braids': { price: '$90', duration: '2-3 hours' },
             'Dutch Braids': { price: '$100', duration: '2-3 hours' },
+            // Twists (8 styles)
             'Passion Twists': { price: '$189', duration: '3-4 hours' },
             'Senegalese Twists': { price: '$168', duration: '4-5 hours' },
             'Twist Out Style': { price: '$120', duration: '2-3 hours' },
             'Marley Twists': { price: '$168', duration: '4-5 hours' },
             'Spring Twists': { price: '$189', duration: '3-4 hours' },
-            'Crochet Braids': { price: '$140', duration: '2-3 hours' },
+            'Goddess Braids': { price: '$189', duration: '3-4 hours' },
+            'Fulani Braids': { price: '$210', duration: '4-5 hours' },
+            'Lemonade Braids': { price: '$168', duration: '3-4 hours' },
+            // Faux Locs (3 styles)
             'Butterfly Locs': { price: '$242', duration: '4-5 hours' },
             'Faux Locs': { price: '$210', duration: '4-6 hours' },
-            'Box Braids with Curls': { price: '$264', duration: '5-6 hours' },
-            'Lemonade Braids': { price: '$168', duration: '3-4 hours' },
+            'Goddess Locs': { price: '$230', duration: '4-5 hours' },
+            // Crochets (9 styles)
+            'Crochet Braids': { price: '$140', duration: '2-3 hours' },
+            'Crochet Twists': { price: '$150', duration: '2-3 hours' },
+            'Crochet Box Braids': { price: '$160', duration: '3-4 hours' },
+            'Crochet Faux Locs': { price: '$180', duration: '3-4 hours' },
+            'Crochet Passion Twists': { price: '$170', duration: '3-4 hours' },
+            'Crochet Senegalese Twists': { price: '$165', duration: '3-4 hours' },
+            'Crochet Spring Twists': { price: '$175', duration: '3-4 hours' },
+            'Crochet Marley Twists': { price: '$160', duration: '3-4 hours' },
+            'Crochet Goddess Braids': { price: '$180', duration: '3-4 hours' },
+            // Dreads (2 styles)
+            'Traditional Dreads': { price: '$200', duration: '4-5 hours' },
+            'Interlocked Dreads': { price: '$220', duration: '5-6 hours' },
+            // Kid Styles (8 styles)
             'Kids Box Braids': { price: '$80', duration: '2-3 hours' },
             'Kids Cornrows': { price: '$60', duration: '1-2 hours' },
             'Kids Twists': { price: '$70', duration: '2-3 hours' },
             'Kids Pigtails': { price: '$50', duration: '1-2 hours' },
-            'Goddess Braids': { price: '$189', duration: '3-4 hours' },
-            'Fulani Braids': { price: '$210', duration: '4-5 hours' },
-            'Halo Braid': { price: '$150', duration: '2-3 hours' },
-            'Crown Braids': { price: '$179', duration: '3-4 hours' },
+            'Kids French Braids': { price: '$55', duration: '1-2 hours' },
+            'Kids Dutch Braids': { price: '$60', duration: '1-2 hours' },
+            'Kids Ponytails': { price: '$45', duration: '1 hour' },
+            'Kids Bantu Knots': { price: '$65', duration: '2 hours' },
+            // Cornrows (12 styles)
+            'Feed-in Cornrows': { price: '$100', duration: '2-3 hours' },
+            'Stitch Braids': { price: '$80', duration: '2-3 hours' },
+            'Ghana Cornrows': { price: '$90', duration: '2-3 hours' },
+            'French Cornrows': { price: '$85', duration: '2 hours' },
+            'Dutch Cornrows': { price: '$90', duration: '2 hours' },
+            'Goddess Cornrows': { price: '$110', duration: '3 hours' },
+            'Fulani Cornrows': { price: '$100', duration: '2-3 hours' },
+            'Lemonade Cornrows': { price: '$95', duration: '2-3 hours' },
+            'Crown Cornrows': { price: '$105', duration: '3 hours' },
+            'Halo Cornrows': { price: '$100', duration: '2-3 hours' },
+            'Side Part Cornrows': { price: '$85', duration: '2 hours' },
+            'Zigzag Cornrows': { price: '$90', duration: '2-3 hours' },
+            // Bantu Knots (7 styles)
+            'Traditional Bantu Knots': { price: '$100', duration: '2-3 hours' },
+            'Bantu Knot Out': { price: '$120', duration: '2-3 hours' },
+            'Mini Bantu Knots': { price: '$110', duration: '2-3 hours' },
+            'Large Bantu Knots': { price: '$100', duration: '2 hours' },
+            'Bantu Knots with Extensions': { price: '$130', duration: '3-4 hours' },
+            'Goddess Bantu Knots': { price: '$125', duration: '3 hours' },
+            'Crown Bantu Knots': { price: '$115', duration: '2-3 hours' },
+            // Weaves/Extensions (3 styles)
+            'Sew-in Weave': { price: '$200', duration: '4-5 hours' },
+            'Tape-in Extensions': { price: '$250', duration: '3-4 hours' },
+            'Clip-in Extensions': { price: '$180', duration: '2-3 hours' },
+            // Hair Maintenance & Consultation (2 styles)
+            'Hair Consultation': { price: '$25', duration: '30 minutes' },
+            'Braids Touch-up': { price: '$50', duration: '1 hour' },
           };
           
           return stylePricing[styleName] || { price: 'To be discussed', duration: 'To be discussed' };

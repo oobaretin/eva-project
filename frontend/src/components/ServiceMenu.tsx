@@ -19,9 +19,9 @@ interface ServiceMenuProps {
 }
 
 const SERVICE_DATA: { [key: string]: ServiceCategory } = {
-  'Box Braids': {
-    name: 'Box Braids',
-    starting: 120,
+  'Braids': {
+    name: 'Braids',
+    starting: 90,
     variations: [
       { name: 'Knotless Box Braids', price: '$275', duration: '5-6 hours' },
       { name: 'Small Box Braids', price: '$330', duration: '6-7 hours' },
@@ -29,28 +29,9 @@ const SERVICE_DATA: { [key: string]: ServiceCategory } = {
       { name: 'Large Box Braids', price: '$158', duration: '3-4 hours' },
       { name: 'Jumbo Box Braids', price: '$120', duration: '2-3 hours' },
       { name: 'Box Braids with Curls', price: '$264', duration: '5-6 hours' },
-    ]
-  },
-  'Cornrows': {
-    name: 'Cornrows',
-    starting: 80,
-    variations: [
-      { name: 'Feed-in Cornrows', price: '$100', duration: '2-3 hours' },
-      { name: 'Stitch Braids', price: '$80', duration: '2-3 hours' },
-    ]
-  },
-  'Traditional Braids': {
-    name: 'Traditional Braids',
-    starting: 90,
-    variations: [
       { name: 'Ghana Braids', price: '$120', duration: '3-4 hours' },
       { name: 'French Braids', price: '$90', duration: '2-3 hours' },
       { name: 'Dutch Braids', price: '$100', duration: '2-3 hours' },
-      { name: 'Lemonade Braids', price: '$168', duration: '3-4 hours' },
-      { name: 'Goddess Braids', price: '$189', duration: '3-4 hours' },
-      { name: 'Fulani Braids', price: '$210', duration: '4-5 hours' },
-      { name: 'Halo Braid', price: '$150', duration: '2-3 hours' },
-      { name: 'Crown Braids', price: '$179', duration: '3-4 hours' },
     ]
   },
   'Twists': {
@@ -62,31 +43,103 @@ const SERVICE_DATA: { [key: string]: ServiceCategory } = {
       { name: 'Twist Out Style', price: '$120', duration: '2-3 hours' },
       { name: 'Marley Twists', price: '$168', duration: '4-5 hours' },
       { name: 'Spring Twists', price: '$189', duration: '3-4 hours' },
+      { name: 'Goddess Braids', price: '$189', duration: '3-4 hours' },
+      { name: 'Fulani Braids', price: '$210', duration: '4-5 hours' },
+      { name: 'Lemonade Braids', price: '$168', duration: '3-4 hours' },
     ]
   },
-  'Locs': {
-    name: 'Locs',
-    starting: 140,
+  'Faux Locs': {
+    name: 'Faux Locs',
+    starting: 210,
     variations: [
       { name: 'Butterfly Locs', price: '$242', duration: '4-5 hours' },
       { name: 'Faux Locs', price: '$210', duration: '4-6 hours' },
+      { name: 'Goddess Locs', price: '$230', duration: '4-5 hours' },
     ]
   },
-  'Crochet Styles': {
-    name: 'Crochet Styles',
+  'Crochets': {
+    name: 'Crochets',
     starting: 140,
     variations: [
       { name: 'Crochet Braids', price: '$140', duration: '2-3 hours' },
+      { name: 'Crochet Twists', price: '$150', duration: '2-3 hours' },
+      { name: 'Crochet Box Braids', price: '$160', duration: '3-4 hours' },
+      { name: 'Crochet Faux Locs', price: '$180', duration: '3-4 hours' },
+      { name: 'Crochet Passion Twists', price: '$170', duration: '3-4 hours' },
+      { name: 'Crochet Senegalese Twists', price: '$165', duration: '3-4 hours' },
+      { name: 'Crochet Spring Twists', price: '$175', duration: '3-4 hours' },
+      { name: 'Crochet Marley Twists', price: '$160', duration: '3-4 hours' },
+      { name: 'Crochet Goddess Braids', price: '$180', duration: '3-4 hours' },
     ]
   },
-  'Kids Styles': {
-    name: 'Kids Styles',
+  'Dreads': {
+    name: 'Dreads',
+    starting: 200,
+    variations: [
+      { name: 'Traditional Dreads', price: '$200', duration: '4-5 hours' },
+      { name: 'Interlocked Dreads', price: '$220', duration: '5-6 hours' },
+    ]
+  },
+  'Kid Styles': {
+    name: 'Kid Styles',
     starting: 50,
     variations: [
       { name: 'Kids Box Braids', price: '$80', duration: '2-3 hours' },
       { name: 'Kids Cornrows', price: '$60', duration: '1-2 hours' },
       { name: 'Kids Twists', price: '$70', duration: '2-3 hours' },
       { name: 'Kids Pigtails', price: '$50', duration: '1-2 hours' },
+      { name: 'Kids French Braids', price: '$55', duration: '1-2 hours' },
+      { name: 'Kids Dutch Braids', price: '$60', duration: '1-2 hours' },
+      { name: 'Kids Ponytails', price: '$45', duration: '1 hour' },
+      { name: 'Kids Bantu Knots', price: '$65', duration: '2 hours' },
+    ]
+  },
+  'Cornrows': {
+    name: 'Cornrows',
+    starting: 80,
+    variations: [
+      { name: 'Feed-in Cornrows', price: '$100', duration: '2-3 hours' },
+      { name: 'Stitch Braids', price: '$80', duration: '2-3 hours' },
+      { name: 'Ghana Cornrows', price: '$90', duration: '2-3 hours' },
+      { name: 'French Cornrows', price: '$85', duration: '2 hours' },
+      { name: 'Dutch Cornrows', price: '$90', duration: '2 hours' },
+      { name: 'Goddess Cornrows', price: '$110', duration: '3 hours' },
+      { name: 'Fulani Cornrows', price: '$100', duration: '2-3 hours' },
+      { name: 'Lemonade Cornrows', price: '$95', duration: '2-3 hours' },
+      { name: 'Crown Cornrows', price: '$105', duration: '3 hours' },
+      { name: 'Halo Cornrows', price: '$100', duration: '2-3 hours' },
+      { name: 'Side Part Cornrows', price: '$85', duration: '2 hours' },
+      { name: 'Zigzag Cornrows', price: '$90', duration: '2-3 hours' },
+    ]
+  },
+  'Bantu Knots': {
+    name: 'Bantu Knots',
+    starting: 100,
+    variations: [
+      { name: 'Traditional Bantu Knots', price: '$100', duration: '2-3 hours' },
+      { name: 'Bantu Knot Out', price: '$120', duration: '2-3 hours' },
+      { name: 'Mini Bantu Knots', price: '$110', duration: '2-3 hours' },
+      { name: 'Large Bantu Knots', price: '$100', duration: '2 hours' },
+      { name: 'Bantu Knots with Extensions', price: '$130', duration: '3-4 hours' },
+      { name: 'Goddess Bantu Knots', price: '$125', duration: '3 hours' },
+      { name: 'Crown Bantu Knots', price: '$115', duration: '2-3 hours' },
+    ]
+  },
+  'Weaves/Extensions': {
+    name: 'Weaves/Extensions',
+    starting: 200,
+    variations: [
+      { name: 'Sew-in Weave', price: '$200', duration: '4-5 hours' },
+      { name: 'Tape-in Extensions', price: '$250', duration: '3-4 hours' },
+      { name: 'Clip-in Extensions', price: '$180', duration: '2-3 hours' },
+    ]
+  },
+  'Hair Maintenance & Consultation': {
+    name: 'Hair Maintenance & Consultation',
+    starting: 25,
+    variations: [
+      { name: 'Hair Consultation', price: '$25', duration: '30 minutes' },
+      { name: 'Braids Touch-up', price: '$50', duration: '1 hour' },
     ]
   }
 };
@@ -143,7 +196,7 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({ onServiceSelect, selectedServ
                       {category.name}
                     </h3>
                     <p className="text-sm text-secondary-600">
-                      Starting at ${category.starting}
+                      {category.variations.length} {category.variations.length === 1 ? 'style' : 'styles'} • Starting at ${category.starting}
                     </p>
                   </div>
                 </div>
@@ -221,4 +274,3 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({ onServiceSelect, selectedServ
 };
 
 export default ServiceMenu;
-
