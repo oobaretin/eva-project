@@ -35,7 +35,18 @@ const GalleryPage: React.FC = () => {
       item => item.id === '31' || item.id === '32' || item.id === '33'
     );
 
-    if (kidsBoxBraidsImages.length === 0) return;
+    if (kidsBoxBraidsImages.length === 0) {
+      setKidsBoxBraidsIndex(0);
+      return;
+    }
+
+    // Reset index if it's out of bounds
+    setKidsBoxBraidsIndex((prev) => {
+      if (prev >= kidsBoxBraidsImages.length) {
+        return 0;
+      }
+      return prev;
+    });
 
     const interval = setInterval(() => {
       setKidsBoxBraidsIndex((prev) => (prev + 1) % kidsBoxBraidsImages.length);
@@ -568,7 +579,11 @@ const GalleryPage: React.FC = () => {
                   // Render carousel card for Kids Box Braids
                   if (displayItem.type === 'carousel') {
                     const kidsImages = displayItem.items;
-                    const currentImage = kidsImages[kidsBoxBraidsIndex];
+                    // Ensure index is within bounds
+                    const safeIndex = kidsBoxBraidsIndex >= kidsImages.length ? 0 : kidsBoxBraidsIndex;
+                    const currentImage = kidsImages[safeIndex];
+                    
+                    if (!currentImage) return null;
 
                     const nextSlide = (e: React.MouseEvent) => {
                       e.stopPropagation();
@@ -589,9 +604,9 @@ const GalleryPage: React.FC = () => {
                         className="card group hover:shadow-xl transition-all duration-300"
                       >
                         <div className="relative overflow-hidden">
-                          <AnimatePresence mode="wait">
+                              <AnimatePresence mode="wait">
                             <motion.div
-                              key={kidsBoxBraidsIndex}
+                              key={safeIndex}
                               initial={{ opacity: 0, x: 100 }}
                               animate={{ opacity: 1, x: 0 }}
                               exit={{ opacity: 0, x: -100 }}
@@ -634,7 +649,7 @@ const GalleryPage: React.FC = () => {
                                       setKidsBoxBraidsIndex(idx);
                                     }}
                                     className={`h-2 rounded-full transition-all duration-200 ${
-                                      idx === kidsBoxBraidsIndex
+                                      idx === safeIndex
                                         ? 'bg-primary-600 w-6'
                                         : 'bg-white/50 hover:bg-white/75 w-2'
                                     }`}
