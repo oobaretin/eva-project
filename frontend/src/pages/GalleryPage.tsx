@@ -29,11 +29,10 @@ const GalleryPage: React.FC = () => {
     }
   }, [selectedCategory, galleryItems]);
 
-  // Auto-play carousel for Kids Box Braids
+  // Auto-play carousel for Kids Box Braids (only when visible in filtered items)
   useEffect(() => {
-    const kidsBoxBraidsImages = galleryItems.filter(
-      item => item.category === 'Kids Styles' && 
-      (item.id === '31' || item.id === '32' || item.id === '33')
+    const kidsBoxBraidsImages = filteredItems.filter(
+      item => item.id === '31' || item.id === '32' || item.id === '33'
     );
 
     if (kidsBoxBraidsImages.length === 0) return;
@@ -43,7 +42,7 @@ const GalleryPage: React.FC = () => {
     }, 5000); // Change slide every 5 seconds
 
     return () => clearInterval(interval);
-  }, [galleryItems]);
+  }, [filteredItems]);
 
   const fetchGalleryItems = () => {
     console.log('Fetching gallery items...');
@@ -538,164 +537,7 @@ const GalleryPage: React.FC = () => {
           </div>
       </section>
 
-      {/* Kids Box Braids Carousel Section */}
-      <section className="section-padding bg-gradient-to-br from-primary-50 to-secondary-50">
-        <div className="container-max">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-secondary-900 mb-4">
-              Kids Box Braids
-            </h2>
-            <p className="text-xl text-secondary-600 max-w-2xl mx-auto">
-              Beautiful, protective box braids designed specifically for children. Safe, comfortable, and fun!
-            </p>
-          </motion.div>
-
-          {(() => {
-            const kidsBoxBraidsImages = galleryItems.filter(
-              item => item.category === 'Kids Styles' && 
-              (item.id === '31' || item.id === '32' || item.id === '33')
-            );
-
-            if (kidsBoxBraidsImages.length === 0) return null;
-
-            const currentImage = kidsBoxBraidsImages[kidsBoxBraidsIndex];
-
-            const nextSlide = () => {
-              setKidsBoxBraidsIndex((prev) => (prev + 1) % kidsBoxBraidsImages.length);
-            };
-
-            const prevSlide = () => {
-              setKidsBoxBraidsIndex((prev) => (prev - 1 + kidsBoxBraidsImages.length) % kidsBoxBraidsImages.length);
-            };
-
-            return (
-              <div className="relative max-w-5xl mx-auto">
-                {/* Carousel Container */}
-                <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-white">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={kidsBoxBraidsIndex}
-                      initial={{ opacity: 0, x: 300 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -300 }}
-                      transition={{ duration: 0.5, ease: "easeInOut" }}
-                      className="relative cursor-pointer group"
-                      onClick={() => handleImageClick(currentImage)}
-                    >
-                      <img
-                        src={currentImage.imageUrl}
-                        alt={currentImage.title}
-                        className="w-full h-[500px] md:h-[600px] object-cover group-hover:scale-105 transition-transform duration-300"
-                        onError={(e) => {
-                          console.log('❌ Carousel image failed to load:', currentImage.imageUrl);
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                        }}
-                      />
-                      {/* Click indicator overlay */}
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center">
-                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 rounded-full p-4">
-                          <svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                          </svg>
-                        </div>
-                      </div>
-                      {/* Overlay with info */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end pointer-events-none">
-                        <div className="w-full p-8 text-white">
-                          <h3 className="text-2xl md:text-3xl font-bold mb-2">
-                            {currentImage.title}
-                          </h3>
-                          <p className="text-lg mb-4 opacity-90">
-                            {currentImage.description}
-                          </p>
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-6">
-                              <div className="text-xl font-semibold">
-                                {currentImage.price}
-                              </div>
-                              <div className="flex items-center text-sm">
-                                <ClockIcon className="w-5 h-5 mr-1" />
-                                {currentImage.duration}
-                              </div>
-                            </div>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleBookThisStyle(currentImage);
-                              }}
-                              className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 pointer-events-auto"
-                            >
-                              Book This Style
-                            </button>
-                          </div>
-                          <p className="text-sm mt-2 opacity-75">Click image to view full size</p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
-
-                  {/* Navigation Arrows */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      prevSlide();
-                    }}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-secondary-900 rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-110 z-20"
-                    aria-label="Previous image"
-                  >
-                    <ChevronLeftIcon className="w-6 h-6" />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      nextSlide();
-                    }}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-secondary-900 rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-110 z-20"
-                    aria-label="Next image"
-                  >
-                    <ChevronRightIcon className="w-6 h-6" />
-                  </button>
-
-                  {/* Dots Indicator */}
-                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
-                    {kidsBoxBraidsImages.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setKidsBoxBraidsIndex(index);
-                        }}
-                        className={`w-3 h-3 rounded-full transition-all duration-200 ${
-                          index === kidsBoxBraidsIndex
-                            ? 'bg-primary-600 w-8'
-                            : 'bg-white/50 hover:bg-white/75'
-                        }`}
-                        aria-label={`Go to slide ${index + 1}`}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Auto-play indicator */}
-                <div className="mt-6 text-center">
-                  <p className="text-sm text-secondary-600">
-                    Click the arrows or dots to navigate • {kidsBoxBraidsIndex + 1} of {kidsBoxBraidsImages.length}
-                  </p>
-                </div>
-              </div>
-            );
-          })()}
-        </div>
-      </section>
-
-          {/* Gallery Grid */}
+      {/* Gallery Grid */}
       <section className="section-padding">
         <div className="container-max">
           {filteredItems.length === 0 ? (
@@ -705,80 +547,220 @@ const GalleryPage: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredItems.map((item, index) => (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
-                  className="card group hover:shadow-xl transition-all duration-300"
-                >
-                  <div className="relative overflow-hidden">
-                    <img 
-                      src={item.imageUrl} 
-                      alt={item.title}
-                      className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-                      onClick={() => handleImageClick(item)}
-                      onLoad={() => console.log('✅ Image loaded:', item.title, item.imageUrl)}
-                      onError={(e) => {
-                        console.log('❌ Image failed to load:', item.imageUrl);
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        const fallback = target.nextElementSibling as HTMLElement;
-                        if (fallback) fallback.style.display = 'flex';
-                      }}
-                    />
-                    <div className="h-80 bg-gradient-to-br from-primary-200 to-primary-300 flex items-center justify-center cursor-pointer" style={{display: 'none'}} onClick={() => handleImageClick(item)}>
-                      <span className="text-6xl">💇‍♀️</span>
-                    </div>
-                    {/* Click to view full size overlay */}
-                    <div 
-                      className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center cursor-pointer"
-                      onClick={() => handleImageClick(item)}
-                    >
-                      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white bg-opacity-90 rounded-full p-3">
-                        <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-primary-600 bg-primary-100 px-3 py-1 rounded-full">
-                        {item.category}
-                      </span>
-          </div>
+              {(() => {
+                // Separate Kids Box Braids images from other items
+                const kidsBoxBraidsImages = filteredItems.filter(
+                  item => item.id === '31' || item.id === '32' || item.id === '33'
+                );
+                const otherItems = filteredItems.filter(
+                  item => item.id !== '31' && item.id !== '32' && item.id !== '33'
+                );
 
-                    <h3 className="text-xl font-semibold text-secondary-900 mb-2">
-                      {item.title}
-                    </h3>
-                    
-                    <p className="text-secondary-600 mb-4 line-clamp-2">
-                      {item.description}
-                    </p>
-                    
-                    {/* Price and Duration */}
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="text-2xl font-bold text-primary-600">
-                        {item.price}
-                      </div>
-                      <div className="text-sm text-secondary-500 flex items-center">
-                        <ClockIcon className="w-4 h-4 mr-1" />
-                        {item.duration}
-                      </div>
-                    </div>
-                    
-                  <button
-                      onClick={() => handleBookThisStyle(item)}
-                      className="w-full btn-primary text-center"
+                // If we have Kids Box Braids images, show them as one carousel card
+                const displayItems = kidsBoxBraidsImages.length > 0
+                  ? [
+                      { type: 'carousel', items: kidsBoxBraidsImages, id: 'kids-box-braids-carousel' },
+                      ...otherItems.map(item => ({ type: 'regular', item }))
+                    ]
+                  : otherItems.map(item => ({ type: 'regular', item }));
+
+                return displayItems.map((displayItem, index) => {
+                  // Render carousel card for Kids Box Braids
+                  if (displayItem.type === 'carousel') {
+                    const kidsImages = displayItem.items;
+                    const currentImage = kidsImages[kidsBoxBraidsIndex];
+
+                    const nextSlide = (e: React.MouseEvent) => {
+                      e.stopPropagation();
+                      setKidsBoxBraidsIndex((prev) => (prev + 1) % kidsImages.length);
+                    };
+
+                    const prevSlide = (e: React.MouseEvent) => {
+                      e.stopPropagation();
+                      setKidsBoxBraidsIndex((prev) => (prev - 1 + kidsImages.length) % kidsImages.length);
+                    };
+
+                    return (
+                      <motion.div
+                        key={displayItem.id}
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: index * 0.1 }}
+                        className="card group hover:shadow-xl transition-all duration-300"
+                      >
+                        <div className="relative overflow-hidden">
+                          <AnimatePresence mode="wait">
+                            <motion.div
+                              key={kidsBoxBraidsIndex}
+                              initial={{ opacity: 0, x: 100 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: -100 }}
+                              transition={{ duration: 0.3 }}
+                              className="relative"
+                            >
+                              <img
+                                src={currentImage.imageUrl}
+                                alt={currentImage.title}
+                                className="w-full h-80 object-cover cursor-pointer"
+                                onClick={() => handleImageClick(currentImage)}
+                                onError={(e) => {
+                                  console.log('❌ Carousel image failed to load:', currentImage.imageUrl);
+                                  const target = e.target as HTMLImageElement;
+                                  target.style.display = 'none';
+                                }}
+                              />
+                              {/* Navigation Arrows */}
+                              <button
+                                onClick={prevSlide}
+                                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-secondary-900 rounded-full p-2 shadow-lg transition-all duration-200 hover:scale-110 z-10"
+                                aria-label="Previous image"
+                              >
+                                <ChevronLeftIcon className="w-5 h-5" />
+                              </button>
+                              <button
+                                onClick={nextSlide}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-secondary-900 rounded-full p-2 shadow-lg transition-all duration-200 hover:scale-110 z-10"
+                                aria-label="Next image"
+                              >
+                                <ChevronRightIcon className="w-5 h-5" />
+                              </button>
+                              {/* Dots Indicator */}
+                              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                                {kidsImages.map((_, idx) => (
+                                  <button
+                                    key={idx}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setKidsBoxBraidsIndex(idx);
+                                    }}
+                                    className={`h-2 rounded-full transition-all duration-200 ${
+                                      idx === kidsBoxBraidsIndex
+                                        ? 'bg-primary-600 w-6'
+                                        : 'bg-white/50 hover:bg-white/75 w-2'
+                                    }`}
+                                    aria-label={`Go to slide ${idx + 1}`}
+                                  />
+                                ))}
+                              </div>
+                            </motion.div>
+                          </AnimatePresence>
+                        </div>
+                        
+                        <div className="p-6">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-sm font-medium text-primary-600 bg-primary-100 px-3 py-1 rounded-full">
+                              {currentImage.category}
+                            </span>
+                          </div>
+
+                          <h3 className="text-xl font-semibold text-secondary-900 mb-2">
+                            Kids Box Braids
+                          </h3>
+                          
+                          <p className="text-secondary-600 mb-4 line-clamp-2">
+                            {currentImage.description}
+                          </p>
+                          
+                          {/* Price and Duration */}
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="text-2xl font-bold text-primary-600">
+                              {currentImage.price}
+                            </div>
+                            <div className="text-sm text-secondary-500 flex items-center">
+                              <ClockIcon className="w-4 h-4 mr-1" />
+                              {currentImage.duration}
+                            </div>
+                          </div>
+                          
+                          <button
+                            onClick={() => handleBookThisStyle(currentImage)}
+                            className="w-full btn-primary text-center"
+                          >
+                            Book This Style
+                          </button>
+                        </div>
+                      </motion.div>
+                    );
+                  }
+
+                  // Render regular gallery item
+                  const item = displayItem.item;
+                  return (
+                    <motion.div
+                      key={item.id}
+                      initial={{ opacity: 0, y: 50 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.8, delay: index * 0.1 }}
+                      className="card group hover:shadow-xl transition-all duration-300"
                     >
-                      Book This Style
-                    </button>
-                  </div>
-                </motion.div>
-              ))}
+                      <div className="relative overflow-hidden">
+                        <img 
+                          src={item.imageUrl} 
+                          alt={item.title}
+                          className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                          onClick={() => handleImageClick(item)}
+                          onLoad={() => console.log('✅ Image loaded:', item.title, item.imageUrl)}
+                          onError={(e) => {
+                            console.log('❌ Image failed to load:', item.imageUrl);
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                            const fallback = target.nextElementSibling as HTMLElement;
+                            if (fallback) fallback.style.display = 'flex';
+                          }}
+                        />
+                        <div className="h-80 bg-gradient-to-br from-primary-200 to-primary-300 flex items-center justify-center cursor-pointer" style={{display: 'none'}} onClick={() => handleImageClick(item)}>
+                          <span className="text-6xl">💇‍♀️</span>
+                        </div>
+                        {/* Click to view full size overlay */}
+                        <div 
+                          className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center cursor-pointer"
+                          onClick={() => handleImageClick(item)}
+                        >
+                          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white bg-opacity-90 rounded-full p-3">
+                            <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="p-6">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium text-primary-600 bg-primary-100 px-3 py-1 rounded-full">
+                            {item.category}
+                          </span>
+                        </div>
+
+                        <h3 className="text-xl font-semibold text-secondary-900 mb-2">
+                          {item.title}
+                        </h3>
+                        
+                        <p className="text-secondary-600 mb-4 line-clamp-2">
+                          {item.description}
+                        </p>
+                        
+                        {/* Price and Duration */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="text-2xl font-bold text-primary-600">
+                            {item.price}
+                          </div>
+                          <div className="text-sm text-secondary-500 flex items-center">
+                            <ClockIcon className="w-4 h-4 mr-1" />
+                            {item.duration}
+                          </div>
+                        </div>
+                        
+                        <button
+                          onClick={() => handleBookThisStyle(item)}
+                          className="w-full btn-primary text-center"
+                        >
+                          Book This Style
+                        </button>
+                      </div>
+                    </motion.div>
+                  );
+                });
+              })()}
             </div>
           )}
         </div>
