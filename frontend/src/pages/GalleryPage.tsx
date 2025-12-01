@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ClockIcon } from '@heroicons/react/24/outline';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ClockIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { GalleryItem } from '../types';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
 // import toast from 'react-hot-toast';
@@ -12,6 +12,7 @@ const GalleryPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [isLoading, setIsLoading] = useState(false); // Start with false for testing
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
+  const [kidsBoxBraidsIndex, setKidsBoxBraidsIndex] = useState(0);
   const navigate = useNavigate();
 
   const categories = ['All', 'Box Braids', 'Cornrows', 'Twists', 'Protective Styles', 'Kids Styles', 'Special Occasions'];
@@ -27,6 +28,22 @@ const GalleryPage: React.FC = () => {
       setFilteredItems(galleryItems.filter(item => item.category === selectedCategory));
     }
   }, [selectedCategory, galleryItems]);
+
+  // Auto-play carousel for Kids Box Braids
+  useEffect(() => {
+    const kidsBoxBraidsImages = galleryItems.filter(
+      item => item.category === 'Kids Styles' && 
+      (item.id === '31' || item.id === '32' || item.id === '33')
+    );
+
+    if (kidsBoxBraidsImages.length === 0) return;
+
+    const interval = setInterval(() => {
+      setKidsBoxBraidsIndex((prev) => (prev + 1) % kidsBoxBraidsImages.length);
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [galleryItems]);
 
   const fetchGalleryItems = () => {
     console.log('Fetching gallery items...');
@@ -379,6 +396,44 @@ const GalleryPage: React.FC = () => {
           updatedAt: new Date().toISOString()
         },
         
+        // Kids Box Braids - New Images
+        {
+          id: '31',
+          title: 'Kids Box Braids Style 1',
+          description: 'Beautiful box braids designed for children. Safe, comfortable, and stylish.',
+          imageUrl: '/images/gallery/IMG_3143-removebg-preview.png',
+          category: 'Kids Styles',
+          price: '$80',
+          duration: '2-3 hours',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '32',
+          title: 'Kids Box Braids Style 2',
+          description: 'Adorable box braids perfect for young ones. Gentle on the scalp and long-lasting.',
+          imageUrl: '/images/gallery/IMG_3146-removebg-preview.png',
+          category: 'Kids Styles',
+          price: '$80',
+          duration: '2-3 hours',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: '33',
+          title: 'Kids Box Braids Style 3',
+          description: 'Cute and protective box braids for kids. Fun colors and comfortable wear.',
+          imageUrl: '/images/gallery/IMG_3140-removebg-preview.png',
+          category: 'Kids Styles',
+          price: '$80',
+          duration: '2-3 hours',
+          isActive: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        
         // Additional Special Occasions
         {
           id: '29',
@@ -493,6 +548,141 @@ const GalleryPage: React.FC = () => {
               ))}
             </div>
           </div>
+      </section>
+
+      {/* Kids Box Braids Carousel Section */}
+      <section className="section-padding bg-gradient-to-br from-primary-50 to-secondary-50">
+        <div className="container-max">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-secondary-900 mb-4">
+              Kids Box Braids
+            </h2>
+            <p className="text-xl text-secondary-600 max-w-2xl mx-auto">
+              Beautiful, protective box braids designed specifically for children. Safe, comfortable, and fun!
+            </p>
+          </motion.div>
+
+          {(() => {
+            const kidsBoxBraidsImages = galleryItems.filter(
+              item => item.category === 'Kids Styles' && 
+              (item.id === '31' || item.id === '32' || item.id === '33')
+            );
+
+            if (kidsBoxBraidsImages.length === 0) return null;
+
+            const currentImage = kidsBoxBraidsImages[kidsBoxBraidsIndex];
+
+            const nextSlide = () => {
+              setKidsBoxBraidsIndex((prev) => (prev + 1) % kidsBoxBraidsImages.length);
+            };
+
+            const prevSlide = () => {
+              setKidsBoxBraidsIndex((prev) => (prev - 1 + kidsBoxBraidsImages.length) % kidsBoxBraidsImages.length);
+            };
+
+            return (
+              <div className="relative max-w-5xl mx-auto">
+                {/* Carousel Container */}
+                <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-white">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={kidsBoxBraidsIndex}
+                      initial={{ opacity: 0, x: 300 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -300 }}
+                      transition={{ duration: 0.5, ease: "easeInOut" }}
+                      className="relative"
+                    >
+                      <img
+                        src={currentImage.imageUrl}
+                        alt={currentImage.title}
+                        className="w-full h-[500px] md:h-[600px] object-cover"
+                        onError={(e) => {
+                          console.log('❌ Carousel image failed to load:', currentImage.imageUrl);
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                        }}
+                      />
+                      {/* Overlay with info */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end">
+                        <div className="w-full p-8 text-white">
+                          <h3 className="text-2xl md:text-3xl font-bold mb-2">
+                            {currentImage.title}
+                          </h3>
+                          <p className="text-lg mb-4 opacity-90">
+                            {currentImage.description}
+                          </p>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-6">
+                              <div className="text-xl font-semibold">
+                                {currentImage.price}
+                              </div>
+                              <div className="flex items-center text-sm">
+                                <ClockIcon className="w-5 h-5 mr-1" />
+                                {currentImage.duration}
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => handleBookThisStyle(currentImage)}
+                              className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
+                            >
+                              Book This Style
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
+
+                  {/* Navigation Arrows */}
+                  <button
+                    onClick={prevSlide}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-secondary-900 rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-110 z-10"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeftIcon className="w-6 h-6" />
+                  </button>
+                  <button
+                    onClick={nextSlide}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-secondary-900 rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-110 z-10"
+                    aria-label="Next image"
+                  >
+                    <ChevronRightIcon className="w-6 h-6" />
+                  </button>
+
+                  {/* Dots Indicator */}
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                    {kidsBoxBraidsImages.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setKidsBoxBraidsIndex(index)}
+                        className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                          index === kidsBoxBraidsIndex
+                            ? 'bg-primary-600 w-8'
+                            : 'bg-white/50 hover:bg-white/75'
+                        }`}
+                        aria-label={`Go to slide ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Auto-play indicator */}
+                <div className="mt-6 text-center">
+                  <p className="text-sm text-secondary-600">
+                    Click the arrows or dots to navigate • {kidsBoxBraidsIndex + 1} of {kidsBoxBraidsImages.length}
+                  </p>
+                </div>
+              </div>
+            );
+          })()}
+        </div>
       </section>
 
           {/* Gallery Grid */}
