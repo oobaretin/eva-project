@@ -699,7 +699,8 @@ const GalleryPage: React.FC = () => {
                   }
 
                   // Render regular gallery item
-                  const item = displayItem.item;
+                  if (displayItem.type !== 'regular') return null;
+                  const item = (displayItem as { type: 'regular', item: GalleryItem }).item;
                   return (
                     <motion.div
                       key={item.id}
