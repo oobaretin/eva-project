@@ -18,6 +18,7 @@ const GalleryPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false); // Start with false for testing
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
   const [kidsBoxBraidsIndex, setKidsBoxBraidsIndex] = useState(0);
+  const [modalSlideIndex, setModalSlideIndex] = useState(0); // For navigation in modal
   const navigate = useNavigate();
 
   const categories = ['All', 'Box Braids', 'Cornrows', 'Twists', 'Protective Styles', 'Kids Styles', 'Special Occasions'];
@@ -473,6 +474,11 @@ const GalleryPage: React.FC = () => {
 
   const handleImageClick = (item: GalleryItem) => {
     setSelectedImage(item);
+    // If it's a Kids Box Braids image, find its index in the carousel
+    if (item.id === '31' || item.id === '32' || item.id === '33') {
+      const index = ['31', '32', '33'].indexOf(item.id);
+      setModalSlideIndex(index >= 0 ? index : 0);
+    }
   };
 
   const handleCloseModal = () => {
@@ -815,71 +821,150 @@ const GalleryPage: React.FC = () => {
       </section>
 
       {/* Full-Screen Image Modal */}
-      {selectedImage && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4"
-          onClick={handleCloseModal}
-        >
+      {selectedImage && (() => {
+        // Check if this is a Kids Box Braids image
+        const isKidsBoxBraids = selectedImage.id === '31' || selectedImage.id === '32' || selectedImage.id === '33';
+        const kidsBoxBraidsImages = isKidsBoxBraids 
+          ? galleryItems.filter(item => item.id === '31' || item.id === '32' || item.id === '33')
+          : [];
+        
+        const currentModalImage = isKidsBoxBraids && kidsBoxBraidsImages.length > 0
+          ? kidsBoxBraidsImages[modalSlideIndex]
+          : selectedImage;
+
+        const handleNextSlide = (e: React.MouseEvent) => {
+          e.stopPropagation();
+          if (isKidsBoxBraids && kidsBoxBraidsImages.length > 0) {
+            setModalSlideIndex((prev) => (prev + 1) % kidsBoxBraidsImages.length);
+          }
+        };
+
+        const handlePrevSlide = (e: React.MouseEvent) => {
+          e.stopPropagation();
+          if (isKidsBoxBraids && kidsBoxBraidsImages.length > 0) {
+            setModalSlideIndex((prev) => (prev - 1 + kidsBoxBraidsImages.length) % kidsBoxBraidsImages.length);
+          }
+        };
+
+        return (
           <div 
-            className="relative max-w-6xl max-h-[90vh] w-full flex flex-col"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-4"
+            onClick={handleCloseModal}
           >
-            {/* Close button */}
-            <button
-              onClick={handleCloseModal}
-              className="absolute top-2 right-2 z-20 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200"
+            <div 
+              className="relative max-w-6xl max-h-[90vh] w-full flex flex-col"
+              onClick={(e) => e.stopPropagation()}
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            
-            {/* Image container */}
-            <div className="flex-1 flex items-center justify-center min-h-0 mb-4">
-              <img
-                src={selectedImage.imageUrl}
-                alt={selectedImage.title}
-                className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
-                style={{ maxHeight: '70vh' }}
-                onError={(e) => {
-                  console.log('❌ Modal image failed to load:', selectedImage.imageUrl);
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
-                }}
-              />
-            </div>
-            
-            {/* Image details */}
-            <div className="bg-white rounded-lg p-6 shadow-xl">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-primary-600 bg-primary-100 px-3 py-1 rounded-full">
-                  {selectedImage.category}
-                </span>
+              {/* Close button */}
+              <button
+                onClick={handleCloseModal}
+                className="absolute top-2 right-2 z-20 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              
+              {/* Navigation arrows for Kids Box Braids */}
+              {isKidsBoxBraids && kidsBoxBraidsImages.length > 1 && (
+                <>
+                  <button
+                    onClick={handlePrevSlide}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-secondary-900 rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-110"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeftIcon className="w-6 h-6" />
+                  </button>
+                  <button
+                    onClick={handleNextSlide}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-secondary-900 rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-110"
+                    aria-label="Next image"
+                  >
+                    <ChevronRightIcon className="w-6 h-6" />
+                  </button>
+                </>
+              )}
+              
+              {/* Image container */}
+              <div className="flex-1 flex items-center justify-center min-h-0 mb-4">
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={currentModalImage.id}
+                    src={currentModalImage.imageUrl}
+                    alt={currentModalImage.title}
+                    className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+                    style={{ maxHeight: '70vh' }}
+                    initial={{ opacity: 0, x: 100 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -100 }}
+                    transition={{ duration: 0.3 }}
+                    onError={(e) => {
+                      console.log('❌ Modal image failed to load:', currentModalImage.imageUrl);
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                    }}
+                  />
+                </AnimatePresence>
               </div>
-              <h3 className="text-2xl font-semibold text-secondary-900 mb-2">
-                {selectedImage.title}
-              </h3>
-              <p className="text-secondary-600 mb-4">
-                {selectedImage.description}
-              </p>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => handleBookThisStyle(selectedImage)}
-                  className="btn-primary flex-1"
-                >
-                  Book This Style
-                </button>
-                <button
-                  onClick={handleCloseModal}
-                  className="btn-secondary flex-1"
-                >
-                  Close
-                </button>
+              
+              {/* Dots indicator for Kids Box Braids */}
+              {isKidsBoxBraids && kidsBoxBraidsImages.length > 1 && (
+                <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+                  {kidsBoxBraidsImages.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setModalSlideIndex(idx);
+                      }}
+                      className={`h-2 rounded-full transition-all duration-200 ${
+                        idx === modalSlideIndex
+                          ? 'bg-primary-600 w-8'
+                          : 'bg-white/50 hover:bg-white/75 w-2'
+                      }`}
+                      aria-label={`Go to slide ${idx + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
+              
+              {/* Image details */}
+              <div className="bg-white rounded-lg p-6 shadow-xl">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-primary-600 bg-primary-100 px-3 py-1 rounded-full">
+                    {currentModalImage.category}
+                  </span>
+                  {isKidsBoxBraids && kidsBoxBraidsImages.length > 1 && (
+                    <span className="text-sm text-secondary-500">
+                      {modalSlideIndex + 1} of {kidsBoxBraidsImages.length}
+                    </span>
+                  )}
+                </div>
+                <h3 className="text-2xl font-semibold text-secondary-900 mb-2">
+                  {isKidsBoxBraids ? 'Kids Box Braids' : currentModalImage.title}
+                </h3>
+                <p className="text-secondary-600 mb-4">
+                  {currentModalImage.description}
+                </p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => handleBookThisStyle(currentModalImage)}
+                    className="btn-primary flex-1"
+                  >
+                    Book This Style
+                  </button>
+                  <button
+                    onClick={handleCloseModal}
+                    className="btn-secondary flex-1"
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
     </div>
   );
