@@ -6,6 +6,11 @@ import { GalleryItem } from '../types';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
 // import toast from 'react-hot-toast';
 
+// Type definitions for display items
+type DisplayItem = 
+  | { type: 'carousel'; items: GalleryItem[]; id: string }
+  | { type: 'regular'; item: GalleryItem };
+
 const GalleryPage: React.FC = () => {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<GalleryItem[]>([]);
@@ -568,12 +573,12 @@ const GalleryPage: React.FC = () => {
                 );
 
                 // If we have Kids Box Braids images, show them as one carousel card
-                const displayItems = kidsBoxBraidsImages.length > 0
+                const displayItems: DisplayItem[] = kidsBoxBraidsImages.length > 0
                   ? [
                       { type: 'carousel', items: kidsBoxBraidsImages, id: 'kids-box-braids-carousel' },
-                      ...otherItems.map(item => ({ type: 'regular', item }))
+                      ...otherItems.map(item => ({ type: 'regular' as const, item }))
                     ]
-                  : otherItems.map(item => ({ type: 'regular', item }));
+                  : otherItems.map(item => ({ type: 'regular' as const, item }));
 
                 return displayItems.map((displayItem, index) => {
                   // Render carousel card for Kids Box Braids
@@ -700,7 +705,7 @@ const GalleryPage: React.FC = () => {
 
                   // Render regular gallery item
                   if (displayItem.type !== 'regular') return null;
-                  const item = (displayItem as { type: 'regular', item: GalleryItem }).item;
+                  const item = displayItem.item;
                   return (
                     <motion.div
                       key={item.id}
