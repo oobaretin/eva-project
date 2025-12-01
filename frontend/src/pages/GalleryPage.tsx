@@ -216,18 +216,6 @@ const GalleryPage: React.FC = () => {
         
         // Kids Styles
         {
-          id: '14',
-          title: 'Kids Box Braids',
-          description: 'Fun and protective styles designed specifically for children. Safe, comfortable, and colorful.',
-          imageUrl: '/images/gallery/Generated%20Image%20September%2023,%202025%20-%209_01PM.png',
-          category: 'Kids Styles',
-          price: '$80',
-          duration: '2-3 hours',
-          isActive: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        },
-        {
           id: '15',
           title: 'Kids Cornrows',
           description: 'Adorable cornrow styles for kids with fun patterns and accessories. Low maintenance.',
@@ -597,20 +585,29 @@ const GalleryPage: React.FC = () => {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -300 }}
                       transition={{ duration: 0.5, ease: "easeInOut" }}
-                      className="relative"
+                      className="relative cursor-pointer group"
+                      onClick={() => handleImageClick(currentImage)}
                     >
                       <img
                         src={currentImage.imageUrl}
                         alt={currentImage.title}
-                        className="w-full h-[500px] md:h-[600px] object-cover"
+                        className="w-full h-[500px] md:h-[600px] object-cover group-hover:scale-105 transition-transform duration-300"
                         onError={(e) => {
                           console.log('❌ Carousel image failed to load:', currentImage.imageUrl);
                           const target = e.target as HTMLImageElement;
                           target.style.display = 'none';
                         }}
                       />
+                      {/* Click indicator overlay */}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center">
+                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 rounded-full p-4">
+                          <svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                          </svg>
+                        </div>
+                      </div>
                       {/* Overlay with info */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end pointer-events-none">
                         <div className="w-full p-8 text-white">
                           <h3 className="text-2xl md:text-3xl font-bold mb-2">
                             {currentImage.title}
@@ -629,12 +626,16 @@ const GalleryPage: React.FC = () => {
                               </div>
                             </div>
                             <button
-                              onClick={() => handleBookThisStyle(currentImage)}
-                              className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleBookThisStyle(currentImage);
+                              }}
+                              className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200 pointer-events-auto"
                             >
                               Book This Style
                             </button>
                           </div>
+                          <p className="text-sm mt-2 opacity-75">Click image to view full size</p>
                         </div>
                       </div>
                     </motion.div>
@@ -642,26 +643,35 @@ const GalleryPage: React.FC = () => {
 
                   {/* Navigation Arrows */}
                   <button
-                    onClick={prevSlide}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-secondary-900 rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-110 z-10"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      prevSlide();
+                    }}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-secondary-900 rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-110 z-20"
                     aria-label="Previous image"
                   >
                     <ChevronLeftIcon className="w-6 h-6" />
                   </button>
                   <button
-                    onClick={nextSlide}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-secondary-900 rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-110 z-10"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      nextSlide();
+                    }}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-secondary-900 rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-110 z-20"
                     aria-label="Next image"
                   >
                     <ChevronRightIcon className="w-6 h-6" />
                   </button>
 
                   {/* Dots Indicator */}
-                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
                     {kidsBoxBraidsImages.map((_, index) => (
                       <button
                         key={index}
-                        onClick={() => setKidsBoxBraidsIndex(index)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setKidsBoxBraidsIndex(index);
+                        }}
                         className={`w-3 h-3 rounded-full transition-all duration-200 ${
                           index === kidsBoxBraidsIndex
                             ? 'bg-primary-600 w-8'
