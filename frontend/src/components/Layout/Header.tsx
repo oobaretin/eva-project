@@ -16,9 +16,9 @@ const Header: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="bg-white shadow-lg sticky top-0 z-50">
+    <header className="bg-white/95 backdrop-blur-md shadow-md sticky top-0 z-50 border-b border-secondary-100">
       <div className="container-max">
-        <div className="flex justify-between items-center py-2">
+        <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="w-40 h-40 -mr-6 mt-6">
@@ -35,15 +35,15 @@ const Header: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-1">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className={`font-medium transition-colors duration-200 ${
+                className={`font-semibold px-4 py-2 rounded-lg transition-all duration-200 ${
                   isActive(item.href)
-                    ? 'text-primary-600'
-                    : 'text-secondary-700 hover:text-primary-600'
+                    ? 'text-primary-600 bg-primary-50'
+                    : 'text-secondary-700 hover:text-primary-600 hover:bg-secondary-50'
                 }`}
               >
                 {item.name}
@@ -55,7 +55,7 @@ const Header: React.FC = () => {
           <div className="hidden md:flex items-center">
             <a 
               href="tel:+18322079386"
-              className="bg-primary-600 hover:bg-primary-700 text-white rounded-full px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center space-x-3"
+              className="bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white rounded-full px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center space-x-3"
               title="Click to call (832) 207-9386"
             >
               <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">

@@ -521,17 +521,17 @@ const GalleryPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Header Section */}
-      <section className="bg-gradient-primary text-white py-16">
+      <section className="bg-gradient-primary text-white py-20">
         <div className="container-max text-center">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-6xl font-serif font-bold mb-4">
+            <h1 className="text-4xl md:text-6xl font-serif font-bold mb-6">
               Our Work Gallery
             </h1>
-            <p className="text-xl text-primary-100 max-w-3xl mx-auto">
+            <p className="text-xl text-primary-100 max-w-3xl mx-auto leading-relaxed">
               Explore our portfolio of beautiful braiding styles. Each piece is crafted with care and attention to detail.
             </p>
           </motion.div>
@@ -539,17 +539,17 @@ const GalleryPage: React.FC = () => {
       </section>
 
       {/* Filter Section */}
-      <section className="py-8 bg-secondary-50">
+      <section className="py-10 bg-gradient-to-b from-white to-secondary-50">
         <div className="container-max">
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-3">
             {categories.map((category) => (
                 <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-6 py-3 rounded-full font-medium transition-all duration-200 ${
+                className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
                   selectedCategory === category
-                    ? 'bg-primary-600 text-white shadow-lg'
-                    : 'bg-white text-secondary-700 hover:bg-primary-50 hover:text-primary-600 border border-secondary-200'
+                    ? 'bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-lg transform scale-105'
+                    : 'bg-white text-secondary-700 hover:bg-primary-50 hover:text-primary-600 border-2 border-secondary-200 hover:border-primary-300 shadow-md hover:shadow-lg'
                 }`}
               >
                 {category}
@@ -612,7 +612,7 @@ const GalleryPage: React.FC = () => {
                         initial={{ opacity: 0, y: 50 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: index * 0.1 }}
-                        className="card group hover:shadow-xl transition-all duration-300"
+                        className="card group hover:shadow-2xl transition-all duration-300 border-primary-100"
                       >
                         <div className="relative overflow-hidden">
                               <AnimatePresence mode="wait">
@@ -715,7 +715,7 @@ const GalleryPage: React.FC = () => {
                       initial={{ opacity: 0, y: 50 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.8, delay: index * 0.1 }}
-                      className="card group hover:shadow-xl transition-all duration-300"
+                      className="card group hover:shadow-2xl transition-all duration-300 border-primary-100"
                     >
                       <div className="relative overflow-hidden">
                         <img 

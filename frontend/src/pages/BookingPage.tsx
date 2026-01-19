@@ -252,13 +252,13 @@ const BookingPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white shadow-sm">
+      <div className="bg-gradient-to-br from-primary-50 via-white to-secondary-50 shadow-sm border-b border-secondary-100">
         <div className="container-max section-padding">
           <div className="text-center">
-            <h1 className="text-4xl font-serif font-bold text-secondary-900 mb-4">
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-secondary-900 mb-6">
               Book Your Appointment
             </h1>
-            <p className="text-xl text-secondary-600 max-w-3xl mx-auto">
+            <p className="text-xl text-secondary-600 max-w-3xl mx-auto leading-relaxed">
               Schedule your professional braiding service with Eva. Choose your date, time, and we'll take care of the rest.
             </p>
           </div>
@@ -267,19 +267,19 @@ const BookingPage: React.FC = () => {
 
       {/* Selected Style Banner */}
       {selectedStyle && (
-        <div className="bg-primary-50 border-l-4 border-primary-500 p-4">
+        <div className="bg-gradient-to-r from-primary-50 via-primary-100 to-accent-50 border-l-4 border-primary-500 shadow-md">
           <div className="container-max">
-            <div className="flex items-center">
+            <div className="flex items-center py-6 px-6">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
-                  <span className="text-2xl">✨</span>
+                <div className="w-14 h-14 bg-gradient-to-br from-primary-200 to-primary-300 rounded-2xl flex items-center justify-center shadow-lg">
+                  <span className="text-3xl">✨</span>
                 </div>
               </div>
-              <div className="ml-4">
-                <h3 className="text-lg font-semibold text-primary-900">
+              <div className="ml-6">
+                <h3 className="text-xl font-serif font-bold text-primary-900 mb-1">
                   Style Selected from Gallery
                 </h3>
-                <p className="text-primary-700">
+                <p className="text-primary-800 font-medium">
                   You've selected "{selectedStyle.title}" - we'll help you book this style!
                 </p>
               </div>
@@ -294,7 +294,7 @@ const BookingPage: React.FC = () => {
           <div className="max-w-4xl mx-auto">
             {/* Service Menu Section with Nested Forms */}
             <div className="mb-8">
-              <div className="bg-white rounded-lg shadow-lg p-8">
+              <div className="bg-white rounded-2xl shadow-xl p-8 border border-secondary-100">
                 <ServiceMenu 
                   onServiceSelect={handleServiceSelect}
                   selectedService={formData.selectedStyle}
@@ -310,8 +310,8 @@ const BookingPage: React.FC = () => {
             </div>
 
             {/* Payment Information Section */}
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <h3 className="text-lg font-semibold text-blue-900 mb-4">Payment Information</h3>
+            <div className="bg-gradient-to-br from-blue-50 via-white to-primary-50 rounded-2xl shadow-xl p-8 border-2 border-blue-100">
+              <h3 className="text-2xl font-serif font-bold text-blue-900 mb-6">Payment Information</h3>
               <div className="space-y-3">
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
@@ -340,8 +340,8 @@ const BookingPage: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
-                <p className="text-sm text-yellow-800">
+              <div className="mt-6 p-4 bg-gradient-to-r from-yellow-50 to-amber-50 border-2 border-yellow-200 rounded-xl shadow-sm">
+                <p className="text-sm font-semibold text-yellow-900">
                   <strong>Note:</strong> Payment is due on the day of your appointment. We accept cash and Zelle payments.
                 </p>
               </div>
@@ -359,11 +359,11 @@ const BookingPage: React.FC = () => {
       {showConfirmation && (
         <div className="container-max section-padding">
           <div className="max-w-2xl mx-auto">
-            <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+            <div className="bg-white rounded-2xl shadow-2xl p-10 text-center border-2 border-green-100">
               {/* Success Icon */}
-              <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
-                <svg className="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-gradient-to-br from-green-100 to-green-200 mb-8 shadow-lg">
+                <svg className="h-10 w-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
 
@@ -376,8 +376,8 @@ const BookingPage: React.FC = () => {
               </p>
 
               {/* Booking Details */}
-              <div className="bg-gray-50 rounded-lg p-6 mb-6 text-left">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Booking Details</h3>
+              <div className="bg-gradient-to-br from-secondary-50 to-white rounded-xl p-8 mb-8 text-left border-2 border-secondary-100 shadow-md">
+                <h3 className="text-xl font-serif font-bold text-secondary-900 mb-6">Booking Details</h3>
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Name:</span>
@@ -406,9 +406,9 @@ const BookingPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                <h4 className="font-semibold text-blue-900 mb-2">Payment Information</h4>
-                <p className="text-sm text-blue-800">
+              <div className="bg-gradient-to-r from-blue-50 to-primary-50 border-2 border-blue-200 rounded-xl p-6 mb-8 shadow-md">
+                <h4 className="font-serif font-bold text-blue-900 mb-3 text-lg">Payment Information</h4>
+                <p className="text-sm text-blue-900 font-medium">
                   Payment is due on the day of your appointment. We accept <strong>cash</strong> and <strong>Zelle</strong> payments.
                   <br />
                   <strong>Zelle:</strong> (832) 207-9386
@@ -432,7 +432,7 @@ const BookingPage: React.FC = () => {
                     specialRequests: ''
                   });
                 }}
-                className="bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200"
+                className="bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-semibold py-4 px-10 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 Book Another Appointment
               </button>

@@ -206,17 +206,17 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({
           return (
             <div
               key={categoryKey}
-              className="bg-white border border-secondary-200 rounded-lg shadow-sm overflow-hidden transition-all duration-200"
+              className="bg-white border-2 border-secondary-200 rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-primary-200"
             >
               {/* Category Header */}
               <button
                 onClick={() => toggleCategory(categoryKey)}
-                className="w-full px-6 py-4 flex items-center justify-between hover:bg-secondary-50 transition-colors duration-200"
+                className="w-full px-6 py-5 flex items-center justify-between hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 transition-all duration-300"
               >
                 <div className="flex items-center space-x-4">
                   <div className="flex-shrink-0">
-                    <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
-                      <span className="text-primary-600 font-semibold text-sm">
+                    <div className="w-12 h-12 bg-gradient-to-br from-primary-100 to-primary-200 rounded-xl flex items-center justify-center shadow-md">
+                      <span className="text-primary-700 font-bold text-base">
                         {category.variations.length}
                       </span>
                     </div>
@@ -241,18 +241,18 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({
 
               {/* Service Variations */}
               {isExpanded && (
-                <div className="border-t border-secondary-100 bg-secondary-50">
-                  <div className="p-4 space-y-2">
+                <div className="border-t-2 border-secondary-100 bg-gradient-to-br from-secondary-50 to-white">
+                  <div className="p-6 space-y-3">
                     {category.variations.map((variation, index) => {
                       const isSelected = selectedService === variation.name;
                       const isFormExpanded = expandedServiceForm === variation.name;
                       
                       return (
                         <div key={index} className="space-y-2">
-                          <div className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 ${
+                          <div className={`w-full px-5 py-4 rounded-xl border-2 transition-all duration-300 ${
                             isSelected
-                              ? 'border-primary-500 bg-primary-50 shadow-md'
-                              : 'border-secondary-200 bg-white hover:border-primary-300 hover:bg-primary-50'
+                              ? 'border-primary-500 bg-gradient-to-r from-primary-50 to-primary-100 shadow-lg transform scale-[1.02]'
+                              : 'border-secondary-200 bg-white hover:border-primary-300 hover:bg-primary-50 hover:shadow-md'
                           }`}>
                             <div className="flex items-center justify-between">
                               <button
@@ -275,7 +275,7 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({
                               </button>
                               <button
                                 onClick={(e) => handleBookNowClick(variation, e)}
-                                className="ml-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 whitespace-nowrap"
+                                className="ml-4 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-semibold py-2.5 px-6 rounded-xl transition-all duration-300 whitespace-nowrap shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                               >
                                 Book Now
                               </button>
@@ -284,7 +284,7 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({
                           
                           {/* Nested Booking Form */}
                           {isFormExpanded && formData && onFormChange && onFormSubmit && (
-                            <div className="bg-white border-2 border-primary-200 rounded-lg p-6 mt-2">
+                            <div className="bg-white border-2 border-primary-300 rounded-2xl p-8 mt-4 shadow-xl">
                               <form onSubmit={onFormSubmit}>
                                 {/* Date Selection */}
                                 <div className="mb-4">
@@ -299,7 +299,7 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({
                                     onChange={onFormChange}
                                     min={getMinDate ? getMinDate() : ''}
                                     max={getMaxDate ? getMaxDate() : ''}
-                                    className="w-full px-4 py-2 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                    className="w-full px-4 py-3 border-2 border-secondary-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 shadow-sm hover:shadow-md"
                                     required
                                   />
                                 </div>
@@ -324,10 +324,10 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({
                                             onFormChange(syntheticEvent);
                                           }
                                         }}
-                                        className={`py-2 px-3 rounded-lg border text-center text-sm font-medium transition-all duration-200 ${
+                                        className={`py-2.5 px-4 rounded-xl border-2 text-center text-sm font-semibold transition-all duration-300 ${
                                           formData?.selectedTime === time
-                                            ? 'bg-primary-600 text-white border-primary-600'
-                                            : 'bg-white text-secondary-700 border-secondary-300 hover:border-primary-500 hover:bg-primary-50'
+                                            ? 'bg-gradient-to-r from-primary-600 to-primary-700 text-white border-primary-600 shadow-lg transform scale-105'
+                                            : 'bg-white text-secondary-700 border-secondary-300 hover:border-primary-500 hover:bg-primary-50 hover:shadow-md'
                                         }`}
                                       >
                                         {time}
@@ -348,7 +348,7 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({
                                       name="name"
                                       value={formData.name || ''}
                                       onChange={onFormChange}
-                                      className="w-full px-4 py-2 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                      className="w-full px-4 py-3 border-2 border-secondary-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 shadow-sm hover:shadow-md"
                                       required
                                     />
                                   </div>
@@ -363,7 +363,7 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({
                                       name="phone"
                                       value={formData.phone || ''}
                                       onChange={onFormChange}
-                                      className="w-full px-4 py-2 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                      className="w-full px-4 py-3 border-2 border-secondary-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 shadow-sm hover:shadow-md"
                                       required
                                     />
                                   </div>
@@ -379,7 +379,7 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({
                                     name="email"
                                     value={formData.email || ''}
                                     onChange={onFormChange}
-                                    className="w-full px-4 py-2 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                    className="w-full px-4 py-3 border-2 border-secondary-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 shadow-sm hover:shadow-md"
                                     required
                                   />
                                 </div>
@@ -396,7 +396,7 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({
                                     onChange={onFormChange}
                                     rows={3}
                                     placeholder="Any specific requests, hair concerns, or additional information..."
-                                    className="w-full px-4 py-2 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                    className="w-full px-4 py-3 border-2 border-secondary-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 shadow-sm hover:shadow-md"
                                   />
                                 </div>
 
@@ -404,7 +404,7 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({
                                 <button
                                   type="submit"
                                   disabled={isSubmitting}
-                                  className="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center"
+                                  className="w-full bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 disabled:from-primary-400 disabled:to-primary-400 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
                                 >
                                   {isSubmitting ? (
                                     <>

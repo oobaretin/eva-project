@@ -26,7 +26,7 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-secondary-900 text-white">
+    <footer className="bg-gradient-to-br from-secondary-900 via-secondary-800 to-secondary-900 text-white">
       <div className="container-max section-padding">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
@@ -59,7 +59,7 @@ const Footer: React.FC = () => {
                 <PhoneIcon className="w-5 h-5 text-primary-400" />
                 <a 
                   href="tel:+18322079386" 
-                  className="text-secondary-300 hover:text-white transition-colors duration-200"
+                  className="text-secondary-300 hover:text-primary-400 transition-all duration-300 hover:scale-110"
                 >
                   (832) 207-9386
                 </a>
@@ -68,7 +68,7 @@ const Footer: React.FC = () => {
                 <EnvelopeIcon className="w-5 h-5 text-primary-400" />
                 <a 
                   href="mailto:braidsbyevaofficial@gmail.com" 
-                  className="text-secondary-300 hover:text-white transition-colors duration-200"
+                  className="text-secondary-300 hover:text-primary-400 transition-all duration-300 hover:scale-110"
                 >
                   braidsbyevaofficial@gmail.com
                 </a>
@@ -91,7 +91,7 @@ const Footer: React.FC = () => {
                 <li key={link.name}>
                   <Link
                     to={link.href}
-                    className="text-secondary-300 hover:text-white transition-colors duration-200"
+                    className="text-secondary-300 hover:text-primary-400 transition-all duration-300 hover:scale-110"
                   >
                     {link.name}
                   </Link>
@@ -108,7 +108,7 @@ const Footer: React.FC = () => {
                 <li key={link.name}>
                   <Link
                     to={link.href}
-                    className="text-secondary-300 hover:text-white transition-colors duration-200"
+                    className="text-secondary-300 hover:text-primary-400 transition-all duration-300 hover:scale-110"
                   >
                     {link.name}
                   </Link>
@@ -119,7 +119,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Social Media & Bottom Bar */}
-        <div className="border-t border-secondary-700 mt-12 pt-8">
+        <div className="border-t border-secondary-700/50 mt-16 pt-10">
           {/* Social Media Icons */}
           <div className="flex justify-center mb-6">
             <div className="flex items-center space-x-4">
@@ -127,7 +127,7 @@ const Footer: React.FC = () => {
                 href="https://www.instagram.com/braidsbyeva"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-secondary-300 hover:text-white transition-colors duration-200"
+                className="text-secondary-300 hover:text-primary-400 transition-all duration-300 hover:scale-110"
                 aria-label="Follow us on Instagram"
               >
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -138,7 +138,7 @@ const Footer: React.FC = () => {
                 href="https://www.facebook.com/braidsbyeva"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-secondary-300 hover:text-white transition-colors duration-200"
+                className="text-secondary-300 hover:text-primary-400 transition-all duration-300 hover:scale-110"
                 aria-label="Follow us on Facebook"
               >
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -149,7 +149,7 @@ const Footer: React.FC = () => {
                 href="https://www.tiktok.com/@braidsbyeva"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-secondary-300 hover:text-white transition-colors duration-200"
+                className="text-secondary-300 hover:text-primary-400 transition-all duration-300 hover:scale-110"
                 aria-label="Follow us on TikTok"
               >
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -160,7 +160,7 @@ const Footer: React.FC = () => {
                 href="https://wa.me/18322079386"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-secondary-300 hover:text-white transition-colors duration-200"
+                className="text-secondary-300 hover:text-primary-400 transition-all duration-300 hover:scale-110"
                 aria-label="Contact us on WhatsApp"
               >
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
