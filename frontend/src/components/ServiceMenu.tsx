@@ -9,7 +9,6 @@ interface ServiceVariation {
 
 interface ServiceCategory {
   name: string;
-  starting: number;
   variations: ServiceVariation[];
 }
 
@@ -21,7 +20,6 @@ interface ServiceMenuProps {
 const SERVICE_DATA: { [key: string]: ServiceCategory } = {
   'Braids': {
     name: 'Braids',
-    starting: 90,
     variations: [
       { name: 'Knotless Box Braids', price: '$275', duration: '5-6 hours' },
       { name: 'Small Box Braids', price: '$330', duration: '6-7 hours' },
@@ -36,7 +34,6 @@ const SERVICE_DATA: { [key: string]: ServiceCategory } = {
   },
   'Twists': {
     name: 'Twists',
-    starting: 120,
     variations: [
       { name: 'Passion Twists', price: '$210', duration: '3-4 hours' },
       { name: 'Senegalese Twists', price: '$210', duration: '4-5 hours' },
@@ -50,7 +47,6 @@ const SERVICE_DATA: { [key: string]: ServiceCategory } = {
   },
   'Faux Locs': {
     name: 'Faux Locs',
-    starting: 250,
     variations: [
       { name: 'Butterfly Locs', price: '$280', duration: '4-5 hours' },
       { name: 'Faux Locs', price: '$250', duration: '4-6 hours' },
@@ -59,7 +55,6 @@ const SERVICE_DATA: { [key: string]: ServiceCategory } = {
   },
   'Crochets': {
     name: 'Crochets',
-    starting: 150,
     variations: [
       { name: 'Crochet Braids', price: '$150', duration: '2-3 hours' },
       { name: 'Crochet Twists', price: '$160', duration: '2-3 hours' },
@@ -74,7 +69,6 @@ const SERVICE_DATA: { [key: string]: ServiceCategory } = {
   },
   'Dreads': {
     name: 'Dreads',
-    starting: 250,
     variations: [
       { name: 'Traditional Dreads', price: '$250', duration: '4-5 hours' },
       { name: 'Interlocked Dreads', price: '$280', duration: '5-6 hours' },
@@ -82,7 +76,6 @@ const SERVICE_DATA: { [key: string]: ServiceCategory } = {
   },
   'Kid Styles': {
     name: 'Kid Styles',
-    starting: 50,
     variations: [
       { name: 'Kids Box Braids', price: '$80', duration: '2-3 hours' },
       { name: 'Kids Cornrows', price: '$60', duration: '1-2 hours' },
@@ -96,7 +89,6 @@ const SERVICE_DATA: { [key: string]: ServiceCategory } = {
   },
   'Cornrows': {
     name: 'Cornrows',
-    starting: 80,
     variations: [
       { name: 'Feed-in Cornrows', price: '$100', duration: '2-3 hours' },
       { name: 'Stitch Braids', price: '$80', duration: '2-3 hours' },
@@ -114,7 +106,6 @@ const SERVICE_DATA: { [key: string]: ServiceCategory } = {
   },
   'Bantu Knots': {
     name: 'Bantu Knots',
-    starting: 100,
     variations: [
       { name: 'Traditional Bantu Knots', price: '$100', duration: '2-3 hours' },
       { name: 'Bantu Knot Out', price: '$120', duration: '2-3 hours' },
@@ -127,7 +118,6 @@ const SERVICE_DATA: { [key: string]: ServiceCategory } = {
   },
   'Weaves/Extensions': {
     name: 'Weaves/Extensions',
-    starting: 220,
     variations: [
       { name: 'Sew-in Weave', price: '$220', duration: '4-5 hours' },
       { name: 'Tape-in Extensions', price: '$350', duration: '3-4 hours' },
@@ -136,7 +126,6 @@ const SERVICE_DATA: { [key: string]: ServiceCategory } = {
   },
   'Hair Maintenance & Consultation': {
     name: 'Hair Maintenance & Consultation',
-    starting: 25,
     variations: [
       { name: 'Hair Consultation', price: '$25', duration: '30 minutes' },
       { name: 'Braids Touch-up', price: '$50', duration: '1 hour' },
@@ -196,7 +185,7 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({ onServiceSelect, selectedServ
                       {category.name}
                     </h3>
                     <p className="text-sm text-secondary-600">
-                      {category.variations.length} {category.variations.length === 1 ? 'style' : 'styles'} • Starting at ${category.starting}
+                      {category.variations.length} {category.variations.length === 1 ? 'style' : 'styles'}
                     </p>
                   </div>
                 </div>
@@ -242,11 +231,6 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({ onServiceSelect, selectedServ
                                 {variation.duration}
                               </p>
                             </div>
-                            <div className="ml-4 text-right">
-                              <p className="text-lg font-bold text-primary-600">
-                                {variation.price}
-                              </p>
-                            </div>
                           </div>
                         </button>
                       );
@@ -264,8 +248,27 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({ onServiceSelect, selectedServ
           <p className="text-sm text-primary-800">
             <strong>Selected:</strong> {selectedService}
           </p>
-          <p className="text-xs text-primary-700 mt-1">
+          <p className="text-xs text-primary-700 mt-1 mb-3">
             Continue below to complete your booking
+          </p>
+          <button
+            onClick={() => {
+              const bookingForm = document.getElementById('booking-form');
+              if (bookingForm) {
+                bookingForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }}
+            className="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+          >
+            Book Now
+          </button>
+        </div>
+      )}
+      
+      {!selectedService && (
+        <div className="mt-6 p-4 bg-secondary-50 border border-secondary-200 rounded-lg text-center">
+          <p className="text-sm text-secondary-700 mb-3">
+            Select a service above to get started
           </p>
         </div>
       )}

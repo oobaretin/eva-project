@@ -62,7 +62,7 @@ const BookingPage: React.FC = () => {
       ...prev,
       selectedStyle: serviceName
     }));
-    toast.success(`Selected: ${serviceName} - ${price}`);
+    toast.success(`Selected: ${serviceName}`);
   };
 
     const sendBookingToBackend = async (bookingData: BookingFormData) => {
@@ -303,7 +303,7 @@ const BookingPage: React.FC = () => {
             </div>
 
             {/* Booking Form Section */}
-            <form onSubmit={handleFormSubmit} className="bg-white rounded-lg shadow-lg p-8">
+            <form id="booking-form" onSubmit={handleFormSubmit} className="bg-white rounded-lg shadow-lg p-8">
             
             {/* Date Selection */}
             <div className="mb-6">
