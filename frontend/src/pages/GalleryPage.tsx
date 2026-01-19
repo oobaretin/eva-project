@@ -687,11 +687,8 @@ const GalleryPage: React.FC = () => {
                             {currentImage.description}
                           </p>
                           
-                          {/* Price and Duration */}
-                          <div className="flex items-center justify-between mb-4">
-                            <div className="text-2xl font-bold text-primary-600">
-                              {currentImage.price}
-                            </div>
+                          {/* Duration */}
+                          <div className="flex items-center mb-4">
                             <div className="text-sm text-secondary-500 flex items-center">
                               <ClockIcon className="w-4 h-4 mr-1" />
                               {currentImage.duration}
@@ -766,11 +763,8 @@ const GalleryPage: React.FC = () => {
                           {item.description}
                         </p>
                         
-                        {/* Price and Duration */}
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="text-2xl font-bold text-primary-600">
-                            {item.price}
-                          </div>
+                        {/* Duration */}
+                        <div className="flex items-center mb-4">
                           <div className="text-sm text-secondary-500 flex items-center">
                             <ClockIcon className="w-4 h-4 mr-1" />
                             {item.duration}
