@@ -292,148 +292,25 @@ const BookingPage: React.FC = () => {
       {!showConfirmation && (
         <div className="container-max section-padding">
           <div className="max-w-4xl mx-auto">
-            {/* Service Menu Section */}
+            {/* Service Menu Section with Nested Forms */}
             <div className="mb-8">
               <div className="bg-white rounded-lg shadow-lg p-8">
                 <ServiceMenu 
                   onServiceSelect={handleServiceSelect}
                   selectedService={formData.selectedStyle}
+                  formData={formData}
+                  onFormChange={handleInputChange}
+                  onFormSubmit={handleFormSubmit}
+                  isSubmitting={isSubmitting}
+                  timeSlots={timeSlots}
+                  getMinDate={getMinDate}
+                  getMaxDate={getMaxDate}
                 />
               </div>
             </div>
 
-            {/* Booking Form Section */}
-            <form id="booking-form" onSubmit={handleFormSubmit} className="bg-white rounded-lg shadow-lg p-8">
-            
-            {/* Date Selection */}
-            <div className="mb-6">
-              <label htmlFor="selectedDate" className="block text-sm font-medium text-secondary-700 mb-2">
-                Select Date *
-              </label>
-              <input
-                type="date"
-                id="selectedDate"
-                name="selectedDate"
-                value={formData.selectedDate}
-                onChange={handleInputChange}
-                min={getMinDate()}
-                max={getMaxDate()}
-                className="w-full px-4 py-3 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                required
-              />
-            </div>
-
-            {/* Time Selection */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-secondary-700 mb-2">
-                Select Time *
-              </label>
-              <div className="grid grid-cols-3 gap-3">
-                {timeSlots.map((time) => (
-                  <button
-                    key={time}
-                    type="button"
-                    onClick={() => setFormData(prev => ({ ...prev, selectedTime: time }))}
-                    className={`py-3 px-4 rounded-lg border text-center font-medium transition-all duration-200 ${
-                      formData.selectedTime === time
-                        ? 'bg-primary-600 text-white border-primary-600'
-                        : 'bg-white text-secondary-700 border-secondary-300 hover:border-primary-500 hover:bg-primary-50'
-                    }`}
-                  >
-                    {time}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Contact Information */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-secondary-700 mb-2">
-                  Full Name *
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  required
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-secondary-700 mb-2">
-                  Phone Number *
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="mb-6">
-              <label htmlFor="email" className="block text-sm font-medium text-secondary-700 mb-2">
-                Email Address *
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                required
-              />
-            </div>
-
-            {/* Selected Style - Read Only if selected from menu */}
-            <div className="mb-6">
-              <label htmlFor="selectedStyle" className="block text-sm font-medium text-secondary-700 mb-2">
-                Selected Service
-              </label>
-              <input
-                type="text"
-                id="selectedStyle"
-                name="selectedStyle"
-                value={formData.selectedStyle}
-                onChange={handleInputChange}
-                placeholder="Select a service from the menu above"
-                className="w-full px-4 py-3 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50"
-                readOnly={!!formData.selectedStyle}
-              />
-              {!formData.selectedStyle && (
-                <p className="mt-2 text-sm text-secondary-500">
-                  Please select a service from the menu above
-                </p>
-              )}
-            </div>
-
-            {/* Special Requests */}
-            <div className="mb-8">
-              <label htmlFor="specialRequests" className="block text-sm font-medium text-secondary-700 mb-2">
-                Special Requests or Notes
-              </label>
-              <textarea
-                id="specialRequests"
-                name="specialRequests"
-                value={formData.specialRequests}
-                onChange={handleInputChange}
-                rows={4}
-                placeholder="Any specific requests, hair concerns, or additional information..."
-                className="w-full px-4 py-3 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-              />
-            </div>
-
-            {/* Payment Information */}
-            <div className="mb-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+            {/* Payment Information Section */}
+            <div className="bg-white rounded-lg shadow-lg p-8">
               <h3 className="text-lg font-semibold text-blue-900 mb-4">Payment Information</h3>
               <div className="space-y-3">
                 <div className="flex items-start">
@@ -470,27 +347,10 @@ const BookingPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-semibold py-4 px-8 rounded-lg transition-colors duration-200 flex items-center justify-center"
-            >
-              {isSubmitting ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                  Submitting Booking...
-                </>
-              ) : (
-                'Book Appointment'
-              )}
-            </button>
-
             {/* Contact Info */}
             <div className="mt-6 text-center text-sm text-secondary-600">
               <p>Need help? Call us at <a href="tel:+18322079386" className="text-primary-600 hover:text-primary-700 font-medium">(832) 207-9386</a></p>
             </div>
-          </form>
         </div>
       </div>
       )}

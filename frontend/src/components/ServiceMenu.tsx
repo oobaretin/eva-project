@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 
 interface ServiceVariation {
@@ -15,6 +15,15 @@ interface ServiceCategory {
 interface ServiceMenuProps {
   onServiceSelect: (serviceName: string, price: string, duration: string) => void;
   selectedService?: string;
+  showBookingForm?: boolean;
+  onToggleBookingForm?: () => void;
+  formData?: any;
+  onFormChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onFormSubmit?: (e: React.FormEvent) => void;
+  isSubmitting?: boolean;
+  timeSlots?: string[];
+  getMinDate?: () => string;
+  getMaxDate?: () => string;
 }
 
 const SERVICE_DATA: { [key: string]: ServiceCategory } = {
@@ -133,8 +142,34 @@ const SERVICE_DATA: { [key: string]: ServiceCategory } = {
   }
 };
 
-const ServiceMenu: React.FC<ServiceMenuProps> = ({ onServiceSelect, selectedService }) => {
+const ServiceMenu: React.FC<ServiceMenuProps> = ({ 
+  onServiceSelect, 
+  selectedService,
+  showBookingForm = false,
+  onToggleBookingForm,
+  formData,
+  onFormChange,
+  onFormSubmit,
+  isSubmitting = false,
+  timeSlots = [],
+  getMinDate,
+  getMaxDate
+}) => {
   const [expandedCategories, setExpandedCategories] = useState<{ [key: string]: boolean }>({});
+  const [expandedServiceForm, setExpandedServiceForm] = useState<string | null>(null);
+
+  // Auto-expand category and form when service is selected from outside
+  useEffect(() => {
+    if (selectedService) {
+      // Find which category contains this service
+      Object.entries(SERVICE_DATA).forEach(([categoryKey, category]) => {
+        const hasService = category.variations.some(v => v.name === selectedService);
+        if (hasService) {
+          setExpandedCategories(prev => ({ ...prev, [categoryKey]: true }));
+        }
+      });
+    }
+  }, [selectedService]);
 
   const toggleCategory = (categoryName: string) => {
     setExpandedCategories(prev => ({
@@ -145,6 +180,12 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({ onServiceSelect, selectedServ
 
   const handleServiceClick = (service: ServiceVariation) => {
     onServiceSelect(service.name, service.price, service.duration);
+  };
+
+  const handleBookNowClick = (service: ServiceVariation, e: React.MouseEvent) => {
+    e.stopPropagation();
+    onServiceSelect(service.name, service.price, service.duration);
+    setExpandedServiceForm(expandedServiceForm === service.name ? null : service.name);
   };
 
   return (
@@ -204,35 +245,180 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({ onServiceSelect, selectedServ
                   <div className="p-4 space-y-2">
                     {category.variations.map((variation, index) => {
                       const isSelected = selectedService === variation.name;
+                      const isFormExpanded = expandedServiceForm === variation.name;
                       
                       return (
-                        <button
-                          key={index}
-                          onClick={() => handleServiceClick(variation)}
-                          className={`w-full px-4 py-3 rounded-lg border-2 text-left transition-all duration-200 ${
+                        <div key={index} className="space-y-2">
+                          <div className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 ${
                             isSelected
                               ? 'border-primary-500 bg-primary-50 shadow-md'
                               : 'border-secondary-200 bg-white hover:border-primary-300 hover:bg-primary-50'
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex-1">
-                              <div className="flex items-center space-x-2">
-                                <h4 className="font-semibold text-secondary-900">
-                                  {variation.name}
-                                </h4>
-                                {isSelected && (
-                                  <span className="text-xs bg-primary-600 text-white px-2 py-1 rounded-full">
-                                    Selected
-                                  </span>
-                                )}
-                              </div>
-                              <p className="text-sm text-secondary-600 mt-1">
-                                {variation.duration}
-                              </p>
+                          }`}>
+                            <div className="flex items-center justify-between">
+                              <button
+                                onClick={() => handleServiceClick(variation)}
+                                className="flex-1 text-left"
+                              >
+                                <div className="flex items-center space-x-2">
+                                  <h4 className="font-semibold text-secondary-900">
+                                    {variation.name}
+                                  </h4>
+                                  {isSelected && (
+                                    <span className="text-xs bg-primary-600 text-white px-2 py-1 rounded-full">
+                                      Selected
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-sm text-secondary-600 mt-1">
+                                  {variation.duration}
+                                </p>
+                              </button>
+                              <button
+                                onClick={(e) => handleBookNowClick(variation, e)}
+                                className="ml-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 whitespace-nowrap"
+                              >
+                                Book Now
+                              </button>
                             </div>
                           </div>
-                        </button>
+                          
+                          {/* Nested Booking Form */}
+                          {isFormExpanded && formData && onFormChange && onFormSubmit && (
+                            <div className="bg-white border-2 border-primary-200 rounded-lg p-6 mt-2">
+                              <form onSubmit={onFormSubmit}>
+                                {/* Date Selection */}
+                                <div className="mb-4">
+                                  <label htmlFor={`date-${index}`} className="block text-sm font-medium text-secondary-700 mb-2">
+                                    Select Date *
+                                  </label>
+                                  <input
+                                    type="date"
+                                    id={`date-${index}`}
+                                    name="selectedDate"
+                                    value={formData.selectedDate || ''}
+                                    onChange={onFormChange}
+                                    min={getMinDate ? getMinDate() : ''}
+                                    max={getMaxDate ? getMaxDate() : ''}
+                                    className="w-full px-4 py-2 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                    required
+                                  />
+                                </div>
+
+                                {/* Time Selection */}
+                                <div className="mb-4">
+                                  <label className="block text-sm font-medium text-secondary-700 mb-2">
+                                    Select Time *
+                                  </label>
+                                  <div className="grid grid-cols-3 gap-2">
+                                    {timeSlots.map((time) => (
+                                      <button
+                                        key={time}
+                                        type="button"
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          if (onFormChange) {
+                                            const syntheticEvent = {
+                                              target: { name: 'selectedTime', value: time },
+                                              currentTarget: { name: 'selectedTime', value: time }
+                                            } as React.ChangeEvent<HTMLInputElement>;
+                                            onFormChange(syntheticEvent);
+                                          }
+                                        }}
+                                        className={`py-2 px-3 rounded-lg border text-center text-sm font-medium transition-all duration-200 ${
+                                          formData?.selectedTime === time
+                                            ? 'bg-primary-600 text-white border-primary-600'
+                                            : 'bg-white text-secondary-700 border-secondary-300 hover:border-primary-500 hover:bg-primary-50'
+                                        }`}
+                                      >
+                                        {time}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+
+                                {/* Contact Information */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                  <div>
+                                    <label htmlFor={`name-${index}`} className="block text-sm font-medium text-secondary-700 mb-2">
+                                      Full Name *
+                                    </label>
+                                    <input
+                                      type="text"
+                                      id={`name-${index}`}
+                                      name="name"
+                                      value={formData.name || ''}
+                                      onChange={onFormChange}
+                                      className="w-full px-4 py-2 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                      required
+                                    />
+                                  </div>
+                                  
+                                  <div>
+                                    <label htmlFor={`phone-${index}`} className="block text-sm font-medium text-secondary-700 mb-2">
+                                      Phone Number *
+                                    </label>
+                                    <input
+                                      type="tel"
+                                      id={`phone-${index}`}
+                                      name="phone"
+                                      value={formData.phone || ''}
+                                      onChange={onFormChange}
+                                      className="w-full px-4 py-2 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                      required
+                                    />
+                                  </div>
+                                </div>
+
+                                <div className="mb-4">
+                                  <label htmlFor={`email-${index}`} className="block text-sm font-medium text-secondary-700 mb-2">
+                                    Email Address *
+                                  </label>
+                                  <input
+                                    type="email"
+                                    id={`email-${index}`}
+                                    name="email"
+                                    value={formData.email || ''}
+                                    onChange={onFormChange}
+                                    className="w-full px-4 py-2 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                    required
+                                  />
+                                </div>
+
+                                {/* Special Requests */}
+                                <div className="mb-4">
+                                  <label htmlFor={`requests-${index}`} className="block text-sm font-medium text-secondary-700 mb-2">
+                                    Special Requests or Notes
+                                  </label>
+                                  <textarea
+                                    id={`requests-${index}`}
+                                    name="specialRequests"
+                                    value={formData.specialRequests || ''}
+                                    onChange={onFormChange}
+                                    rows={3}
+                                    placeholder="Any specific requests, hair concerns, or additional information..."
+                                    className="w-full px-4 py-2 border border-secondary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                  />
+                                </div>
+
+                                {/* Submit Button */}
+                                <button
+                                  type="submit"
+                                  disabled={isSubmitting}
+                                  className="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center"
+                                >
+                                  {isSubmitting ? (
+                                    <>
+                                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                                      Submitting Booking...
+                                    </>
+                                  ) : (
+                                    'Book Appointment'
+                                  )}
+                                </button>
+                              </form>
+                            </div>
+                          )}
+                        </div>
                       );
                     })}
                   </div>
@@ -243,35 +429,6 @@ const ServiceMenu: React.FC<ServiceMenuProps> = ({ onServiceSelect, selectedServ
         })}
       </div>
 
-      {selectedService && (
-        <div className="mt-6 p-4 bg-primary-50 border border-primary-200 rounded-lg">
-          <p className="text-sm text-primary-800">
-            <strong>Selected:</strong> {selectedService}
-          </p>
-          <p className="text-xs text-primary-700 mt-1 mb-3">
-            Continue below to complete your booking
-          </p>
-          <button
-            onClick={() => {
-              const bookingForm = document.getElementById('booking-form');
-              if (bookingForm) {
-                bookingForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }
-            }}
-            className="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
-          >
-            Book Now
-          </button>
-        </div>
-      )}
-      
-      {!selectedService && (
-        <div className="mt-6 p-4 bg-secondary-50 border border-secondary-200 rounded-lg text-center">
-          <p className="text-sm text-secondary-700 mb-3">
-            Select a service above to get started
-          </p>
-        </div>
-      )}
     </div>
   );
 };
